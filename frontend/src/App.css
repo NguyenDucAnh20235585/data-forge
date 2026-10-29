@@ -132,3 +132,17 @@ tbody tr:hover {
     min-width: 600px;
   }
 }
+
+select {
+  padding: 12px;
+  background: #fff;
+  color: #191919;
+  border: 1px solid #dcdcd6;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+select:focus {
+  outline: 2px solid #b65a38;
+  outline-offset: 2px;
+}

@@ -8,6 +8,6 @@ export class GeneratorController {
 
   @Post()
   generate(@Body() body: GenerateDataDto) {
-    return this.generatorService.generate(body.count);
+    return this.generatorService.generate(body.count, body.preset);
   }
 }

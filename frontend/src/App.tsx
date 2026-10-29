@@ -1,18 +1,24 @@
 import { useState } from "react";
 import "./App.css";
 
-type FakeUser = {
+type Preset = "users" | "products" | "employees";
+
+type GeneratedRecord = {
   id: string;
-  fullName: string;
-  email: string;
-  phone: string;
+  [key: string]: string | number;
 };
 
 function App() {
+  const [preset, setPreset] = useState<Preset>("users");
   const [count, setCount] = useState(3);
-  const [users, setUsers] = useState<FakeUser[]>([]);
+  const [records, setRecords] = useState<GeneratedRecord[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const columns =
+    records.length > 0
+      ? Object.keys(records[0]).filter((key) => key !== "id")
+      : [];
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -24,15 +30,15 @@ function App() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ count }),
+        body: JSON.stringify({ count, preset }),
       });
 
       if (!response.ok) {
         throw new Error("Failed to generate data");
       }
 
-      const data: FakeUser[] = await response.json();
-      setUsers(data);
+      const data: GeneratedRecord[] = await response.json();
+      setRecords(data);
     } catch (error) {
       console.error(error);
       setError("Unable to generate data.");
@@ -47,7 +53,18 @@ function App() {
       <p>Generate fake data for testing.</p>
 
       <div>
-        <label htmlFor="count">Number of records: </label>
+        <label htmlFor="preset">Preset:</label>
+        <select
+          id="preset"
+          value={preset}
+          onChange={(event) => setPreset(event.target.value as Preset)}
+        >
+          <option value="users">Users</option>
+          <option value="products">Products</option>
+          <option value="employees">Employees</option>
+        </select>
+
+        <label htmlFor="count">Number of records:</label>
         <input
           id="count"
           type="number"
@@ -69,25 +86,25 @@ function App() {
 
       {error && <p role="alert">{error}</p>}
 
-      {users.length > 0 && (
+      {records.length > 0 && (
         <section>
-          <h2>Generated Users ({users.length})</h2>
+          <h2>Generated Records ({records.length})</h2>
 
           <table>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
+                {columns.map((column) => (
+                  <th key={column}>{column}</th>
+                ))}
               </tr>
             </thead>
 
             <tbody>
-              {users.map((user) => (
-                <tr key={user.id}>
-                  <td>{user.fullName}</td>
-                  <td>{user.email}</td>
-                  <td>{user.phone}</td>
+              {records.map((record) => (
+                <tr key={record.id}>
+                  {columns.map((column) => (
+                    <td key={column}>{record[column]}</td>
+                  ))}
                 </tr>
               ))}
             </tbody>
