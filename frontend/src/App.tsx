@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 
-type Preset = "users" | "products" | "employees";
+type Preset = "users" | "products" | "employees" | "umamusume";
 
 type GeneratedRecord = {
   id: string;
@@ -62,6 +62,7 @@ function App() {
           <option value="users">Users</option>
           <option value="products">Products</option>
           <option value="employees">Employees</option>
+          <option value="umamusume">Umamusume</option>
         </select>
 
         <label htmlFor="count">Number of records:</label>

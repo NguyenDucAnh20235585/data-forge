@@ -4,6 +4,7 @@ export enum GeneratePreset {
   USERS = 'users',
   PRODUCTS = 'products',
   EMPLOYEES = 'employees',
+  UMAMUSUME = 'umamusume',
 }
 
 export class GenerateDataDto {
