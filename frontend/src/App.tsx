@@ -3,6 +3,11 @@ import "./App.css";
 
 type Preset = "users" | "products" | "employees" | "umamusume";
 
+type CustomField = {
+  name: string;
+  type: "personName" | "number";
+};
+
 type GeneratedRecord = {
   id: string;
   [key: string]: string | number;
@@ -14,6 +19,11 @@ function App() {
   const [records, setRecords] = useState<GeneratedRecord[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [mode, setMode] = useState<"quick" | "custom">("quick");
+
+  const [fields, setFields] = useState<CustomField[]>([
+    { name: "playerName", type: "personName" },
+  ]);
 
   const columns =
     records.length > 0
@@ -25,12 +35,19 @@ function App() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:3000/generate", {
+      const endpoint =
+        mode === "quick"
+          ? "http://localhost:3000/generate"
+          : "http://localhost:3000/generate/custom";
+
+      const payload = mode === "quick" ? { count, preset } : { count, fields };
+
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ count, preset }),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -53,17 +70,21 @@ function App() {
       <p>Generate fake data for testing.</p>
 
       <div>
-        <label htmlFor="preset">Preset:</label>
-        <select
-          id="preset"
-          value={preset}
-          onChange={(event) => setPreset(event.target.value as Preset)}
-        >
-          <option value="users">Users</option>
-          <option value="products">Products</option>
-          <option value="employees">Employees</option>
-          <option value="umamusume">Umamusume</option>
-        </select>
+        {mode === "quick" && (
+          <>
+            <label htmlFor="preset">Preset:</label>
+            <select
+              id="preset"
+              value={preset}
+              onChange={(event) => setPreset(event.target.value as Preset)}
+            >
+              <option value="users">Users</option>
+              <option value="products">Products</option>
+              <option value="employees">Employees</option>
+              <option value="umamusume">Umamusume</option>
+            </select>
+          </>
+        )}
 
         <label htmlFor="count">Number of records:</label>
         <input
@@ -75,6 +96,63 @@ function App() {
           onChange={(event) => setCount(Number(event.target.value))}
         />
 
+        {mode === "custom" && (
+          <section>
+            <h2>Custom Fields</h2>
+
+            {fields.map((field, index) => (
+              <div key={index}>
+                <input
+                  value={field.name}
+                  onChange={(event) => {
+                    const updatedFields = fields.map((item, i) =>
+                      i === index
+                        ? { ...item, name: event.target.value }
+                        : item,
+                    );
+
+                    setFields(updatedFields);
+                  }}
+                />
+
+                <select
+                  value={field.type}
+                  onChange={(event) => {
+                    const updatedFields = fields.map((item, i) =>
+                      i === index
+                        ? {
+                            ...item,
+                            type: event.target.value as CustomField["type"],
+                          }
+                        : item,
+                    );
+
+                    setFields(updatedFields);
+                  }}
+                >
+                  <option value="personName">Person Name</option>
+                  <option value="number">Number</option>
+                </select>
+              </div>
+            ))}
+
+            <button
+              onClick={() =>
+                setFields([
+                  ...fields,
+                  { name: `field${fields.length + 1}`, type: "number" },
+                ])
+              }
+            >
+              Add Field
+            </button>
+          </section>
+        )}
+
+        <button onClick={() => setMode("quick")}>Quick Generate</button>
+
+        <button onClick={() => setMode("custom")}>Custom Generate</button>
+
         <button
           onClick={handleGenerate}
           disabled={
@@ -84,6 +162,12 @@ function App() {
           {loading ? "Generating..." : "Generate Data"}
         </button>
       </div>
+
+      <p>
+        {mode === "quick"
+          ? "You are using Quick Generate"
+          : "You are using Custom Generate"}
+      </p>
 
       {error && <p role="alert">{error}</p>}
 

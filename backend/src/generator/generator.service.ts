@@ -2,6 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { faker } from '@faker-js/faker';
 import { GeneratePreset } from './dto/generate-data.dto';
 
+type CustomField = {
+  name: string;
+  type: 'personName' | 'number';
+};
+
 @Injectable()
 export class GeneratorService {
   generate(count: number, preset: GeneratePreset = GeneratePreset.USERS) {
@@ -61,5 +66,26 @@ export class GeneratorService {
           };
       }
     });
+  }
+  generateCustom(count: number, fields: CustomField[]) {
+    const records: Record<string, string | number>[] = [];
+
+    for (let i = 0; i < count; i++) {
+      const record: Record<string, string | number> = {
+        id: faker.string.uuid(),
+      };
+
+      for (const field of fields) {
+        if (field.type === 'personName') {
+          record[field.name] = faker.person.fullName();
+        } else if (field.type === 'number') {
+          record[field.name] = faker.number.int({ min: 1, max: 100 });
+        }
+      }
+
+      records.push(record);
+    }
+
+    return records;
   }
 }
