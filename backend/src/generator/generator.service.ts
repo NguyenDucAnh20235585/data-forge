@@ -4,7 +4,7 @@ import { GeneratePreset } from './dto/generate-data.dto';
 
 type CustomField = {
   name: string;
-  type: 'personName' | 'number';
+  type: 'personName' | 'number' | 'email';
   min?: number;
   max?: number;
 };
@@ -75,6 +75,20 @@ export class GeneratorService {
     if (new Set(names).size !== names.length) {
       throw new BadRequestException('Field names must be unique.');
     }
+    const hasInvalidRange = fields.some((field) => {
+      if (field.type !== 'number') return false;
+
+      const min = field.min ?? 1;
+      const max = field.max ?? 100;
+
+      return (
+        !Number.isSafeInteger(min) || !Number.isSafeInteger(max) || min > max
+      );
+    });
+
+    if (hasInvalidRange) {
+      throw new BadRequestException('Invalid number range.');
+    }
     const records: Record<string, string | number>[] = [];
 
     for (let i = 0; i < count; i++) {
@@ -90,6 +104,8 @@ export class GeneratorService {
             min: field.min ?? 1,
             max: field.max ?? 100,
           });
+        } else if (field.type === 'email') {
+          record[field.name] = faker.internet.email();
         }
       }
 

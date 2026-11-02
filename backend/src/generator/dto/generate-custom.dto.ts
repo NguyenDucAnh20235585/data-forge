@@ -27,8 +27,8 @@ export class CustomFieldDto {
   @IsInt()
   max?: number;
 
-  @IsIn(['personName', 'number'])
-  type!: 'personName' | 'number';
+  @IsIn(['personName', 'number', 'email'])
+  type!: 'personName' | 'number' | 'email';
 }
 
 export class GenerateCustomDto {
