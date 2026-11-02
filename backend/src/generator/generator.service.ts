@@ -4,7 +4,7 @@ import { GeneratePreset } from './dto/generate-data.dto';
 
 type CustomField = {
   name: string;
-  type: 'personName' | 'number' | 'email';
+  type: 'personName' | 'number' | 'email' | 'string';
   min?: number;
   max?: number;
 };
@@ -106,6 +106,8 @@ export class GeneratorService {
           });
         } else if (field.type === 'email') {
           record[field.name] = faker.internet.email();
+        } else if (field.type === 'string') {
+          record[field.name] = faker.string.alphanumeric({ length: 8 });
         }
       }
 
