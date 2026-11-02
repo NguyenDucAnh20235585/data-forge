@@ -27,6 +27,12 @@ export class CustomFieldDto {
   @IsInt()
   max?: number;
 
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  @Max(100)
+  length?: number;
+
   @IsIn(['personName', 'number', 'email', 'string'])
   type!: 'personName' | 'number' | 'email' | 'string';
 }

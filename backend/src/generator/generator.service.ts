@@ -7,6 +7,7 @@ type CustomField = {
   type: 'personName' | 'number' | 'email' | 'string';
   min?: number;
   max?: number;
+  length?: number;
 };
 
 @Injectable()
@@ -107,7 +108,9 @@ export class GeneratorService {
         } else if (field.type === 'email') {
           record[field.name] = faker.internet.email();
         } else if (field.type === 'string') {
-          record[field.name] = faker.string.alphanumeric({ length: 8 });
+          record[field.name] = faker.string.alphanumeric({
+            length: field.length ?? 8,
+          });
         }
       }
 

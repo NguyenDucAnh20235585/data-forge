@@ -8,6 +8,7 @@ type CustomField = {
   type: "personName" | "number" | "email" | "string";
   min?: number;
   max?: number;
+  length?: number;
 };
 
 type GeneratedRecord = {
@@ -55,8 +56,22 @@ function App() {
         );
       });
 
+      const hasInvalidLength = fields.some((field) => {
+        if (field.type !== "string") return false;
+
+        const length = field.length ?? 8;
+
+        return;
+        !Number.isInteger(length) || length < 1 || length > 100;
+      });
+
       if (hasInvalidRange) {
         setError("Invalid number range. Check Min and Max.");
+        return;
+      }
+
+      if (hasInvalidLength) {
+        setError("String length must be between 1 and 100.");
         return;
       }
 
@@ -85,7 +100,8 @@ function App() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to generate data");
+        const details = await response.text();
+        throw new Error(details);
       }
 
       const data: GeneratedRecord[] = await response.json();
@@ -216,6 +232,33 @@ function App() {
                               ? {
                                   ...item,
                                   max: value === "" ? undefined : Number(value),
+                                }
+                              : item,
+                          ),
+                        );
+                      }}
+                    />
+                  </label>
+                )}
+
+                {field.type === "string" && (
+                  <label>
+                    Length:
+                    <input
+                      type="number"
+                      min="1"
+                      max="100"
+                      value={field.length ?? ""}
+                      onChange={(event) => {
+                        const value = event.target.value;
+
+                        setFields(
+                          fields.map((item, i) =>
+                            i === index
+                              ? {
+                                  ...item,
+                                  length:
+                                    value === "" ? undefined : Number(value),
                                 }
                               : item,
                           ),
