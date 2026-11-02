@@ -8,11 +8,24 @@ import {
   Max,
   Min,
   ValidateNested,
+  Matches,
+  IsOptional,
 } from 'class-validator';
 
 export class CustomFieldDto {
   @IsString()
+  @Matches(/\S/, {
+    message: 'Field name cannot be empty.',
+  })
   name!: string;
+
+  @IsOptional()
+  @IsInt()
+  min?: number;
+
+  @IsOptional()
+  @IsInt()
+  max?: number;
 
   @IsIn(['personName', 'number'])
   type!: 'personName' | 'number';

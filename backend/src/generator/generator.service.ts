@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { faker } from '@faker-js/faker';
 import { GeneratePreset } from './dto/generate-data.dto';
 
 type CustomField = {
   name: string;
   type: 'personName' | 'number';
+  min?: number;
+  max?: number;
 };
 
 @Injectable()
@@ -68,6 +70,11 @@ export class GeneratorService {
     });
   }
   generateCustom(count: number, fields: CustomField[]) {
+    const names = fields.map((field) => field.name.trim().toLowerCase());
+
+    if (new Set(names).size !== names.length) {
+      throw new BadRequestException('Field names must be unique.');
+    }
     const records: Record<string, string | number>[] = [];
 
     for (let i = 0; i < count; i++) {
@@ -79,7 +86,10 @@ export class GeneratorService {
         if (field.type === 'personName') {
           record[field.name] = faker.person.fullName();
         } else if (field.type === 'number') {
-          record[field.name] = faker.number.int({ min: 1, max: 100 });
+          record[field.name] = faker.number.int({
+            min: field.min ?? 1,
+            max: field.max ?? 100,
+          });
         }
       }
 

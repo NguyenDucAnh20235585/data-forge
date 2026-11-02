@@ -6,6 +6,8 @@ type Preset = "users" | "products" | "employees" | "umamusume";
 type CustomField = {
   name: string;
   type: "personName" | "number";
+  min?: number;
+  max?: number;
 };
 
 type GeneratedRecord = {
@@ -31,9 +33,41 @@ function App() {
       : [];
 
   const handleGenerate = async () => {
+    if (mode === "custom") {
+      const hasEmptyName = fields.some((field) => field.name.trim() === "");
+
+      if (hasEmptyName) {
+        setError("Field name cannot be empty.");
+        return;
+      }
+      const names = fields.map((field) => field.name.trim().toLowerCase());
+
+      const hasDuplicates = new Set(names).size !== names.length;
+
+      const hasInvalidRange = fields.some((field) => {
+        if (field.type !== "number") return false;
+
+        const min = field.min ?? 1;
+        const max = field.max ?? 100;
+
+        return (
+          !Number.isSafeInteger(min) || !Number.isSafeInteger(max) || min > max
+        );
+      });
+
+      if (hasInvalidRange) {
+        setError("Invalid number range. Check Min and Max.");
+        return;
+      }
+
+      if (hasDuplicates) {
+        setError("Field names must be unique.");
+        return;
+      }
+    }
+
     setLoading(true);
     setError("");
-
     try {
       const endpoint =
         mode === "quick"
@@ -114,6 +148,14 @@ function App() {
                     setFields(updatedFields);
                   }}
                 />
+                <button
+                  disabled={fields.length === 1}
+                  onClick={() =>
+                    setFields(fields.filter((_, i) => i !== index))
+                  }
+                >
+                  Remove
+                </button>
 
                 <select
                   value={field.type}
@@ -133,16 +175,74 @@ function App() {
                   <option value="personName">Person Name</option>
                   <option value="number">Number</option>
                 </select>
+                {field.type === "number" && (
+                  <label>
+                    Min:
+                    <input
+                      type="number"
+                      value={field.min ?? ""}
+                      onChange={(event) => {
+                        const value = event.target.value;
+
+                        setFields(
+                          fields.map((item, i) =>
+                            i === index
+                              ? {
+                                  ...item,
+                                  min: value === "" ? undefined : Number(value),
+                                }
+                              : item,
+                          ),
+                        );
+                      }}
+                    />
+                  </label>
+                )}
+
+                {field.type === "number" && (
+                  <label>
+                    Max:
+                    <input
+                      type="number"
+                      value={field.max ?? ""}
+                      onChange={(event) => {
+                        const value = event.target.value;
+
+                        setFields(
+                          fields.map((item, i) =>
+                            i === index
+                              ? {
+                                  ...item,
+                                  max: value === "" ? undefined : Number(value),
+                                }
+                              : item,
+                          ),
+                        );
+                      }}
+                    />
+                  </label>
+                )}
               </div>
             ))}
 
             <button
-              onClick={() =>
+              onClick={() => {
+                let next = 2;
+
+                while (
+                  fields.some(
+                    (field) =>
+                      field.name.trim().toLowerCase() === `field${next}`,
+                  )
+                ) {
+                  next++;
+                }
+
                 setFields([
                   ...fields,
-                  { name: `field${fields.length + 1}`, type: "number" },
-                ])
-              }
+                  { name: `field${next}`, type: "number" },
+                ]);
+              }}
             >
               Add Field
             </button>
