@@ -5,10 +5,11 @@ type Preset = "users" | "products" | "employees" | "umamusume";
 
 type CustomField = {
   name: string;
-  type: "personName" | "number" | "email" | "string";
+  type: "personName" | "number" | "email" | "string" | "choice";
   min?: number;
   max?: number;
   length?: number;
+  options?: string[];
 };
 
 type GeneratedRecord = {
@@ -61,8 +62,17 @@ function App() {
 
         const length = field.length ?? 8;
 
-        return;
-        !Number.isInteger(length) || length < 1 || length > 100;
+        return !Number.isInteger(length) || length < 1 || length > 100;
+      });
+
+      const hasInvalidOptions = fields.some((field) => {
+        if (field.type !== "choice") return false;
+
+        if (!field.options || field.options.length === 0) {
+          return true;
+        }
+
+        return field.options.some((option) => option.trim() === "");
       });
 
       if (hasInvalidRange) {
@@ -72,6 +82,11 @@ function App() {
 
       if (hasInvalidLength) {
         setError("String length must be between 1 and 100.");
+        return;
+      }
+
+      if (hasInvalidOptions) {
+        setError("Choice must contain valid options.");
         return;
       }
 
@@ -192,6 +207,7 @@ function App() {
                   <option value="number">Number</option>
                   <option value="email">Email</option>
                   <option value="string">String</option>
+                  <option value="choice">Choice</option>
                 </select>
                 {field.type === "number" && (
                   <label>
@@ -261,6 +277,26 @@ function App() {
                                     value === "" ? undefined : Number(value),
                                 }
                               : item,
+                          ),
+                        );
+                      }}
+                    />
+                  </label>
+                )}
+                {field.type === "choice" && (
+                  <label>
+                    Options:
+                    <input
+                      type="text"
+                      value={(field.options ?? []).join(", ")}
+                      onChange={(event) => {
+                        const options = event.target.value
+                          .split(",")
+                          .map((item) => item.trim());
+
+                        setFields(
+                          fields.map((item, i) =>
+                            i === index ? { ...item, options } : item,
                           ),
                         );
                       }}

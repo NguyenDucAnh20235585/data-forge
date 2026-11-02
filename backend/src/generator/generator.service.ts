@@ -4,10 +4,11 @@ import { GeneratePreset } from './dto/generate-data.dto';
 
 type CustomField = {
   name: string;
-  type: 'personName' | 'number' | 'email' | 'string';
+  type: 'personName' | 'number' | 'email' | 'string' | 'choice';
   min?: number;
   max?: number;
   length?: number;
+  options?: string[];
 };
 
 @Injectable()
@@ -92,6 +93,20 @@ export class GeneratorService {
     }
     const records: Record<string, string | number>[] = [];
 
+    const hasInvalidOptions = fields.some((field) => {
+      if (field.type !== 'choice') return false;
+
+      if (!field.options || field.options.length === 0) {
+        return true;
+      }
+
+      return field.options.some((option) => option.trim() === '');
+    });
+
+    if (hasInvalidOptions) {
+      throw new BadRequestException('Invalid choice options.');
+    }
+
     for (let i = 0; i < count; i++) {
       const record: Record<string, string | number> = {
         id: faker.string.uuid(),
@@ -111,6 +126,12 @@ export class GeneratorService {
           record[field.name] = faker.string.alphanumeric({
             length: field.length ?? 8,
           });
+        } else if (field.type === 'choice') {
+          if (!field.options) {
+            throw new BadRequestException('Invalid choice options.');
+          }
+
+          record[field.name] = faker.helpers.arrayElement(field.options);
         }
       }
 

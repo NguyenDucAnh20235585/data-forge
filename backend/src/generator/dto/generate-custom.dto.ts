@@ -33,8 +33,13 @@ export class CustomFieldDto {
   @Max(100)
   length?: number;
 
-  @IsIn(['personName', 'number', 'email', 'string'])
-  type!: 'personName' | 'number' | 'email' | 'string';
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  options?: string[];
+
+  @IsIn(['personName', 'number', 'email', 'string', 'choice'])
+  type!: 'personName' | 'number' | 'email' | 'string' | 'choice';
 }
 
 export class GenerateCustomDto {
