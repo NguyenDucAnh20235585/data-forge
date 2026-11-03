@@ -41,6 +41,25 @@ function App() {
 
   const columns = records.length > 0 ? Object.keys(records[0]) : [];
 
+  const handleExportJson = () => {
+    if (records.length === 0) return;
+
+    const json = JSON.stringify(records, null, 2);
+
+    const blob = new Blob([json], {
+      type: "application/json;charset=utf-8",
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "data-forge.json";
+    link.click();
+
+    URL.revokeObjectURL(url);
+  };
+
   const handleGenerate = async () => {
     if (mode === "custom") {
       const hasEmptyName = fields.some((field) => field.name.trim() === "");
@@ -444,7 +463,9 @@ function App() {
       {records.length > 0 && (
         <section>
           <h2>Generated Records ({records.length})</h2>
-
+          <button onClick={handleExportJson} disabled={records.length === 0}>
+            Export JSON
+          </button>
           <table>
             <thead>
               <tr>
