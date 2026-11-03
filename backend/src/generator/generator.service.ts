@@ -4,7 +4,7 @@ import { GeneratePreset } from './dto/generate-data.dto';
 
 type CustomField = {
   name: string;
-  type: 'personName' | 'number' | 'email' | 'string' | 'choice';
+  type: 'personName' | 'number' | 'email' | 'string' | 'choice' | 'phoneNumber';
   min?: number;
   max?: number;
   length?: number;
@@ -130,6 +130,8 @@ export class GeneratorService {
           }
 
           record[field.name] = faker.helpers.arrayElement(field.options);
+        } else if (field.type === 'phoneNumber') {
+          record[field.name] = faker.phone.number();
         }
       }
 

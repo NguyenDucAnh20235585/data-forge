@@ -5,7 +5,7 @@ type Preset = "users" | "products" | "employees" | "umamusume";
 
 type CustomField = {
   name: string;
-  type: "personName" | "number" | "email" | "string" | "choice";
+  type: "personName" | "number" | "email" | "string" | "choice" | "phoneNumber";
   min?: number;
   max?: number;
   length?: number;
@@ -202,6 +202,7 @@ function App() {
                   <option value="email">Email</option>
                   <option value="string">String</option>
                   <option value="choice">Choice</option>
+                  <option value="phoneNumber">Phone Number</option>
                 </select>
                 {field.type === "number" && (
                   <label>
