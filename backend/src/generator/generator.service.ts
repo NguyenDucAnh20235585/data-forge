@@ -108,9 +108,7 @@ export class GeneratorService {
     }
 
     for (let i = 0; i < count; i++) {
-      const record: Record<string, string | number> = {
-        id: faker.string.uuid(),
-      };
+      const record: Record<string, string | number> = {};
 
       for (const field of fields) {
         if (field.type === 'personName') {

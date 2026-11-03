@@ -12,10 +12,7 @@ type CustomField = {
   options?: string[];
 };
 
-type GeneratedRecord = {
-  id: string;
-  [key: string]: string | number;
-};
+type GeneratedRecord = Record<string, string | number>;
 
 function App() {
   const [preset, setPreset] = useState<Preset>("users");
@@ -29,10 +26,7 @@ function App() {
     { name: "playerName", type: "personName" },
   ]);
 
-  const columns =
-    records.length > 0
-      ? Object.keys(records[0]).filter((key) => key !== "id")
-      : [];
+  const columns = records.length > 0 ? Object.keys(records[0]) : [];
 
   const handleGenerate = async () => {
     if (mode === "custom") {
@@ -366,8 +360,8 @@ function App() {
             </thead>
 
             <tbody>
-              {records.map((record) => (
-                <tr key={record.id}>
+              {records.map((record, index) => (
+                <tr key={index}>
                   {columns.map((column) => (
                     <td key={column}>{record[column]}</td>
                   ))}
