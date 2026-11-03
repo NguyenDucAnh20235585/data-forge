@@ -4,7 +4,15 @@ import { GeneratePreset } from './dto/generate-data.dto';
 
 type CustomField = {
   name: string;
-  type: 'personName' | 'number' | 'email' | 'string' | 'choice' | 'phoneNumber';
+  type:
+    | 'personName'
+    | 'productName'
+    | 'companyName'
+    | 'number'
+    | 'email'
+    | 'string'
+    | 'choice'
+    | 'phoneNumber';
   min?: number;
   max?: number;
   length?: number;
@@ -113,6 +121,11 @@ export class GeneratorService {
       for (const field of fields) {
         if (field.type === 'personName') {
           record[field.name] = faker.person.fullName();
+        } else if (field.type === 'productName') {
+          record[field.name] = faker.commerce.productName();
+        }
+        if (field.type === 'companyName') {
+          record[field.name] = faker.company.name();
         } else if (field.type === 'number') {
           record[field.name] = faker.number.int({
             min: field.min ?? 1,

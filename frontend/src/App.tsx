@@ -5,7 +5,15 @@ type Preset = "users" | "products" | "employees" | "umamusume";
 
 type CustomField = {
   name: string;
-  type: "personName" | "number" | "email" | "string" | "choice" | "phoneNumber";
+  type:
+    | "personName"
+    | "productName"
+    | "companyName"
+    | "number"
+    | "email"
+    | "string"
+    | "choice"
+    | "phoneNumber";
   min?: number;
   max?: number;
   length?: number;
@@ -210,6 +218,8 @@ function App() {
                   }}
                 >
                   <option value="personName">Person Name</option>
+                  <option value="productName">Product Name</option>
+                  <option value="companyName">Company Name</option>
                   <option value="number">Number</option>
                   <option value="email">Email</option>
                   <option value="string">String</option>

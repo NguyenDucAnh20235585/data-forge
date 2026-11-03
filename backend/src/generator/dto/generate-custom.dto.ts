@@ -38,9 +38,25 @@ export class CustomFieldDto {
   @IsString({ each: true })
   options?: string[];
 
-  @IsIn(['personName', 'number', 'email', 'string', 'choice', 'phoneNumber'])
+  @IsIn([
+    'personName',
+    'productName',
+    'companyName',
+    'number',
+    'email',
+    'string',
+    'choice',
+    'phoneNumber',
+  ])
   type!:
-    'personName' | 'number' | 'email' | 'string' | 'choice' | 'phoneNumber';
+    | 'personName'
+    | 'productName'
+    | 'companyName'
+    | 'number'
+    | 'email'
+    | 'string'
+    | 'choice'
+    | 'phoneNumber';
 }
 
 export class GenerateCustomDto {
