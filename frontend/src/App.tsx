@@ -60,6 +60,40 @@ function App() {
     URL.revokeObjectURL(url);
   };
 
+  const handleExportCsv = () => {
+    if (records.length === 0) return;
+
+    const headers = Object.keys(records[0]);
+
+    const rows = records.map((record) =>
+      headers.map((header) => record[header]),
+    );
+
+    console.log(headers);
+    console.log(rows);
+
+    const escapeCsvCell = (value: string | number): string =>
+      `"${String(value).replace(/"/g, '""')}"`;
+
+    const csv = [
+      headers.map(escapeCsvCell).join(","),
+      ...rows.map((row) => row.map(escapeCsvCell).join(",")),
+    ].join("\r\n");
+
+    const blob = new Blob(["\uFEFF", csv], {
+      type: "text/csv;charset=utf-8",
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "data-forge.csv";
+    link.click();
+
+    URL.revokeObjectURL(url);
+  };
+
   const handleGenerate = async () => {
     if (mode === "custom") {
       const hasEmptyName = fields.some((field) => field.name.trim() === "");
@@ -466,6 +500,7 @@ function App() {
           <button onClick={handleExportJson} disabled={records.length === 0}>
             Export JSON
           </button>
+          <button onClick={handleExportCsv}>Export CSV</button>
           <table>
             <thead>
               <tr>
