@@ -47,6 +47,13 @@ export class CustomFieldDto {
   @IsDateString()
   endDate?: string;
 
+  @IsOptional()
+  @IsString()
+  @Matches(/\S/, {
+    message: 'Pattern cannot be empty.',
+  })
+  pattern?: string;
+
   @IsIn([
     'personName',
     'productName',
@@ -57,6 +64,7 @@ export class CustomFieldDto {
     'choice',
     'phoneNumber',
     'date',
+    'pattern',
   ])
   type!:
     | 'personName'
@@ -67,7 +75,8 @@ export class CustomFieldDto {
     | 'string'
     | 'choice'
     | 'phoneNumber'
-    | 'date';
+    | 'date'
+    | 'pattern';
 }
 
 export class GenerateCustomDto {
