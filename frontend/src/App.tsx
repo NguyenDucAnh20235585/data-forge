@@ -98,8 +98,20 @@ function App() {
           ? "http://localhost:3000/generate"
           : "http://localhost:3000/generate/custom";
 
-      const payload = mode === "quick" ? { count, preset } : { count, fields };
-
+      const payload =
+        mode === "quick"
+          ? { count, preset }
+          : {
+              count,
+              fields: fields.map((field) =>
+                field.type === "choice"
+                  ? {
+                      ...field,
+                      options: field.options?.map((option) => option.trim()),
+                    }
+                  : field,
+              ),
+            };
       const response = await fetch(endpoint, {
         method: "POST",
         headers: {
@@ -283,11 +295,9 @@ function App() {
                     Options:
                     <input
                       type="text"
-                      value={(field.options ?? []).join(", ")}
+                      value={(field.options ?? []).join(",")}
                       onChange={(event) => {
-                        const options = event.target.value
-                          .split(",")
-                          .map((item) => item.trim());
+                        const options = event.target.value.split(",");
 
                         setFields(
                           fields.map((item, i) =>
