@@ -10,6 +10,7 @@ import {
   ValidateNested,
   Matches,
   IsOptional,
+  IsDateString,
 } from 'class-validator';
 
 export class CustomFieldDto {
@@ -38,6 +39,14 @@ export class CustomFieldDto {
   @IsString({ each: true })
   options?: string[];
 
+  @IsOptional()
+  @IsDateString()
+  startDate?: string;
+
+  @IsOptional()
+  @IsDateString()
+  endDate?: string;
+
   @IsIn([
     'personName',
     'productName',
@@ -47,6 +56,7 @@ export class CustomFieldDto {
     'string',
     'choice',
     'phoneNumber',
+    'date',
   ])
   type!:
     | 'personName'
@@ -56,7 +66,8 @@ export class CustomFieldDto {
     | 'email'
     | 'string'
     | 'choice'
-    | 'phoneNumber';
+    | 'phoneNumber'
+    | 'date';
 }
 
 export class GenerateCustomDto {

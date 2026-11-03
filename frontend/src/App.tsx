@@ -13,11 +13,14 @@ type CustomField = {
     | "email"
     | "string"
     | "choice"
-    | "phoneNumber";
+    | "phoneNumber"
+    | "date";
   min?: number;
   max?: number;
   length?: number;
   options?: string[];
+  startDate?: string;
+  endDate?: string;
 };
 
 type GeneratedRecord = Record<string, string | number>;
@@ -76,6 +79,21 @@ function App() {
 
         return field.options.some((option) => option.trim() === "");
       });
+
+      const hasInvalidDateRange = fields.some((field) => {
+        if (field.type !== "date") return false;
+
+        if (!field.startDate || !field.endDate) {
+          return true;
+        }
+
+        return field.startDate > field.endDate;
+      });
+
+      if (hasInvalidDateRange) {
+        setError("Invalid date range. Check Start Date and End Date.");
+        return;
+      }
 
       if (hasInvalidRange) {
         setError("Invalid number range. Check Min and Max.");
@@ -225,6 +243,7 @@ function App() {
                   <option value="string">String</option>
                   <option value="choice">Choice</option>
                   <option value="phoneNumber">Phone Number</option>
+                  <option value="date">Date</option>
                 </select>
                 {field.type === "number" && (
                   <label>
@@ -312,6 +331,42 @@ function App() {
                         setFields(
                           fields.map((item, i) =>
                             i === index ? { ...item, options } : item,
+                          ),
+                        );
+                      }}
+                    />
+                  </label>
+                )}
+                {field.type === "date" && (
+                  <label>
+                    Start Date:
+                    <input
+                      type="date"
+                      value={field.startDate ?? ""}
+                      onChange={(event) => {
+                        setFields(
+                          fields.map((item, i) =>
+                            i === index
+                              ? { ...item, startDate: event.target.value }
+                              : item,
+                          ),
+                        );
+                      }}
+                    />
+                  </label>
+                )}
+                {field.type === "date" && (
+                  <label>
+                    End Date:
+                    <input
+                      type="date"
+                      value={field.endDate ?? ""}
+                      onChange={(event) => {
+                        setFields(
+                          fields.map((item, i) =>
+                            i === index
+                              ? { ...item, endDate: event.target.value }
+                              : item,
                           ),
                         );
                       }}

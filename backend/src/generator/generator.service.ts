@@ -12,11 +12,14 @@ type CustomField = {
     | 'email'
     | 'string'
     | 'choice'
-    | 'phoneNumber';
+    | 'phoneNumber'
+    | 'date';
   min?: number;
   max?: number;
   length?: number;
   options?: string[];
+  startDate?: string;
+  endDate?: string;
 };
 
 @Injectable()
@@ -111,8 +114,29 @@ export class GeneratorService {
       return field.options.some((option) => option.trim() === '');
     });
 
+    const hasInvalidDateRange = fields.some((field) => {
+      if (field.type !== 'date') return false;
+
+      if (!field.startDate || !field.endDate) {
+        return true;
+      }
+
+      const start = new Date(field.startDate);
+      const end = new Date(field.endDate);
+
+      return (
+        Number.isNaN(start.getTime()) ||
+        Number.isNaN(end.getTime()) ||
+        start.getTime() > end.getTime()
+      );
+    });
+
     if (hasInvalidOptions) {
       throw new BadRequestException('Invalid choice options.');
+    }
+
+    if (hasInvalidDateRange) {
+      throw new BadRequestException('Invalid date range.');
     }
 
     for (let i = 0; i < count; i++) {
@@ -145,6 +169,18 @@ export class GeneratorService {
           record[field.name] = faker.helpers.arrayElement(field.options);
         } else if (field.type === 'phoneNumber') {
           record[field.name] = faker.phone.number();
+        } else if (field.type === 'date') {
+          if (!field.startDate || !field.endDate) {
+            throw new BadRequestException('Invalid date range.');
+          }
+
+          record[field.name] = faker.date
+            .between({
+              from: field.startDate,
+              to: field.endDate,
+            })
+            .toISOString()
+            .slice(0, 10);
         }
       }
 
