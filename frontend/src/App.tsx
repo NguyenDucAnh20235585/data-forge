@@ -14,13 +14,15 @@ type CustomField = {
     | "string"
     | "choice"
     | "phoneNumber"
-    | "date";
+    | "date"
+    | "pattern";
   min?: number;
   max?: number;
   length?: number;
   options?: string[];
   startDate?: string;
   endDate?: string;
+  pattern?: string;
 };
 
 type GeneratedRecord = Record<string, string | number>;
@@ -244,6 +246,7 @@ function App() {
                   <option value="choice">Choice</option>
                   <option value="phoneNumber">Phone Number</option>
                   <option value="date">Date</option>
+                  <option value="pattern">Pattern</option>
                 </select>
                 {field.type === "number" && (
                   <label>
@@ -372,6 +375,22 @@ function App() {
                       }}
                     />
                   </label>
+                )}
+                {field.type === "pattern" && (
+                  <input
+                    type="text"
+                    placeholder="PLR-{letters:4}-{digits:6}"
+                    value={field.pattern ?? ""}
+                    onChange={(event) =>
+                      setFields((previous) =>
+                        previous.map((item, i) =>
+                          i === index
+                            ? { ...item, pattern: event.target.value }
+                            : item,
+                        ),
+                      )
+                    }
+                  />
                 )}
               </div>
             ))}

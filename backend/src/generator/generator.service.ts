@@ -2,6 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { faker } from '@faker-js/faker';
 import { GeneratePreset } from './dto/generate-data.dto';
 import { generatePreset } from './preset-generator';
+import { generatePattern } from './pattern-generator';
 
 import {
   validateFieldNames,
@@ -38,6 +39,7 @@ export class GeneratorService {
   generate(count: number, preset: GeneratePreset = GeneratePreset.USERS) {
     return generatePreset(count, preset);
   }
+
   generateCustom(count: number, fields: CustomField[]) {
     validateFieldNames(fields);
     validateNumberRanges(fields);
@@ -88,6 +90,12 @@ export class GeneratorService {
             })
             .toISOString()
             .slice(0, 10);
+        } else if (field.type === 'pattern') {
+          if (!field.pattern) {
+            throw new BadRequestException('Invalid pattern.');
+          }
+
+          record[field.name] = generatePattern(field.pattern);
         }
       }
 
