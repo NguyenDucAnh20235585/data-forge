@@ -117,35 +117,37 @@ export default function CustomFieldRow({
             </p>
           </div>
         )}
+
         {field.type === "date" && (
-          <label className="flex items-center gap-2 text-sm text-muted">
-            Start Date:
-            <input
-              className="min-w-0 rounded-md border border-outline bg-surface px-2 py-2 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
-              type="date"
-              value={field.startDate ?? ""}
-              onChange={(event) => {
-                onConfigChange({
-                  startDate: event.target.value,
-                });
-              }}
-            />
-          </label>
-        )}
-        {field.type === "date" && (
-          <label className="flex items-center gap-2 text-sm text-muted">
-            End Date:
-            <input
-              className="min-w-0 rounded-md border border-outline bg-surface px-2 py-2 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
-              type="date"
-              value={field.endDate ?? ""}
-              onChange={(event) => {
-                onConfigChange({
-                  endDate: event.target.value,
-                });
-              }}
-            />
-          </label>
+          <div className="grid w-full min-w-0 grid-cols-2 gap-3">
+            <label className="flex min-w-0 flex-col gap-1 text-xs text-muted">
+              Start Date
+              <input
+                type="date"
+                className="w-full min-w-0 rounded-md border border-outline bg-surface px-2 py-2 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
+                value={field.startDate ?? ""}
+                onChange={(event) => {
+                  onConfigChange({
+                    startDate: event.target.value,
+                  });
+                }}
+              />
+            </label>
+
+            <label className="flex min-w-0 flex-col gap-1 text-xs text-muted">
+              End Date
+              <input
+                type="date"
+                className="w-full min-w-0 rounded-md border border-outline bg-surface px-2 py-2 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
+                value={field.endDate ?? ""}
+                onChange={(event) => {
+                  onConfigChange({
+                    endDate: event.target.value,
+                  });
+                }}
+              />
+            </label>
+          </div>
         )}
 
         {field.type === "pattern" && (

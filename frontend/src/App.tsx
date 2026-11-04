@@ -26,6 +26,22 @@ function App() {
     mode === "quick" ? { mode, count, preset } : { mode, count, fields },
   );
 
+  const handleAddField = () => {
+    setFields((previous) => {
+      let next = 2;
+
+      while (
+        previous.some(
+          (field) => field.name.trim().toLowerCase() === `field${next}`,
+        )
+      ) {
+        next++;
+      }
+
+      return [...previous, { name: `field${next}`, type: "number" }];
+    });
+  };
+
   const isPreviewStale =
     records.length > 0 &&
     generatedConfig !== null &&
@@ -165,14 +181,24 @@ function App() {
           <CustomFieldEditor fields={fields} setFields={setFields} />
         )}
 
-        <div className="flex justify-end">
+        <div className="flex items-center justify-between gap-4">
+          {mode === "custom" && (
+            <button
+              type="button"
+              onClick={handleAddField}
+              className="rounded-md border border-dashed border-outline px-4 py-2 text-sm font-medium text-ink transition-colors duration-150 hover:border-accent hover:bg-surface-soft"
+            >
+              Add Field
+            </button>
+          )}
+
           <button
             type="button"
             onClick={handleGenerate}
             disabled={
               loading || !Number.isInteger(count) || count < 1 || count > 1000
             }
-            className="rounded-md bg-primary px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors duration-150 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-50"
+            className="ml-auto rounded-md bg-primary px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors duration-150 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Generating..." : "Generate Data"}
           </button>
