@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { CustomField } from "../types/generator";
+import CustomFieldRow from "./CustomFieldRow";
 
 type CustomFieldEditorProps = {
   fields: CustomField[];
@@ -16,122 +17,35 @@ export default function CustomFieldEditor({
 
       {fields.map((field, index) => (
         <div key={index}>
-          <input
-            value={field.name}
-            onChange={(event) => {
-              const updatedFields = fields.map((item, i) =>
-                i === index ? { ...item, name: event.target.value } : item,
+          <CustomFieldRow
+            field={field}
+            onNameChange={(name) => {
+              setFields((previous) =>
+                previous.map((item, i) =>
+                  i === index ? { ...item, name } : item,
+                ),
               );
-
-              setFields(updatedFields);
             }}
+            onTypeChange={(type) => {
+              setFields((previous) =>
+                previous.map((item, i) =>
+                  i === index ? { ...item, type } : item,
+                ),
+              );
+            }}
+            onConfigChange={(changes) => {
+              setFields((previous) =>
+                previous.map((item, i) =>
+                  i === index ? { ...item, ...changes } : item,
+                ),
+              );
+            }}
+            onRemove={() =>
+              setFields((previous) => previous.filter((_, i) => i !== index))
+            }
+            canRemove={fields.length > 1}
           />
-          <button
-            disabled={fields.length === 1}
-            onClick={() => setFields(fields.filter((_, i) => i !== index))}
-          >
-            Remove
-          </button>
 
-          <select
-            value={field.type}
-            onChange={(event) => {
-              const updatedFields = fields.map((item, i) =>
-                i === index
-                  ? {
-                      ...item,
-                      type: event.target.value as CustomField["type"],
-                    }
-                  : item,
-              );
-
-              setFields(updatedFields);
-            }}
-          >
-            <option value="personName">Person Name</option>
-            <option value="productName">Product Name</option>
-            <option value="companyName">Company Name</option>
-            <option value="number">Number</option>
-            <option value="email">Email</option>
-            <option value="string">String</option>
-            <option value="choice">Choice</option>
-            <option value="phoneNumber">Phone Number</option>
-            <option value="date">Date</option>
-            <option value="pattern">Pattern</option>
-          </select>
-          {field.type === "number" && (
-            <label>
-              Min:
-              <input
-                type="number"
-                value={field.min ?? ""}
-                onChange={(event) => {
-                  const value = event.target.value;
-
-                  setFields(
-                    fields.map((item, i) =>
-                      i === index
-                        ? {
-                            ...item,
-                            min: value === "" ? undefined : Number(value),
-                          }
-                        : item,
-                    ),
-                  );
-                }}
-              />
-            </label>
-          )}
-
-          {field.type === "number" && (
-            <label>
-              Max:
-              <input
-                type="number"
-                value={field.max ?? ""}
-                onChange={(event) => {
-                  const value = event.target.value;
-
-                  setFields(
-                    fields.map((item, i) =>
-                      i === index
-                        ? {
-                            ...item,
-                            max: value === "" ? undefined : Number(value),
-                          }
-                        : item,
-                    ),
-                  );
-                }}
-              />
-            </label>
-          )}
-
-          {field.type === "string" && (
-            <label>
-              Length:
-              <input
-                type="number"
-                min="1"
-                max="100"
-                value={field.length ?? ""}
-                onChange={(event) => {
-                  const value = event.target.value;
-
-                  setFields(
-                    fields.map((item, i) =>
-                      i === index
-                        ? {
-                            ...item,
-                            length: value === "" ? undefined : Number(value),
-                          }
-                        : item,
-                    ),
-                  );
-                }}
-              />
-            </label>
-          )}
           {field.type === "choice" && (
             <label>
               Options:
