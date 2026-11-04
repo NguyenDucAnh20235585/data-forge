@@ -45,59 +45,6 @@ export default function CustomFieldEditor({
             }
             canRemove={fields.length > 1}
           />
-
-          {field.type === "date" && (
-            <label>
-              Start Date:
-              <input
-                type="date"
-                value={field.startDate ?? ""}
-                onChange={(event) => {
-                  setFields(
-                    fields.map((item, i) =>
-                      i === index
-                        ? { ...item, startDate: event.target.value }
-                        : item,
-                    ),
-                  );
-                }}
-              />
-            </label>
-          )}
-          {field.type === "date" && (
-            <label>
-              End Date:
-              <input
-                type="date"
-                value={field.endDate ?? ""}
-                onChange={(event) => {
-                  setFields(
-                    fields.map((item, i) =>
-                      i === index
-                        ? { ...item, endDate: event.target.value }
-                        : item,
-                    ),
-                  );
-                }}
-              />
-            </label>
-          )}
-          {field.type === "pattern" && (
-            <input
-              type="text"
-              placeholder="PLR-{letters:4}-{digits:6}"
-              value={field.pattern ?? ""}
-              onChange={(event) =>
-                setFields((previous) =>
-                  previous.map((item, i) =>
-                    i === index
-                      ? { ...item, pattern: event.target.value }
-                      : item,
-                  ),
-                )
-              }
-            />
-          )}
         </div>
       ))}
 

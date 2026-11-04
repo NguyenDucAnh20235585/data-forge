@@ -104,6 +104,46 @@ export default function CustomFieldRow({
           />
         </label>
       )}
+      {field.type === "date" && (
+        <label>
+          Start Date:
+          <input
+            type="date"
+            value={field.startDate ?? ""}
+            onChange={(event) => {
+              onConfigChange({
+                startDate: event.target.value,
+              });
+            }}
+          />
+        </label>
+      )}
+      {field.type === "date" && (
+        <label>
+          End Date:
+          <input
+            type="date"
+            value={field.endDate ?? ""}
+            onChange={(event) => {
+              onConfigChange({
+                endDate: event.target.value,
+              });
+            }}
+          />
+        </label>
+      )}
+      {field.type === "pattern" && (
+        <input
+          type="text"
+          placeholder="PLR-{letters:4}-{digits:6}"
+          value={field.pattern ?? ""}
+          onChange={(event) => {
+            onConfigChange({
+              pattern: event.target.value,
+            });
+          }}
+        />
+      )}
       <button disabled={!canRemove} onClick={onRemove}>
         Remove
       </button>
