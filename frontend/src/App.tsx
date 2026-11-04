@@ -13,6 +13,7 @@ function App() {
   const [preset, setPreset] = useState<Preset>("users");
   const [count, setCount] = useState(3);
   const [records, setRecords] = useState<GeneratedRecord[]>([]);
+  const [generatedConfig, setGeneratedConfig] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [mode, setMode] = useState<"quick" | "custom">("quick");
@@ -20,6 +21,15 @@ function App() {
   const [fields, setFields] = useState<CustomField[]>([
     { name: "playerName", type: "personName" },
   ]);
+
+  const currentConfig = JSON.stringify(
+    mode === "quick" ? { mode, count, preset } : { mode, count, fields },
+  );
+
+  const isPreviewStale =
+    records.length > 0 &&
+    generatedConfig !== null &&
+    generatedConfig !== currentConfig;
 
   const handleExportJson = () => {
     exportJson(records);
@@ -61,6 +71,7 @@ function App() {
       const data = await generateData(mode, payload);
 
       setRecords(data);
+      setGeneratedConfig(currentConfig);
     } catch (error) {
       console.error(error);
       setError("Unable to generate data.");
@@ -202,7 +213,18 @@ function App() {
         </div>
 
         {records.length > 0 ? (
-          <PreviewTable records={records} />
+          <>
+            {isPreviewStale && (
+              <p
+                role="status"
+                className="mb-4 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
+              >
+                Configuration changed. Generate again to update the preview.
+              </p>
+            )}
+
+            <PreviewTable records={records} />
+          </>
         ) : (
           <div className="rounded-lg border border-dashed border-outline bg-canvas px-6 py-12 text-center">
             <p className="text-sm font-medium text-ink">
