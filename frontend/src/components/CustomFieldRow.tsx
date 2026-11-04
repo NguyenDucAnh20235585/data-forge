@@ -97,18 +97,25 @@ export default function CustomFieldRow({
           </label>
         )}
         {field.type === "choice" && (
-          <label className="flex w-full min-w-0 items-center gap-2 text-sm text-muted">
-            Options:
-            <input
-              className="min-w-0 flex-1 rounded-md border border-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
-              type="text"
-              value={(field.options ?? []).join(",")}
-              onChange={(event) => {
-                const options = event.target.value.split(",");
-                onConfigChange({ options });
-              }}
-            />
-          </label>
+          <div className="flex w-full min-w-0 flex-col gap-2">
+            <label className="flex w-full min-w-0 items-center gap-2 text-sm text-muted">
+              Options:
+              <input
+                className="min-w-0 flex-1 rounded-md border border-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
+                type="text"
+                placeholder="Common, Rare, Epic"
+                value={(field.options ?? []).join(",")}
+                onChange={(event) => {
+                  const options = event.target.value.split(",");
+                  onConfigChange({ options });
+                }}
+              />
+            </label>
+
+            <p className="text-xs leading-5 text-muted">
+              Separate options with commas, e.g. Common, Rare, Epic.
+            </p>
+          </div>
         )}
         {field.type === "date" && (
           <label className="flex items-center gap-2 text-sm text-muted">
@@ -140,18 +147,24 @@ export default function CustomFieldRow({
             />
           </label>
         )}
+
         {field.type === "pattern" && (
-          <input
-            className="w-full min-w-0 rounded-md border border-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
-            type="text"
-            placeholder="PLR-{letters:4}-{digits:6}"
-            value={field.pattern ?? ""}
-            onChange={(event) => {
-              onConfigChange({
-                pattern: event.target.value,
-              });
-            }}
-          />
+          <div className="flex w-full min-w-0 flex-col gap-2">
+            <input
+              className="w-full min-w-0 rounded-md border border-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
+              type="text"
+              placeholder="PLR-{letters:4}-{digits:6}"
+              value={field.pattern ?? ""}
+              onChange={(event) => {
+                onConfigChange({
+                  pattern: event.target.value,
+                });
+              }}
+            />
+            <p className="text-xs leading-5 text-muted">
+              {"Use {letters:4} for 4 letters and {digits:6} for 6 digits."}
+            </p>
+          </div>
         )}
       </div>
       <button
