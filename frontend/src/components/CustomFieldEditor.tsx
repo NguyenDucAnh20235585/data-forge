@@ -49,6 +49,8 @@ export default function CustomFieldEditor({
       ))}
 
       <button
+        type="button"
+        className="mt-3 rounded-md border border-dashed border-outline px-4 py-2 text-sm font-medium text-ink transition-colors duration-150 hover:border-accent hover:bg-surface-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         onClick={() => {
           let next = 2;
 

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import "./App.css";
 
 import { generateData } from "./api/generatorApi";
 import { validateFields } from "./utils/validateFields";
+
 import type { Preset, CustomField, GeneratedRecord } from "./types/generator";
 
 import PreviewTable from "./components/PreviewTable";
@@ -70,11 +70,47 @@ function App() {
   };
 
   return (
-    <main>
-      <h1>Data Forge</h1>
-      <p>Generate fake data for testing.</p>
+    <main className="mx-auto w-full max-w-5xl px-6 py-10">
+      <header className="mb-8">
+        <h1 className="text-4xl font-semibold tracking-tight">Data Forge</h1>
 
-      <div>
+        <p className="mt-2 text-sm text-zinc-500">
+          Generate fake data for testing.
+        </p>
+      </header>
+
+      <div className="flex flex-col gap-6 rounded-xl border border-outline bg-surface p-6 shadow-sm">
+        <div
+          className="flex w-fit gap-1 rounded-lg bg-surface-soft p-1"
+          role="group"
+          aria-label="Generation mode"
+        >
+          <button
+            type="button"
+            aria-pressed={mode === "quick"}
+            onClick={() => setMode("quick")}
+            className={`mode-tab rounded-md px-4 py-2 text-sm font-medium ${
+              mode === "quick"
+                ? "bg-white text-zinc-900 shadow-sm"
+                : "bg-transparent text-zinc-600 hover:text-zinc-900"
+            }`}
+          >
+            Quick Preset
+          </button>
+
+          <button
+            type="button"
+            aria-pressed={mode === "custom"}
+            onClick={() => setMode("custom")}
+            className={`mode-tab rounded-md px-4 py-2 text-sm font-medium ${
+              mode === "custom"
+                ? "bg-white text-zinc-900 shadow-sm"
+                : "bg-transparent text-zinc-600 hover:text-zinc-900"
+            }`}
+          >
+            Custom Fields
+          </button>
+        </div>
         {mode === "quick" && (
           <>
             <label htmlFor="preset">Preset:</label>
@@ -91,32 +127,38 @@ function App() {
           </>
         )}
 
-        <label htmlFor="count">Number of records:</label>
-        <input
-          id="count"
-          type="number"
-          min="1"
-          max="1000"
-          value={count}
-          onChange={(event) => setCount(Number(event.target.value))}
-        />
+        <div className="flex items-center gap-3">
+          <label htmlFor="count" className="text-sm font-medium text-ink">
+            Number of records
+          </label>
+
+          <input
+            id="count"
+            type="number"
+            min="1"
+            max="1000"
+            value={count}
+            onChange={(event) => setCount(Number(event.target.value))}
+            className="w-28 rounded-md border border-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
+          />
+        </div>
 
         {mode === "custom" && (
           <CustomFieldEditor fields={fields} setFields={setFields} />
         )}
 
-        <button onClick={() => setMode("quick")}>Quick Generate</button>
-
-        <button onClick={() => setMode("custom")}>Custom Generate</button>
-
-        <button
-          onClick={handleGenerate}
-          disabled={
-            loading || !Number.isInteger(count) || count < 1 || count > 1000
-          }
-        >
-          {loading ? "Generating..." : "Generate Data"}
-        </button>
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={handleGenerate}
+            disabled={
+              loading || !Number.isInteger(count) || count < 1 || count > 1000
+            }
+            className="rounded-md bg-primary px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors duration-150 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {loading ? "Generating..." : "Generate Data"}
+          </button>
+        </div>
       </div>
 
       <p>
