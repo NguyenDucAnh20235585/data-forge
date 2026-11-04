@@ -46,24 +46,6 @@ export default function CustomFieldEditor({
             canRemove={fields.length > 1}
           />
 
-          {field.type === "choice" && (
-            <label>
-              Options:
-              <input
-                type="text"
-                value={(field.options ?? []).join(",")}
-                onChange={(event) => {
-                  const options = event.target.value.split(",");
-
-                  setFields(
-                    fields.map((item, i) =>
-                      i === index ? { ...item, options } : item,
-                    ),
-                  );
-                }}
-              />
-            </label>
-          )}
           {field.type === "date" && (
             <label>
               Start Date:

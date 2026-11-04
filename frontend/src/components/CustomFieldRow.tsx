@@ -90,6 +90,20 @@ export default function CustomFieldRow({
           />
         </label>
       )}
+      {field.type === "choice" && (
+        <label>
+          Options:
+          <input
+            type="text"
+            value={(field.options ?? []).join(",")}
+            onChange={(event) => {
+              const options = event.target.value.split(",");
+
+              onConfigChange({ options });
+            }}
+          />
+        </label>
+      )}
       <button disabled={!canRemove} onClick={onRemove}>
         Remove
       </button>
