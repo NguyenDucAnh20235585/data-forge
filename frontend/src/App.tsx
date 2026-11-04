@@ -1,6 +1,8 @@
 import { useState } from "react";
 import "./App.css";
 
+import { generateData } from "./api/generatorApi";
+
 import type { Preset, CustomField, GeneratedRecord } from "./types/generator";
 
 import PreviewTable from "./components/PreviewTable";
@@ -106,12 +108,8 @@ function App() {
 
     setLoading(true);
     setError("");
-    try {
-      const endpoint =
-        mode === "quick"
-          ? "http://localhost:3000/generate"
-          : "http://localhost:3000/generate/custom";
 
+    try {
       const payload =
         mode === "quick"
           ? { count, preset }
@@ -126,20 +124,9 @@ function App() {
                   : field,
               ),
             };
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
 
-      if (!response.ok) {
-        const details = await response.text();
-        throw new Error(details);
-      }
+      const data = await generateData(mode, payload);
 
-      const data: GeneratedRecord[] = await response.json();
       setRecords(data);
     } catch (error) {
       console.error(error);
@@ -147,7 +134,7 @@ function App() {
     } finally {
       setLoading(false);
     }
-  };
+  }; // ← Thiếu dòng này
 
   return (
     <main>
