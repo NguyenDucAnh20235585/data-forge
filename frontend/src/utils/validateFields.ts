@@ -11,7 +11,7 @@ export function validateFields(fields: CustomField[]): string | null {
 
   const hasDuplicates = new Set(names).size !== names.length;
 
-  const hasInvalidRange = fields.some((field) => {
+  const invalidNumber = fields.find((field) => {
     if (field.type !== "number") return false;
 
     const min = field.min ?? 1;
@@ -22,7 +22,7 @@ export function validateFields(fields: CustomField[]): string | null {
     );
   });
 
-  const hasInvalidLength = fields.some((field) => {
+  const invalidString = fields.find((field) => {
     if (field.type !== "string") return false;
 
     const length = field.length ?? 8;
@@ -30,7 +30,7 @@ export function validateFields(fields: CustomField[]): string | null {
     return !Number.isInteger(length) || length < 1 || length > 100;
   });
 
-  const hasInvalidOptions = fields.some((field) => {
+  const invalidChoice = fields.find((field) => {
     if (field.type !== "choice") return false;
 
     if (!field.options || field.options.length === 0) {
@@ -40,7 +40,7 @@ export function validateFields(fields: CustomField[]): string | null {
     return field.options.some((option) => option.trim() === "");
   });
 
-  const hasInvalidDateRange = fields.some((field) => {
+  const invalidDate = fields.find((field) => {
     if (field.type !== "date") return false;
 
     if (!field.startDate || !field.endDate) {
@@ -50,20 +50,20 @@ export function validateFields(fields: CustomField[]): string | null {
     return field.startDate > field.endDate;
   });
 
-  if (hasInvalidDateRange) {
-    return "Invalid date range. Check Start Date and End Date.";
+  if (invalidNumber) {
+    return `Field "${invalidNumber.name}": Invalid number range. Check Min and Max.`;
   }
 
-  if (hasInvalidRange) {
-    return "Invalid number range. Check Min and Max.";
+  if (invalidString) {
+    return `Field "${invalidString.name}": String length must be between 1 and 100.`;
   }
 
-  if (hasInvalidLength) {
-    return "String length must be between 1 and 100.";
+  if (invalidChoice) {
+    return `Field "${invalidChoice.name}": Choice must contain valid options.`;
   }
 
-  if (hasInvalidOptions) {
-    return "Choice must contain valid options.";
+  if (invalidDate) {
+    return `Field "${invalidDate.name}": Invalid date range. Check Start Date and End Date.`;
   }
 
   if (hasDuplicates) {
