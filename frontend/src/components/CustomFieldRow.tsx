@@ -35,7 +35,6 @@ export default function CustomFieldRow({
 
   return (
     <div className="grid w-full grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,2.2fr)_auto] gap-x-3 gap-y-2 rounded-lg border border-outline bg-surface p-3">
-      {/* Row 1 */}
       <div className="min-w-0">
         <input
           aria-label="Field name"
@@ -232,40 +231,43 @@ export default function CustomFieldRow({
         </button>
       </div>
 
-      {/* Row 2: helper / error */}
-      <div className="col-start-1 col-end-4 min-h-5 text-left">
-        {hasNameError && (
-          <p
-            id={nameErrorId}
-            role="alert"
-            className="text-xs leading-5 text-red-600"
-          >
-            {error.message}
-          </p>
-        )}
+      {(error !== null ||
+        field.type === "choice" ||
+        field.type === "pattern") && (
+        <div className="col-span-full text-left">
+          {hasNameError && (
+            <p
+              id={nameErrorId}
+              role="alert"
+              className="text-xs leading-5 text-red-600"
+            >
+              {error.message}
+            </p>
+          )}
 
-        {hasConfigError && (
-          <p
-            id={configErrorId}
-            role="alert"
-            className="text-xs leading-5 text-red-600"
-          >
-            {error.message}
-          </p>
-        )}
+          {hasConfigError && (
+            <p
+              id={configErrorId}
+              role="alert"
+              className="text-xs leading-5 text-red-600"
+            >
+              {error.message}
+            </p>
+          )}
 
-        {!error && field.type === "choice" && (
-          <p className="text-xs leading-5 text-muted">
-            Separate options with commas, e.g. Common, Rare, Epic.
-          </p>
-        )}
+          {!error && field.type === "choice" && (
+            <p className="text-xs leading-5 text-muted">
+              Separate options with commas, e.g. Common, Rare, Epic.
+            </p>
+          )}
 
-        {!error && field.type === "pattern" && (
-          <p className="text-xs leading-5 text-muted">
-            Use {"{letters:4}"}, {"{digits:6}"}, or {"{choice:Red|Blue}"}.
-          </p>
-        )}
-      </div>
+          {!error && field.type === "pattern" && (
+            <p className="text-xs leading-5 text-muted">
+              Use {"{letters:4}"}, {"{digits:6}"}, or {"{choice:Red|Blue}"}.
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

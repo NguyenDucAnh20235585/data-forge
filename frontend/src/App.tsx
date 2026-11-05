@@ -113,14 +113,20 @@ function App() {
     <main className="mx-auto w-full max-w-5xl px-6 py-10">
       <header className="mb-8">
         <div className="text-center">
-          <h1 className="text-4xl font-semibold text-ink">Data Forge</h1>
-          <p className="mt-2 text-sm text-muted">
+          <h1 className="text-5xl font-semibold text-ink">Data Forge</h1>
+          <p className="mt-2 text-base text-muted">
             Generate fake data for testing.
           </p>
         </div>
       </header>
 
-      <div className="flex flex-col gap-6 rounded-xl border border-outline bg-surface p-6 shadow-sm">
+      <div className="flex flex-col gap-4 rounded-xl border border-outline bg-surface p-6 shadow-sm">
+        <div>
+          <h2 className="text-xl font-semibold text-ink">Configure dataset</h2>
+          <p className="mt-1 text-sm text-muted">
+            Choose a preset or define your own fields.
+          </p>
+        </div>
         <div
           className="flex w-fit gap-1 rounded-lg bg-surface-soft p-1"
           role="group"
@@ -194,7 +200,7 @@ function App() {
               max="1000"
               value={count}
               onChange={(event) => setCount(Number(event.target.value))}
-              className="w-56 rounded-md border border-control-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
+              className="w-32 rounded-md border border-control-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
             />
           </div>
         </div>
@@ -224,7 +230,7 @@ function App() {
             disabled={
               loading || !Number.isInteger(count) || count < 1 || count > 1000
             }
-            className="ml-auto rounded-md bg-primary px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors duration-150 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-50"
+            className="ml-auto rounded-md bg-primary h-12 px-6 text-sm font-semibold text-white shadow-sm transition-colors duration-150 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Generating..." : "Generate Data"}
           </button>
