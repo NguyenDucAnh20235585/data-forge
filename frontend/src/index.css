@@ -9,25 +9,27 @@
   --ink: #1a1a1a;
   --primary: #191919;
   --accent: #0000c2;
+  --action-primary: #b7a4e8;
+  --action-primary-hover: #a990da;
+  --border-color: #d9d9d3;
 
   color: var(--ink);
   background-color: var(--canvas);
-  --border-color: #d9d9d3;
 }
 
 @theme inline {
   --color-canvas: var(--canvas);
   --color-surface: var(--surface);
   --color-surface-soft: var(--surface-soft);
-
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --color-outline: var(--border-color);
   --color-control-outline: var(--border-control);
-
   --color-primary: var(--primary);
   --color-accent: var(--accent);
   --muted: #585851;
+  --color-action-primary: var(--action-primary);
+  --color-action-primary-hover: var(--action-primary-hover);
 }
 
 * {

@@ -81,6 +81,10 @@ function App() {
     setLoading(true);
     setError("");
 
+    const minimumLoading = new Promise<void>((resolve) => {
+      setTimeout(resolve, 600);
+    });
+
     try {
       const payload =
         mode === "quick"
@@ -105,6 +109,7 @@ function App() {
       console.error(error);
       setError("Unable to generate data.");
     } finally {
+      await minimumLoading;
       setLoading(false);
     }
   };
@@ -218,7 +223,7 @@ function App() {
             <button
               type="button"
               onClick={handleAddField}
-              className="rounded-md border border-dashed border-outline px-4 py-2 text-sm font-medium text-ink transition-colors duration-150 hover:border-accent hover:bg-surface-soft"
+              className="rounded-md border border-control-outline bg-surface inline-flex h-11 items-center justify-center px-4 text-sm font-medium text-ink transition-colors duration-150 hover:bg-surface-soft"
             >
               Add Field
             </button>
@@ -227,12 +232,36 @@ function App() {
           <button
             type="button"
             onClick={handleGenerate}
+            aria-busy={loading}
             disabled={
               loading || !Number.isInteger(count) || count < 1 || count > 1000
             }
-            className="ml-auto rounded-md bg-primary h-12 px-6 text-sm font-semibold text-white shadow-sm transition-colors duration-150 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-50"
+            className="
+  ml-auto inline-flex h-12 w-44 items-center justify-center rounded-md px-6
+  bg-action-primary text-sm font-semibold text-ink
+  transition-[transform,background-color,box-shadow]
+  duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
+  hover:bg-action-primary-hover 
+  shadow-[0_4px_0_#8F7BC4]
+  active:translate-y-[3px]
+  active:shadow-[0_1px_0_#8F7BC4]
+  active:duration-100
+  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent
+  disabled:cursor-not-allowed disabled:opacity-50
+  disabled:active:scale-100
+  disabled:aria-busy:opacity-100
+"
           >
-            {loading ? "Generating..." : "Generate Data"}
+            {loading ? (
+              <span
+                role="status"
+                className="animate-[pulse_1s_ease-in-out_infinite] motion-reduce:animate-none"
+              >
+                Generating...
+              </span>
+            ) : (
+              "Generate Data"
+            )}
           </button>
         </div>
       </div>
@@ -256,13 +285,13 @@ function App() {
             <div className="flex gap-2">
               <button
                 onClick={handleExportJson}
-                className="rounded-md border border-outline px-4 py-2 text-sm font-medium hover:bg-surface-soft"
+                className="rounded-md border border-control-outline bg-surface inline-flex h-11 items-center justify-center px-4 text-sm font-medium text-ink transition-colors duration-150 hover:bg-surface-soft"
               >
                 Export JSON
               </button>
               <button
                 onClick={handleExportCsv}
-                className="rounded-md border border-outline px-4 py-2 text-sm font-medium hover:bg-surface-soft"
+                className="rounded-md border border-control-outline bg-surface inline-flex h-11 items-center justify-center px-4 text-sm font-medium text-ink transition-colors duration-150 hover:bg-surface-soft"
               >
                 Export CSV
               </button>
