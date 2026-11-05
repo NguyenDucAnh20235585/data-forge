@@ -34,7 +34,10 @@ export default function CustomFieldRow({
   const errorBorder = "border-red-500";
 
   return (
-    <div className="grid w-full grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,2.2fr)_auto] gap-x-3 gap-y-2 rounded-lg border border-outline bg-canvas p-3">
+    <div
+      className="grid w-full grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,2.2fr)_auto] 
+    gap-x-3 gap-y-2 rounded-lg border border-outline bg-canvas p-3"
+    >
       <div className="min-w-0">
         <input
           aria-label="Field name"

@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { generateData } from "./api/generatorApi";
 import { validateFields } from "./utils/validateFields";
+import SettingsMenu from "./components/SettingsMenu";
 
 import type { Preset, CustomField, GeneratedRecord } from "./types/generator";
 
@@ -116,13 +117,16 @@ function App() {
 
   return (
     <main className="mx-auto w-full max-w-5xl px-6 py-10">
-      <header className="mb-8">
+      <header className="relative mb-8">
         <div className="text-center">
           <h1 className="text-5xl font-semibold text-ink">Data Forge</h1>
+
           <p className="mt-2 text-base text-muted">
             Generate fake data for testing.
           </p>
         </div>
+
+        <SettingsMenu />
       </header>
 
       <div className="flex flex-col gap-4 rounded-xl border border-outline bg-surface p-6 shadow-[0_6px_24px_rgba(26,26,26,0.07)]">
