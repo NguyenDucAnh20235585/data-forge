@@ -1,10 +1,12 @@
 import type { CustomField } from "../types/generator";
+import type { FieldValidationError } from "../utils/validateFields";
 
 type CustomFieldRowProps = {
   field: CustomField;
   onNameChange: (name: string) => void;
   onTypeChange: (type: CustomField["type"]) => void;
   onConfigChange: (changes: Partial<CustomField>) => void;
+  error: FieldValidationError | null;
   onRemove: () => void;
   canRemove: boolean;
 };
@@ -14,16 +16,30 @@ export default function CustomFieldRow({
   onNameChange,
   onTypeChange,
   onConfigChange,
+  error,
   onRemove,
   canRemove,
 }: CustomFieldRowProps) {
   return (
     <div className="grid w-full grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,2.5fr)_auto] items-center gap-3 rounded-lg border border-outline bg-surface p-3">
-      <input
-        className="w-full min-w-0 rounded-md border border-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
-        value={field.name}
-        onChange={(event) => onNameChange(event.target.value)}
-      />
+      <div className="flex min-w-0 flex-col gap-1">
+        <input
+          aria-label="Field name"
+          aria-invalid={error?.target === "name"}
+          className={`w-full min-w-0 rounded-md border bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 ${
+            error?.target === "name" ? "border-red-500" : "border-outline"
+          }`}
+          value={field.name}
+          onChange={(event) => onNameChange(event.target.value)}
+        />
+
+        {error?.target === "name" && (
+          <p role="alert" className="text-xs leading-5 text-red-600">
+            {error.message}
+          </p>
+        )}
+      </div>
+
       <select
         className="w-full min-w-0 rounded-md border border-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
         value={field.type}
@@ -42,13 +58,19 @@ export default function CustomFieldRow({
         <option value="date">Date</option>
         <option value="pattern">Pattern</option>
       </select>
-      <div className="flex min-w-0 flex-wrap items-center gap-3">
+
+      <div
+        className={`flex min-w-0 flex-wrap items-center gap-3 rounded-md ${
+          error?.target === "config" ? "ring-1 ring-red-500 ring-offset-2" : ""
+        }`}
+      >
         {field.type === "number" && (
           <label className="flex items-center gap-2 text-sm text-muted">
             Min:
             <input
               className="w-20 rounded-md border border-outline bg-surface px-2 py-2 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
               type="number"
+              placeholder="1"
               value={field.min ?? ""}
               onChange={(event) => {
                 const value = event.target.value;
@@ -66,6 +88,7 @@ export default function CustomFieldRow({
             <input
               className="w-20 rounded-md border border-outline bg-surface px-2 py-2 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
               type="number"
+              placeholder="100"
               value={field.max ?? ""}
               onChange={(event) => {
                 const value = event.target.value;
@@ -167,6 +190,12 @@ export default function CustomFieldRow({
               {"Use {letters:4}, {digits:6}, or {choice:Red|Blue}."}
             </p>
           </div>
+        )}
+
+        {error?.target === "config" && (
+          <p role="alert" className="w-full text-xs leading-5 text-red-600">
+            {error.message}
+          </p>
         )}
       </div>
       <button

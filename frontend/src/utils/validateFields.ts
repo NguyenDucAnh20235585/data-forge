@@ -1,10 +1,22 @@
 import type { CustomField } from "../types/generator";
 
-export function validateFields(fields: CustomField[]): string | null {
-  const hasEmptyName = fields.some((field) => field.name.trim() === "");
+export type FieldValidationError = {
+  fieldIndex: number;
+  target: "name" | "config";
+  message: string;
+};
 
-  if (hasEmptyName) {
-    return "Field name cannot be empty.";
+export function validateFields(
+  fields: CustomField[],
+): FieldValidationError | null {
+  const emptyNameIndex = fields.findIndex((field) => field.name.trim() === "");
+
+  if (emptyNameIndex !== -1) {
+    return {
+      fieldIndex: emptyNameIndex,
+      target: "name",
+      message: "Field name cannot be empty.",
+    };
   }
 
   const names = fields.map((field) => field.name.trim().toLowerCase());
@@ -88,26 +100,55 @@ export function validateFields(fields: CustomField[]): string | null {
   });
 
   if (invalidNumber) {
-    return `Field "${invalidNumber.name}": Invalid number range. Check Min and Max.`;
+    return {
+      fieldIndex: fields.indexOf(invalidNumber),
+      target: "config",
+      message: `Field "${invalidNumber.name}": Invalid number range. Check Min and Max.`,
+    };
   }
 
   if (invalidString) {
-    return `Field "${invalidString.name}": String length must be between 1 and 100.`;
+    return {
+      fieldIndex: fields.indexOf(invalidString),
+      target: "config",
+      message: `Field "${invalidString.name}": String length must be between 1 and 100.`,
+    };
   }
 
   if (invalidChoice) {
-    return `Field "${invalidChoice.name}": Choice must contain valid options.`;
+    return {
+      fieldIndex: fields.indexOf(invalidChoice),
+      target: "config",
+      message: `Field "${invalidChoice.name}": Choice must contain valid options.`,
+    };
   }
 
   if (invalidDate) {
-    return `Field "${invalidDate.name}": Invalid date range. Check Start Date and End Date.`;
+    return {
+      fieldIndex: fields.indexOf(invalidDate),
+      target: "config",
+      message: `Field "${invalidDate.name}": Invalid date range. Check Start Date and End Date.`,
+    };
   }
 
   if (invalidPattern) {
-    return `Field "${invalidPattern.name}": Invalid or unsupported pattern.`;
+    return {
+      fieldIndex: fields.indexOf(invalidPattern),
+      target: "config",
+      message: `Field "${invalidPattern.name}": Invalid or unsupported pattern.`,
+    };
   }
+
   if (hasDuplicates) {
-    return "Field names must be unique.";
+    const duplicateIndex = names.findIndex(
+      (name, index) => names.indexOf(name) !== index,
+    );
+
+    return {
+      fieldIndex: duplicateIndex,
+      target: "name",
+      message: "Field names must be unique.",
+    };
   }
 
   return null;

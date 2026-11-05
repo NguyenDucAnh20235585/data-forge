@@ -8,6 +8,7 @@ import type { Preset, CustomField, GeneratedRecord } from "./types/generator";
 import PreviewTable from "./components/PreviewTable";
 import CustomFieldEditor from "./components/CustomFieldEditor";
 import { exportJson, exportCsv } from "./utils/exportData";
+import type { FieldValidationError } from "./utils/validateFields";
 
 function App() {
   const [preset, setPreset] = useState<Preset>("users");
@@ -22,12 +23,22 @@ function App() {
     { name: "playerName", type: "personName" },
   ]);
 
+  const [fieldError, setFieldError] = useState<FieldValidationError | null>(
+    null,
+  );
+
+  const updateFields: typeof setFields = (update) => {
+    setFields(update);
+    setFieldError(null);
+    setError("");
+  };
+
   const currentConfig = JSON.stringify(
     mode === "quick" ? { mode, count, preset } : { mode, count, fields },
   );
 
   const handleAddField = () => {
-    setFields((previous) => {
+    updateFields((previous) => {
       let next = 2;
 
       while (
@@ -60,11 +71,13 @@ function App() {
       const validationError = validateFields(fields);
 
       if (validationError) {
-        setError(validationError);
+        setFieldError(validationError);
+        setError(validationError.message);
         return;
       }
     }
 
+    setFieldError(null);
     setLoading(true);
     setError("");
 
@@ -115,7 +128,11 @@ function App() {
           <button
             type="button"
             aria-pressed={mode === "quick"}
-            onClick={() => setMode("quick")}
+            onClick={() => {
+              setMode("quick");
+              setError("");
+              setFieldError(null);
+            }}
             className={`mode-tab rounded-md px-4 py-2 text-sm font-medium ${
               mode === "quick"
                 ? "bg-white text-zinc-900 shadow-sm"
@@ -128,7 +145,11 @@ function App() {
           <button
             type="button"
             aria-pressed={mode === "custom"}
-            onClick={() => setMode("custom")}
+            onClick={() => {
+              setMode("custom");
+              setError("");
+              setFieldError(null);
+            }}
             className={`mode-tab rounded-md px-4 py-2 text-sm font-medium ${
               mode === "custom"
                 ? "bg-white text-zinc-900 shadow-sm"
@@ -178,7 +199,11 @@ function App() {
         </div>
 
         {mode === "custom" && (
-          <CustomFieldEditor fields={fields} setFields={setFields} />
+          <CustomFieldEditor
+            fields={fields}
+            setFields={updateFields}
+            fieldError={fieldError}
+          />
         )}
 
         <div className="flex items-center justify-between gap-4">
@@ -205,7 +230,7 @@ function App() {
         </div>
       </div>
 
-      {error && (
+      {error && !fieldError && (
         <p role="alert" className="mt-4 text-sm text-red-600">
           {error}
         </p>

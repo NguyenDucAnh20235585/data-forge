@@ -1,15 +1,18 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { CustomField } from "../types/generator";
 import CustomFieldRow from "./CustomFieldRow";
+import type { FieldValidationError } from "../utils/validateFields";
 
 type CustomFieldEditorProps = {
   fields: CustomField[];
+  fieldError: FieldValidationError | null;
   setFields: Dispatch<SetStateAction<CustomField[]>>;
 };
 
 export default function CustomFieldEditor({
   fields,
   setFields,
+  fieldError,
 }: CustomFieldEditorProps) {
   return (
     <section>
@@ -19,6 +22,7 @@ export default function CustomFieldEditor({
         <div key={index}>
           <CustomFieldRow
             field={field}
+            error={fieldError?.fieldIndex === index ? fieldError : null}
             onNameChange={(name) => {
               setFields((previous) =>
                 previous.map((item, i) =>
