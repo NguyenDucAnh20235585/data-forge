@@ -164,7 +164,7 @@ export default function CustomFieldRow({
               }}
             />
             <p className="text-xs leading-5 text-muted">
-              {"Use {letters:4} for 4 letters and {digits:6} for 6 digits."}
+              {"Use {letters:4}, {digits:6}, or {choice:Red|Blue}."}
             </p>
           </div>
         )}

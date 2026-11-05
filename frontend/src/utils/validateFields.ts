@@ -50,6 +50,43 @@ export function validateFields(fields: CustomField[]): string | null {
     return field.startDate > field.endDate;
   });
 
+  const invalidPattern = fields.find((field) => {
+    if (field.type !== "pattern") return false;
+
+    let hasInvalidToken = false;
+
+    const remaining = (field.pattern ?? "")
+      .replace(/\{digits:(\d+)\}/g, (_match, rawLength: string) => {
+        const length = Number(rawLength);
+
+        if (!Number.isInteger(length) || length < 1 || length > 100) {
+          hasInvalidToken = true;
+        }
+
+        return "";
+      })
+      .replace(/\{letters:(\d+)\}/g, (_match, rawLength: string) => {
+        const length = Number(rawLength);
+
+        if (!Number.isInteger(length) || length < 1 || length > 100) {
+          hasInvalidToken = true;
+        }
+
+        return "";
+      })
+      .replace(/\{choice:([^{}]+)\}/g, (_match, rawOptions: string) => {
+        const options = rawOptions.split("|").map((option) => option.trim());
+
+        if (options.length < 2 || options.some((option) => option === "")) {
+          hasInvalidToken = true;
+        }
+
+        return "";
+      });
+
+    return hasInvalidToken || /[{}]/.test(remaining);
+  });
+
   if (invalidNumber) {
     return `Field "${invalidNumber.name}": Invalid number range. Check Min and Max.`;
   }
@@ -66,6 +103,9 @@ export function validateFields(fields: CustomField[]): string | null {
     return `Field "${invalidDate.name}": Invalid date range. Check Start Date and End Date.`;
   }
 
+  if (invalidPattern) {
+    return `Field "${invalidPattern.name}": Invalid or unsupported pattern.`;
+  }
   if (hasDuplicates) {
     return "Field names must be unique.";
   }
