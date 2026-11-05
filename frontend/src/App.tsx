@@ -270,7 +270,8 @@ function App() {
                 role="status"
                 className="mb-4 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
               >
-                Configuration changed. Generate again to update the preview.
+                Configuration changed. Preview and exports still use the last
+                generated data. Generate again to update them.
               </p>
             )}
 
