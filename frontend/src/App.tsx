@@ -3,6 +3,7 @@ import { useState } from "react";
 import { generateData } from "./api/generatorApi";
 import { validateFields } from "./utils/validateFields";
 import SettingsMenu from "./components/SettingsMenu";
+import "./i18n";
 
 import type { Preset, CustomField, GeneratedRecord } from "./types/generator";
 

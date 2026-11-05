@@ -1,7 +1,9 @@
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 function SettingsMenu() {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const { t, i18n } = useTranslation();
 
   return (
     <div className="absolute right-0 top-0">
@@ -35,7 +37,7 @@ function SettingsMenu() {
       >
         <div className="flex items-center justify-between">
           <h2 id="settings-title" className="text-xl font-semibold">
-            Settings
+            {t("settings.title")}
           </h2>
 
           <button
@@ -50,13 +52,29 @@ function SettingsMenu() {
 
         <div className="mt-6 divide-y divide-outline border-t border-outline">
           <div className="flex items-center justify-between py-5">
-            <span className="text-sm font-medium">Language</span>
-            <span className="text-sm text-muted">English</span>
+            <label htmlFor="settings-language" className="text-sm font-medium">
+              {t("settings.language")}
+            </label>
+
+            <select
+              id="settings-language"
+              value={i18n.resolvedLanguage ?? "en"}
+              onChange={(event) => {
+                void i18n.changeLanguage(event.target.value);
+              }}
+              className="h-10 w-32 rounded-md border border-control-outline bg-surface px-3 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
+            >
+              <option value="en">English</option>
+              <option value="vi">Tiếng Việt</option>
+              <option value="ja">日本語</option>
+            </select>
           </div>
 
           <div className="flex items-center justify-between py-5">
-            <span className="text-sm font-medium">Dark Mode</span>
-            <span className="text-sm text-muted">Off</span>
+            <span className="text-sm font-medium">
+              {t("settings.darkMode")}
+            </span>
+            <span className="text-sm text-muted">{t("settings.off")}</span>
           </div>
         </div>
       </dialog>
