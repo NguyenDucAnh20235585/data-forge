@@ -125,7 +125,7 @@ function App() {
         </div>
       </header>
 
-      <div className="flex flex-col gap-4 rounded-xl border border-outline bg-surface p-6 shadow-sm">
+      <div className="flex flex-col gap-4 rounded-xl border border-outline bg-surface p-6 shadow-[0_6px_24px_rgba(26,26,26,0.07)]">
         <div>
           <h2 className="text-xl font-semibold text-ink">Configure dataset</h2>
           <p className="mt-1 text-sm text-muted">
@@ -272,7 +272,7 @@ function App() {
         </p>
       )}
 
-      <section className="mt-8 rounded-xl border border-outline bg-surface p-6 shadow-sm">
+      <section className="mt-8 rounded-xl border border-outline bg-surface p-6 shadow-[0_6px_24px_rgba(26,26,26,0.07)]">
         <div className="mb-5 flex items-center justify-between gap-4">
           <div>
             <h2 className="text-xl font-semibold text-ink">Data Preview</h2>
