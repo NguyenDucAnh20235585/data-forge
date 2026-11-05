@@ -1,5 +1,6 @@
 import type { CustomField } from "../types/generator";
 import type { FieldValidationError } from "../utils/validateFields";
+import { useId } from "react";
 
 type CustomFieldRowProps = {
   field: CustomField;
@@ -20,12 +21,15 @@ export default function CustomFieldRow({
   onRemove,
   canRemove,
 }: CustomFieldRowProps) {
+  const nameErrorId = useId();
+  const configErrorId = useId();
   return (
     <div className="grid w-full grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,2.5fr)_auto] items-center gap-3 rounded-lg border border-outline bg-surface p-3">
       <div className="flex min-w-0 flex-col gap-1">
         <input
           aria-label="Field name"
           aria-invalid={error?.target === "name"}
+          aria-describedby={error?.target === "name" ? nameErrorId : undefined}
           className={`w-full min-w-0 rounded-md border bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 ${
             error?.target === "name" ? "border-red-500" : "border-outline"
           }`}
@@ -34,7 +38,11 @@ export default function CustomFieldRow({
         />
 
         {error?.target === "name" && (
-          <p role="alert" className="text-xs leading-5 text-red-600">
+          <p
+            id={nameErrorId}
+            role="alert"
+            className="text-xs leading-5 text-red-600"
+          >
             {error.message}
           </p>
         )}
@@ -70,6 +78,10 @@ export default function CustomFieldRow({
             <input
               className="w-20 rounded-md border border-outline bg-surface px-2 py-2 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
               type="number"
+              aria-invalid={error?.target === "config"}
+              aria-describedby={
+                error?.target === "config" ? configErrorId : undefined
+              }
               placeholder="1"
               value={field.min ?? ""}
               onChange={(event) => {
@@ -88,6 +100,10 @@ export default function CustomFieldRow({
             <input
               className="w-20 rounded-md border border-outline bg-surface px-2 py-2 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
               type="number"
+              aria-invalid={error?.target === "config"}
+              aria-describedby={
+                error?.target === "config" ? configErrorId : undefined
+              }
               placeholder="100"
               value={field.max ?? ""}
               onChange={(event) => {
@@ -106,6 +122,11 @@ export default function CustomFieldRow({
             <input
               className="w-20 rounded-md border border-outline bg-surface px-2 py-2 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
               type="number"
+              aria-invalid={error?.target === "config"}
+              aria-describedby={
+                error?.target === "config" ? configErrorId : undefined
+              }
+              aria-label="String length"
               min="1"
               max="100"
               value={field.length ?? ""}
@@ -126,6 +147,11 @@ export default function CustomFieldRow({
               <input
                 className="min-w-0 flex-1 rounded-md border border-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
                 type="text"
+                aria-invalid={error?.target === "config"}
+                aria-describedby={
+                  error?.target === "config" ? configErrorId : undefined
+                }
+                aria-label="Choice options"
                 placeholder="Common, Rare, Epic"
                 value={(field.options ?? []).join(",")}
                 onChange={(event) => {
@@ -148,6 +174,11 @@ export default function CustomFieldRow({
               <input
                 type="date"
                 className="w-full min-w-0 rounded-md border border-outline bg-surface px-2 py-2 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
+                aria-invalid={error?.target === "config"}
+                aria-describedby={
+                  error?.target === "config" ? configErrorId : undefined
+                }
+                aria-label="Start Date"
                 value={field.startDate ?? ""}
                 onChange={(event) => {
                   onConfigChange({
@@ -162,6 +193,11 @@ export default function CustomFieldRow({
               <input
                 type="date"
                 className="w-full min-w-0 rounded-md border border-outline bg-surface px-2 py-2 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
+                aria-invalid={error?.target === "config"}
+                aria-describedby={
+                  error?.target === "config" ? configErrorId : undefined
+                }
+                aria-label="End Date"
                 value={field.endDate ?? ""}
                 onChange={(event) => {
                   onConfigChange({
@@ -178,6 +214,10 @@ export default function CustomFieldRow({
             <input
               className="w-full min-w-0 rounded-md border border-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
               type="text"
+              aria-invalid={error?.target === "config"}
+              aria-describedby={
+                error?.target === "config" ? configErrorId : undefined
+              }
               placeholder="PLR-{letters:4}-{digits:6}"
               value={field.pattern ?? ""}
               onChange={(event) => {
@@ -193,7 +233,11 @@ export default function CustomFieldRow({
         )}
 
         {error?.target === "config" && (
-          <p role="alert" className="w-full text-xs leading-5 text-red-600">
+          <p
+            id={configErrorId}
+            role="alert"
+            className="w-full text-xs leading-5 text-red-600"
+          >
             {error.message}
           </p>
         )}
