@@ -12,6 +12,7 @@
 
   color: var(--ink);
   background-color: var(--canvas);
+  --border-color: #d9d9d3;
 }
 
 @theme inline {
@@ -26,6 +27,7 @@
 
   --color-primary: var(--primary);
   --color-accent: var(--accent);
+  --muted: #585851;
 }
 
 * {

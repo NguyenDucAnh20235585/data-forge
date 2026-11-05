@@ -172,7 +172,7 @@ function App() {
                 id="preset"
                 value={preset}
                 onChange={(event) => setPreset(event.target.value as Preset)}
-                className="w-56 rounded-md border border-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
+                className="w-56 rounded-md border border-control-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
               >
                 <option value="users">Users</option>
                 <option value="products">Products</option>
@@ -194,7 +194,7 @@ function App() {
               max="1000"
               value={count}
               onChange={(event) => setCount(Number(event.target.value))}
-              className="w-28 rounded-md border border-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
+              className="w-56 rounded-md border border-control-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
             />
           </div>
         </div>

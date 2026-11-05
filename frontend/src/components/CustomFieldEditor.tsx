@@ -16,7 +16,7 @@ export default function CustomFieldEditor({
 }: CustomFieldEditorProps) {
   return (
     <section>
-      <h2>Custom Fields</h2>
+      <h2 className="mb-3">Custom Fields</h2>
 
       {fields.map((field, index) => (
         <div key={index}>

@@ -30,7 +30,7 @@ export default function CustomFieldRow({
   const baseInputClass =
     "h-10 w-full min-w-0 rounded-md border bg-surface px-3 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20";
 
-  const normalBorder = "border-outline";
+  const normalBorder = "border-control-outline";
   const errorBorder = "border-red-500";
 
   return (
