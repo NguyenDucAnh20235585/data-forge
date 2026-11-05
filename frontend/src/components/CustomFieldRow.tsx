@@ -1,6 +1,6 @@
+import { useId } from "react";
 import type { CustomField } from "../types/generator";
 import type { FieldValidationError } from "../utils/validateFields";
-import { useId } from "react";
 
 type CustomFieldRowProps = {
   field: CustomField;
@@ -23,136 +23,133 @@ export default function CustomFieldRow({
 }: CustomFieldRowProps) {
   const nameErrorId = useId();
   const configErrorId = useId();
+
+  const hasNameError = error?.target === "name";
+  const hasConfigError = error?.target === "config";
+
+  const baseInputClass =
+    "h-10 w-full min-w-0 rounded-md border bg-surface px-3 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20";
+
+  const normalBorder = "border-outline";
+  const errorBorder = "border-red-500";
+
   return (
-    <div className="grid w-full grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,2.5fr)_auto] items-center gap-3 rounded-lg border border-outline bg-surface p-3">
-      <div className="flex min-w-0 flex-col gap-1">
+    <div className="grid w-full grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,2.2fr)_auto] gap-x-3 gap-y-2 rounded-lg border border-outline bg-surface p-3">
+      {/* Row 1 */}
+      <div className="min-w-0">
         <input
           aria-label="Field name"
-          aria-invalid={error?.target === "name"}
-          aria-describedby={error?.target === "name" ? nameErrorId : undefined}
-          className={`w-full min-w-0 rounded-md border bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 ${
-            error?.target === "name" ? "border-red-500" : "border-outline"
-          }`}
+          aria-invalid={hasNameError}
+          aria-describedby={hasNameError ? nameErrorId : undefined}
+          className={`${baseInputClass} ${hasNameError ? errorBorder : normalBorder}`}
           value={field.name}
           onChange={(event) => onNameChange(event.target.value)}
         />
-
-        {error?.target === "name" && (
-          <p
-            id={nameErrorId}
-            role="alert"
-            className="text-xs leading-5 text-red-600"
-          >
-            {error.message}
-          </p>
-        )}
       </div>
 
-      <select
-        className="w-full min-w-0 rounded-md border border-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
-        value={field.type}
-        onChange={(event) =>
-          onTypeChange(event.target.value as CustomField["type"])
-        }
-      >
-        <option value="personName">Person Name</option>
-        <option value="productName">Product Name</option>
-        <option value="companyName">Company Name</option>
-        <option value="number">Number</option>
-        <option value="email">Email</option>
-        <option value="string">String</option>
-        <option value="choice">Choice</option>
-        <option value="phoneNumber">Phone Number</option>
-        <option value="date">Date</option>
-        <option value="pattern">Pattern</option>
-      </select>
+      <div className="min-w-0">
+        <select
+          aria-label="Field type"
+          className={`${baseInputClass} ${normalBorder}`}
+          value={field.type}
+          onChange={(event) =>
+            onTypeChange(event.target.value as CustomField["type"])
+          }
+        >
+          <option value="personName">Person Name</option>
+          <option value="productName">Product Name</option>
+          <option value="companyName">Company Name</option>
+          <option value="number">Number</option>
+          <option value="email">Email</option>
+          <option value="string">String</option>
+          <option value="choice">Choice</option>
+          <option value="phoneNumber">Phone Number</option>
+          <option value="date">Date</option>
+          <option value="pattern">Pattern</option>
+        </select>
+      </div>
 
-      <div
-        className={`flex min-w-0 flex-wrap items-center gap-3 rounded-md ${
-          error?.target === "config" ? "ring-1 ring-red-500 ring-offset-2" : ""
-        }`}
-      >
+      <div className="min-w-0">
         {field.type === "number" && (
-          <label className="flex items-center gap-2 text-sm text-muted">
-            Min:
-            <input
-              className="w-20 rounded-md border border-outline bg-surface px-2 py-2 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
-              type="number"
-              aria-invalid={error?.target === "config"}
-              aria-describedby={
-                error?.target === "config" ? configErrorId : undefined
-              }
-              placeholder="1"
-              value={field.min ?? ""}
-              onChange={(event) => {
-                const value = event.target.value;
-
-                onConfigChange({
-                  min: value === "" ? undefined : Number(value),
-                });
-              }}
-            />
-          </label>
-        )}
-        {field.type === "number" && (
-          <label className="flex items-center gap-2 text-sm text-muted">
-            Max:
-            <input
-              className="w-20 rounded-md border border-outline bg-surface px-2 py-2 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
-              type="number"
-              aria-invalid={error?.target === "config"}
-              aria-describedby={
-                error?.target === "config" ? configErrorId : undefined
-              }
-              placeholder="100"
-              value={field.max ?? ""}
-              onChange={(event) => {
-                const value = event.target.value;
-
-                onConfigChange({
-                  max: value === "" ? undefined : Number(value),
-                });
-              }}
-            />
-          </label>
-        )}
-        {field.type === "string" && (
-          <label className="flex items-center gap-2 text-sm text-muted">
-            Length:
-            <input
-              className="w-20 rounded-md border border-outline bg-surface px-2 py-2 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
-              type="number"
-              aria-invalid={error?.target === "config"}
-              aria-describedby={
-                error?.target === "config" ? configErrorId : undefined
-              }
-              aria-label="String length"
-              min="1"
-              max="100"
-              value={field.length ?? ""}
-              onChange={(event) => {
-                const value = event.target.value;
-
-                onConfigChange({
-                  length: value === "" ? undefined : Number(value),
-                });
-              }}
-            />
-          </label>
-        )}
-        {field.type === "choice" && (
-          <div className="flex w-full min-w-0 flex-col gap-2">
-            <label className="flex w-full min-w-0 items-center gap-2 text-sm text-muted">
-              Options:
+          <div className="flex h-10 items-center gap-3">
+            <label className="flex items-center gap-2 text-sm text-muted">
+              <span>Min:</span>
               <input
-                className="min-w-0 flex-1 rounded-md border border-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
+                type="number"
+                placeholder="1"
+                aria-invalid={hasConfigError}
+                aria-describedby={hasConfigError ? configErrorId : undefined}
+                className={`h-10 w-22 rounded-md border bg-surface px-3 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 ${
+                  hasConfigError ? errorBorder : normalBorder
+                }`}
+                value={field.min ?? ""}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  onConfigChange({
+                    min: value === "" ? undefined : Number(value),
+                  });
+                }}
+              />
+            </label>
+
+            <label className="flex items-center gap-2 text-sm text-muted">
+              <span>Max:</span>
+              <input
+                type="number"
+                placeholder="100"
+                aria-invalid={hasConfigError}
+                aria-describedby={hasConfigError ? configErrorId : undefined}
+                className={`h-10 w-22 rounded-md border bg-surface px-3 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 ${
+                  hasConfigError ? errorBorder : normalBorder
+                }`}
+                value={field.max ?? ""}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  onConfigChange({
+                    max: value === "" ? undefined : Number(value),
+                  });
+                }}
+              />
+            </label>
+          </div>
+        )}
+
+        {field.type === "string" && (
+          <div className="flex h-10 items-center gap-2">
+            <label className="flex items-center gap-2 text-sm text-muted">
+              <span>Length:</span>
+              <input
+                type="number"
+                min="1"
+                max="100"
+                placeholder="8"
+                aria-invalid={hasConfigError}
+                aria-describedby={hasConfigError ? configErrorId : undefined}
+                className={`h-10 w-24 rounded-md border bg-surface px-3 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 ${
+                  hasConfigError ? errorBorder : normalBorder
+                }`}
+                value={field.length ?? ""}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  onConfigChange({
+                    length: value === "" ? undefined : Number(value),
+                  });
+                }}
+              />
+            </label>
+          </div>
+        )}
+
+        {field.type === "choice" && (
+          <div className="flex h-10 items-center gap-2">
+            <label className="flex w-full min-w-0 items-center gap-2 text-sm text-muted">
+              <span>Options:</span>
+              <input
                 type="text"
-                aria-invalid={error?.target === "config"}
-                aria-describedby={
-                  error?.target === "config" ? configErrorId : undefined
-                }
-                aria-label="Choice options"
                 placeholder="Common, Rare, Epic"
+                aria-invalid={hasConfigError}
+                aria-describedby={hasConfigError ? configErrorId : undefined}
+                className={`${baseInputClass} ${hasConfigError ? errorBorder : normalBorder}`}
                 value={(field.options ?? []).join(",")}
                 onChange={(event) => {
                   const options = event.target.value.split(",");
@@ -160,25 +157,20 @@ export default function CustomFieldRow({
                 }}
               />
             </label>
-
-            <p className="text-xs leading-5 text-muted">
-              Separate options with commas, e.g. Common, Rare, Epic.
-            </p>
           </div>
         )}
 
         {field.type === "date" && (
-          <div className="grid w-full min-w-0 grid-cols-2 gap-3">
-            <label className="flex min-w-0 flex-col gap-1 text-xs text-muted">
-              Start Date
+          <div className="flex h-10 w-full min-w-0 items-center gap-3">
+            <label className="flex min-w-0 flex-1 items-center gap-2 text-sm text-muted">
+              <span className="shrink-0">Start:</span>
               <input
                 type="date"
-                className="w-full min-w-0 rounded-md border border-outline bg-surface px-2 py-2 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
-                aria-invalid={error?.target === "config"}
-                aria-describedby={
-                  error?.target === "config" ? configErrorId : undefined
-                }
-                aria-label="Start Date"
+                aria-invalid={hasConfigError}
+                aria-describedby={hasConfigError ? configErrorId : undefined}
+                className={`${baseInputClass} flex-1 px-2 ${
+                  hasConfigError ? errorBorder : normalBorder
+                }`}
                 value={field.startDate ?? ""}
                 onChange={(event) => {
                   onConfigChange({
@@ -188,16 +180,15 @@ export default function CustomFieldRow({
               />
             </label>
 
-            <label className="flex min-w-0 flex-col gap-1 text-xs text-muted">
-              End Date
+            <label className="flex min-w-0 flex-1 items-center gap-2 text-sm text-muted">
+              <span className="shrink-0">End:</span>
               <input
                 type="date"
-                className="w-full min-w-0 rounded-md border border-outline bg-surface px-2 py-2 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
-                aria-invalid={error?.target === "config"}
-                aria-describedby={
-                  error?.target === "config" ? configErrorId : undefined
-                }
-                aria-label="End Date"
+                aria-invalid={hasConfigError}
+                aria-describedby={hasConfigError ? configErrorId : undefined}
+                className={`${baseInputClass} flex-1 px-2 ${
+                  hasConfigError ? errorBorder : normalBorder
+                }`}
                 value={field.endDate ?? ""}
                 onChange={(event) => {
                   onConfigChange({
@@ -210,46 +201,71 @@ export default function CustomFieldRow({
         )}
 
         {field.type === "pattern" && (
-          <div className="flex w-full min-w-0 flex-col gap-2">
-            <input
-              className="w-full min-w-0 rounded-md border border-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
-              type="text"
-              aria-invalid={error?.target === "config"}
-              aria-describedby={
-                error?.target === "config" ? configErrorId : undefined
-              }
-              placeholder="PLR-{letters:4}-{digits:6}"
-              value={field.pattern ?? ""}
-              onChange={(event) => {
-                onConfigChange({
-                  pattern: event.target.value,
-                });
-              }}
-            />
-            <p className="text-xs leading-5 text-muted">
-              {"Use {letters:4}, {digits:6}, or {choice:Red|Blue}."}
-            </p>
-          </div>
+          <input
+            type="text"
+            placeholder="PLR-{letters:4}-{digits:6}"
+            aria-invalid={hasConfigError}
+            aria-describedby={hasConfigError ? configErrorId : undefined}
+            className={`${baseInputClass} ${hasConfigError ? errorBorder : normalBorder}`}
+            value={field.pattern ?? ""}
+            onChange={(event) => {
+              onConfigChange({
+                pattern: event.target.value,
+              });
+            }}
+          />
         )}
 
-        {error?.target === "config" && (
+        {!["number", "string", "choice", "date", "pattern"].includes(
+          field.type,
+        ) && <div className="h-10" />}
+      </div>
+
+      <div className="flex items-start">
+        <button
+          type="button"
+          disabled={!canRemove}
+          onClick={onRemove}
+          className="h-10 rounded-md px-3 text-sm font-medium text-muted transition-colors duration-150 hover:bg-red-50 hover:text-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          Remove
+        </button>
+      </div>
+
+      {/* Row 2: helper / error */}
+      <div className="col-start-1 col-end-4 min-h-5 text-left">
+        {hasNameError && (
           <p
-            id={configErrorId}
+            id={nameErrorId}
             role="alert"
-            className="w-full text-xs leading-5 text-red-600"
+            className="text-xs leading-5 text-red-600"
           >
             {error.message}
           </p>
         )}
+
+        {hasConfigError && (
+          <p
+            id={configErrorId}
+            role="alert"
+            className="text-xs leading-5 text-red-600"
+          >
+            {error.message}
+          </p>
+        )}
+
+        {!error && field.type === "choice" && (
+          <p className="text-xs leading-5 text-muted">
+            Separate options with commas, e.g. Common, Rare, Epic.
+          </p>
+        )}
+
+        {!error && field.type === "pattern" && (
+          <p className="text-xs leading-5 text-muted">
+            Use {"{letters:4}"}, {"{digits:6}"}, or {"{choice:Red|Blue}"}.
+          </p>
+        )}
       </div>
-      <button
-        type="button"
-        disabled={!canRemove}
-        onClick={onRemove}
-        className="rounded-md px-3 py-2 text-sm font-medium text-muted transition-colors duration-150 hover:bg-red-50 hover:text-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-40"
-      >
-        Remove
-      </button>
     </div>
   );
 }

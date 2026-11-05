@@ -103,7 +103,7 @@ export function validateFields(
     return {
       fieldIndex: fields.indexOf(invalidNumber),
       target: "config",
-      message: `Field "${invalidNumber.name}": Invalid number range. Check Min and Max.`,
+      message: `Field "${invalidNumber.name}": Min and Max must be valid integers. Min cannot be greater than Max.`,
     };
   }
 
@@ -119,7 +119,7 @@ export function validateFields(
     return {
       fieldIndex: fields.indexOf(invalidChoice),
       target: "config",
-      message: `Field "${invalidChoice.name}": Choice must contain valid options.`,
+      message: `Field "${invalidChoice.name}": Enter at least one non-empty option and remove any blank options.`,
     };
   }
 
@@ -127,7 +127,7 @@ export function validateFields(
     return {
       fieldIndex: fields.indexOf(invalidDate),
       target: "config",
-      message: `Field "${invalidDate.name}": Invalid date range. Check Start Date and End Date.`,
+      message: `Field "${invalidDate.name}": Both dates are required. Start Date cannot be after End Date.`,
     };
   }
 
@@ -135,7 +135,7 @@ export function validateFields(
     return {
       fieldIndex: fields.indexOf(invalidPattern),
       target: "config",
-      message: `Field "${invalidPattern.name}": Invalid or unsupported pattern.`,
+      message: `Field "${invalidPattern.name}": Invalid pattern. Use tokens like {digits:6}, {letters:4}, or {choice:Red|Blue}. Lengths must be 1–100, and choices need at least 2 options.`,
     };
   }
 
@@ -147,7 +147,8 @@ export function validateFields(
     return {
       fieldIndex: duplicateIndex,
       target: "name",
-      message: "Field names must be unique.",
+      message:
+        "Field names must be unique, regardless of uppercase or lowercase.",
     };
   }
 
