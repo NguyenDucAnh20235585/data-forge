@@ -112,11 +112,12 @@ function App() {
   return (
     <main className="mx-auto w-full max-w-5xl px-6 py-10">
       <header className="mb-8">
-        <h1 className="text-4xl font-semibold tracking-tight">Data Forge</h1>
-
-        <p className="mt-2 text-sm text-zinc-500">
-          Generate fake data for testing.
-        </p>
+        <div className="text-center">
+          <h1 className="text-4xl font-semibold text-ink">Data Forge</h1>
+          <p className="mt-2 text-sm text-muted">
+            Generate fake data for testing.
+          </p>
+        </div>
       </header>
 
       <div className="flex flex-col gap-6 rounded-xl border border-outline bg-surface p-6 shadow-sm">
