@@ -3,6 +3,7 @@ import { useState } from "react";
 import { generateData } from "./api/generatorApi";
 import { validateFields } from "./utils/validateFields";
 import SettingsMenu from "./components/SettingsMenu";
+import { useTranslation } from "react-i18next";
 import "./i18n";
 
 import type { Preset, CustomField, GeneratedRecord } from "./types/generator";
@@ -13,6 +14,7 @@ import { exportJson, exportCsv } from "./utils/exportData";
 import type { FieldValidationError } from "./utils/validateFields";
 
 function App() {
+  const { t } = useTranslation();
   const [preset, setPreset] = useState<Preset>("users");
   const [count, setCount] = useState(3);
   const [records, setRecords] = useState<GeneratedRecord[]>([]);
@@ -109,7 +111,7 @@ function App() {
       setGeneratedConfig(currentConfig);
     } catch (error) {
       console.error(error);
-      setError("Unable to generate data.");
+      setError("errors.generateFailed");
     } finally {
       await minimumLoading;
       setLoading(false);
@@ -122,9 +124,7 @@ function App() {
         <div className="text-center">
           <h1 className="text-5xl font-semibold text-ink">Data Forge</h1>
 
-          <p className="mt-2 text-base text-muted">
-            Generate fake data for testing.
-          </p>
+          <p className="mt-2 text-base text-muted">{t("appDescription")}</p>
         </div>
 
         <SettingsMenu />
@@ -132,15 +132,17 @@ function App() {
 
       <div className="flex flex-col gap-4 rounded-xl border border-outline bg-surface p-6 shadow-[0_6px_24px_rgba(26,26,26,0.07)]">
         <div>
-          <h2 className="text-xl font-semibold text-ink">Configure dataset</h2>
+          <h2 className="text-xl font-semibold text-ink">
+            {t("configureDataset")}
+          </h2>
           <p className="mt-1 text-sm text-muted">
-            Choose a preset or define your own fields.
+            {t("configuration.description")}
           </p>
         </div>
         <div
           className="flex w-fit gap-1 rounded-lg bg-surface-soft p-1"
           role="group"
-          aria-label="Generation mode"
+          aria-label={t("configuration.generationMode")}
         >
           <button
             type="button"
@@ -156,7 +158,7 @@ function App() {
                 : "bg-transparent text-zinc-600 hover:text-zinc-900"
             }`}
           >
-            Quick Preset
+            {t("configuration.quickPreset")}
           </button>
 
           <button
@@ -173,7 +175,7 @@ function App() {
                 : "bg-transparent text-zinc-600 hover:text-zinc-900"
             }`}
           >
-            Custom Fields
+            {t("configuration.customFields")}
           </button>
         </div>
 
@@ -181,7 +183,7 @@ function App() {
           {mode === "quick" && (
             <div className="flex items-center gap-3">
               <label htmlFor="preset" className="text-sm font-medium text-ink">
-                Preset
+                {t("configuration.preset")}
               </label>
 
               <select
@@ -190,17 +192,25 @@ function App() {
                 onChange={(event) => setPreset(event.target.value as Preset)}
                 className="w-56 rounded-md border border-control-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
               >
-                <option value="users">Users</option>
-                <option value="products">Products</option>
-                <option value="employees">Employees</option>
-                <option value="umamusume">Umamusume</option>
+                <option value="users">
+                  {t("configuration.presets.users")}
+                </option>
+                <option value="products">
+                  {t("configuration.presets.products")}
+                </option>
+                <option value="employees">
+                  {t("configuration.presets.employees")}
+                </option>
+                <option value="umamusume">
+                  {t("configuration.presets.umamusume")}
+                </option>
               </select>
             </div>
           )}
 
           <div className="flex items-center gap-3">
             <label htmlFor="count" className="text-sm font-medium text-ink">
-              Number of records
+              {t("configuration.numberOfRecords")}
             </label>
 
             <input
@@ -230,7 +240,7 @@ function App() {
               onClick={handleAddField}
               className="rounded-md border border-control-outline bg-surface inline-flex h-11 items-center justify-center px-4 text-sm font-medium text-ink transition-colors duration-150 hover:bg-surface-soft"
             >
-              Add Field
+              {t("configuration.addField")}
             </button>
           )}
 
@@ -262,10 +272,10 @@ function App() {
                 role="status"
                 className="animate-[pulse_1s_ease-in-out_infinite] motion-reduce:animate-none"
               >
-                Generating...
+                {t("configuration.generating")}
               </span>
             ) : (
-              "Generate Data"
+              t("configuration.generateData")
             )}
           </button>
         </div>
@@ -273,16 +283,18 @@ function App() {
 
       {error && !fieldError && (
         <p role="alert" className="mt-4 text-sm text-red-600">
-          {error}
+          {t(error)}
         </p>
       )}
 
       <section className="mt-8 rounded-xl border border-outline bg-surface p-6 shadow-[0_6px_24px_rgba(26,26,26,0.07)]">
         <div className="mb-5 flex items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl font-semibold text-ink">Data Preview</h2>
+            <h2 className="text-xl font-semibold text-ink">
+              {t("preview.title")}
+            </h2>
             <p className="mt-1 text-sm text-muted">
-              {records.length} generated records
+              {t("preview.generatedRecords", { count: records.length })}
             </p>
           </div>
 
@@ -292,13 +304,13 @@ function App() {
                 onClick={handleExportJson}
                 className="rounded-md border border-control-outline bg-surface inline-flex h-11 items-center justify-center px-4 text-sm font-medium text-ink transition-colors duration-150 hover:bg-surface-soft"
               >
-                Export JSON
+                {t("preview.exportJson")}
               </button>
               <button
                 onClick={handleExportCsv}
                 className="rounded-md border border-control-outline bg-surface inline-flex h-11 items-center justify-center px-4 text-sm font-medium text-ink transition-colors duration-150 hover:bg-surface-soft"
               >
-                Export CSV
+                {t("preview.exportCsv")}
               </button>
             </div>
           )}
@@ -311,8 +323,7 @@ function App() {
                 role="status"
                 className="mb-4 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
               >
-                Configuration changed. Preview and exports still use the last
-                generated data. Generate again to update them.
+                {t("preview.staleWarning")}
               </p>
             )}
 
@@ -321,10 +332,10 @@ function App() {
         ) : (
           <div className="rounded-lg border border-dashed border-outline bg-canvas px-6 py-12 text-center">
             <p className="text-sm font-medium text-ink">
-              Your data will appear here
+              {t("preview.emptyTitle")}
             </p>
             <p className="mt-2 text-sm text-muted">
-              Configure your dataset and click Generate Data.
+              {t("preview.emptyDescription")}
             </p>
           </div>
         )}

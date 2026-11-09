@@ -4,5 +4,37 @@
     "language": "言語",
     "darkMode": "ダークモード",
     "off": "オフ"
-  }
+  },
+  "configuration": {
+    "description": "プリセットを選択するか、独自のフィールドを定義してください。",
+    "generationMode": "生成モード",
+    "quickPreset": "クイックプリセット",
+    "customFields": "カスタムフィールド",
+    "preset": "プリセット",
+    "numberOfRecords": "レコード数",
+    "presets": {
+      "users": "ユーザー",
+      "products": "製品",
+      "employees": "従業員",
+      "umamusume": "ウマ娘"
+    },
+    "addField": "フィールドを追加",
+    "generateData": "データを生成",
+    "generating": "生成中..."
+  },
+  "preview": {
+    "title": "データプレビュー",
+    "generatedRecords_one": "{{count}} 件のレコードを生成",
+    "generatedRecords_other": "{{count}} 件のレコードを生成",
+    "exportJson": "JSONをエクスポート",
+    "exportCsv": "CSVをエクスポート",
+    "emptyTitle": "ここにデータが表示されます",
+    "emptyDescription": "データセットを設定して「データを生成」をクリックしてください.",
+    "staleWarning": "設定が変更されました。プレビューとエクスポートには前回生成したデータが使用されます。更新するには再生成してください。"
+  },
+  "errors": {
+    "generateFailed": "データを生成できませんでした。もう一度お試しください。"
+  },
+  "appDescription": "テスト用のダミーデータを生成します。",
+  "configureDataset": "データセットの設定"
 }

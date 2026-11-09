@@ -4,5 +4,37 @@
     "language": "Language",
     "darkMode": "Dark Mode",
     "off": "Off"
-  }
+  },
+  "configuration": {
+    "description": "Choose a preset or define your own fields.",
+    "generationMode": "Generation mode",
+    "quickPreset": "Quick Preset",
+    "customFields": "Custom Fields",
+    "preset": "Preset",
+    "numberOfRecords": "Number of records",
+    "presets": {
+      "users": "Users",
+      "products": "Products",
+      "employees": "Employees",
+      "umamusume": "Umamusume"
+    },
+    "addField": "Add Field",
+    "generateData": "Generate Data",
+    "generating": "Generating..."
+  },
+  "preview": {
+    "title": "Data Preview",
+    "generatedRecords_one": "{{count}} generated record",
+    "generatedRecords_other": "{{count}} generated records",
+    "exportJson": "Export JSON",
+    "exportCsv": "Export CSV",
+    "emptyTitle": "Your data will appear here",
+    "emptyDescription": "Configure your dataset and click Generate Data.",
+    "staleWarning": "Configuration changed. Preview and exports still use the last generated data. Generate again to update them."
+  },
+  "errors": {
+    "generateFailed": "Unable to generate data."
+  },
+  "appDescription": "Generate fake data for testing.",
+  "configureDataset": "Configure dataset"
 }

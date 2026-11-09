@@ -4,5 +4,37 @@
     "language": "Ngôn ngữ",
     "darkMode": "Chế độ tối",
     "off": "Tắt"
-  }
+  },
+  "configuration": {
+    "description": "Chọn 1 mẫu có sẵn hoặc tự định nghĩa các trường dữ liệu.",
+    "generationMode": "Khởi tạo sẵn",
+    "quickPreset": "Mẫu có sẵn",
+    "customFields": "Trường dữ liệu tuỳ chỉnh",
+    "preset": "Mẫu dữ liệu",
+    "numberOfRecords": "Số bản ghi",
+    "presets": {
+      "users": "Người dùng",
+      "products": "Sản phẩm",
+      "employees": "Nhân viên",
+      "umamusume": "Mã nương"
+    },
+    "addField": "Thêm trường dữ liệu",
+    "generateData": "Tạo dữ liệu",
+    "generating": "Đang tạo..."
+  },
+  "preview": {
+    "title": "Xem trước dữ liệu",
+    "generatedRecords_one": "Đã tạo {{count}} bản ghi",
+    "generatedRecords_other": "Đã tạo {{count}} bản ghi",
+    "exportJson": "Xuất JSON",
+    "exportCsv": "Xuất CSV",
+    "emptyTitle": "Dữ liệu của bạn sẽ xuất hiện ở đây",
+    "emptyDescription": "Cấu hình dữ liệu và nhấn Tạo dữ liệu.",
+    "staleWarning": "Cấu hình đã thay đổi. Phần xem trước và dữ liệu xuất vẫn sử dụng kết quả tạo trước đó. Hãy tạo lại dữ liệu để cập nhật。"
+  },
+  "errors": {
+    "generateFailed": "Không thể tạo dữ liệu. Vui lòng thử lại."
+  },
+  "appDescription": "Tạo dữ liệu giả để kiểm thử.",
+  "configureDataset": "Cấu hình bộ dữ liệu"
 }

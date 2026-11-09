@@ -60,7 +60,10 @@ function SettingsMenu() {
               id="settings-language"
               value={i18n.resolvedLanguage ?? "en"}
               onChange={(event) => {
-                void i18n.changeLanguage(event.target.value);
+                const language = event.target.value;
+
+                localStorage.setItem("data-forge-language", language);
+                void i18n.changeLanguage(language);
               }}
               className="h-10 w-32 rounded-md border border-control-outline bg-surface px-3 text-sm text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
             >
