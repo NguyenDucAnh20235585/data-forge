@@ -1,6 +1,7 @@
 import { useId } from "react";
 import type { CustomField } from "../types/generator";
 import type { FieldValidationError } from "../utils/validateFields";
+import { useTranslation } from "react-i18next";
 
 type CustomFieldRowProps = {
   field: CustomField;
@@ -21,6 +22,7 @@ export default function CustomFieldRow({
   onRemove,
   canRemove,
 }: CustomFieldRowProps) {
+  const { t } = useTranslation();
   const nameErrorId = useId();
   const configErrorId = useId();
 
@@ -40,7 +42,7 @@ export default function CustomFieldRow({
     >
       <div className="min-w-0">
         <input
-          aria-label="Field name"
+          aria-label={t("fieldEditor.fieldName")}
           aria-invalid={hasNameError}
           aria-describedby={hasNameError ? nameErrorId : undefined}
           className={`${baseInputClass} ${hasNameError ? errorBorder : normalBorder}`}
@@ -51,23 +53,31 @@ export default function CustomFieldRow({
 
       <div className="min-w-0">
         <select
-          aria-label="Field type"
+          aria-label={t("fieldEditor.fieldType")}
           className={`${baseInputClass} ${normalBorder}`}
           value={field.type}
           onChange={(event) =>
             onTypeChange(event.target.value as CustomField["type"])
           }
         >
-          <option value="personName">Person Name</option>
-          <option value="productName">Product Name</option>
-          <option value="companyName">Company Name</option>
-          <option value="number">Number</option>
-          <option value="email">Email</option>
-          <option value="string">String</option>
-          <option value="choice">Choice</option>
-          <option value="phoneNumber">Phone Number</option>
-          <option value="date">Date</option>
-          <option value="pattern">Pattern</option>
+          <option value="personName">
+            {t("fieldEditor.types.personName")}
+          </option>
+          <option value="productName">
+            {t("fieldEditor.types.productName")}
+          </option>
+          <option value="companyName">
+            {t("fieldEditor.types.companyName")}
+          </option>
+          <option value="number">{t("fieldEditor.types.number")}</option>
+          <option value="email">{t("fieldEditor.types.email")}</option>
+          <option value="string">{t("fieldEditor.types.string")}</option>
+          <option value="choice">{t("fieldEditor.types.choice")}</option>
+          <option value="phoneNumber">
+            {t("fieldEditor.types.phoneNumber")}
+          </option>
+          <option value="date">{t("fieldEditor.types.date")}</option>
+          <option value="pattern">{t("fieldEditor.types.pattern")}</option>
         </select>
       </div>
 
@@ -75,7 +85,7 @@ export default function CustomFieldRow({
         {field.type === "number" && (
           <div className="flex h-10 items-center gap-3">
             <label className="flex items-center gap-2 text-sm text-muted">
-              <span>Min:</span>
+              <span>{t("fieldEditor.min")}</span>
               <input
                 type="number"
                 placeholder="1"
@@ -95,7 +105,7 @@ export default function CustomFieldRow({
             </label>
 
             <label className="flex items-center gap-2 text-sm text-muted">
-              <span>Max:</span>
+              <span>{t("fieldEditor.max")}</span>
               <input
                 type="number"
                 placeholder="100"
@@ -119,7 +129,7 @@ export default function CustomFieldRow({
         {field.type === "string" && (
           <div className="flex h-10 items-center gap-2">
             <label className="flex items-center gap-2 text-sm text-muted">
-              <span>Length:</span>
+              <span>{t("fieldEditor.length")}</span>
               <input
                 type="number"
                 min="1"
@@ -145,10 +155,10 @@ export default function CustomFieldRow({
         {field.type === "choice" && (
           <div className="flex h-10 items-center gap-2">
             <label className="flex w-full min-w-0 items-center gap-2 text-sm text-muted">
-              <span>Options:</span>
+              <span>{t("fieldEditor.options")}</span>
               <input
                 type="text"
-                placeholder="Common, Rare, Epic"
+                placeholder={t("fieldEditor.choicePlaceholder")}
                 aria-invalid={hasConfigError}
                 aria-describedby={hasConfigError ? configErrorId : undefined}
                 className={`${baseInputClass} ${hasConfigError ? errorBorder : normalBorder}`}
@@ -165,7 +175,7 @@ export default function CustomFieldRow({
         {field.type === "date" && (
           <div className="flex h-10 w-full min-w-0 items-center gap-3">
             <label className="flex min-w-0 flex-1 items-center gap-2 text-sm text-muted">
-              <span className="shrink-0">Start:</span>
+              <span className="shrink-0">{t("fieldEditor.start")}</span>
               <input
                 type="date"
                 aria-invalid={hasConfigError}
@@ -183,7 +193,7 @@ export default function CustomFieldRow({
             </label>
 
             <label className="flex min-w-0 flex-1 items-center gap-2 text-sm text-muted">
-              <span className="shrink-0">End:</span>
+              <span className="shrink-0">{t("fieldEditor.end")}</span>
               <input
                 type="date"
                 aria-invalid={hasConfigError}
@@ -230,7 +240,7 @@ export default function CustomFieldRow({
           onClick={onRemove}
           className="h-10 rounded-md px-3 text-sm font-medium text-muted transition-colors duration-150 hover:bg-red-50 hover:text-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-40"
         >
-          Remove
+          {t("fieldEditor.remove")}
         </button>
       </div>
 
@@ -244,7 +254,7 @@ export default function CustomFieldRow({
               role="alert"
               className="text-xs leading-5 text-red-600"
             >
-              {error.message}
+              {t(error.messageKey, { name: field.name })}
             </p>
           )}
 
@@ -254,19 +264,19 @@ export default function CustomFieldRow({
               role="alert"
               className="text-xs leading-5 text-red-600"
             >
-              {error.message}
+              {t(error.messageKey, { name: field.name })}
             </p>
           )}
 
           {!error && field.type === "choice" && (
             <p className="text-xs leading-5 text-muted">
-              Separate options with commas, e.g. Common, Rare, Epic.
+              {t("fieldEditor.choiceHint")}
             </p>
           )}
 
           {!error && field.type === "pattern" && (
             <p className="text-xs leading-5 text-muted">
-              Use {"{letters:4}"}, {"{digits:6}"}, or {"{choice:Red|Blue}"}.
+              {t("fieldEditor.patternHint")}
             </p>
           )}
         </div>

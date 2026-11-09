@@ -35,6 +35,41 @@
   "errors": {
     "generateFailed": "Unable to generate data."
   },
+  "fieldEditor": {
+    "fieldName": "Field name",
+    "fieldType": "Field type",
+    "min": "Min:",
+    "max": "Max:",
+    "length": "Length:",
+    "options": "Options:",
+    "start": "Start:",
+    "end": "End:",
+    "remove": "Remove",
+    "choicePlaceholder": "Common, Rare, Epic",
+    "choiceHint": "Separate options with commas, e.g. Common, Rare, Epic.",
+    "patternHint": "Use {letters:4}, {digits:6}, or {choice:Red|Blue}.",
+    "types": {
+      "personName": "Person Name",
+      "productName": "Product Name",
+      "companyName": "Company Name",
+      "number": "Number",
+      "email": "Email",
+      "string": "String",
+      "choice": "Choice",
+      "phoneNumber": "Phone Number",
+      "date": "Date",
+      "pattern": "Pattern"
+    }
+  },
+  "validation": {
+    "emptyName": "Field name cannot be empty.",
+    "duplicateName": "Field names must be unique, regardless of uppercase or lowercase.",
+    "invalidNumber": "Field \"{{name}}\": Min and Max must be valid integers. Min cannot be greater than Max.",
+    "invalidString": "Field \"{{name}}\": String length must be between 1 and 100.",
+    "invalidChoice": "Field \"{{name}}\": Enter at least one non-empty option and remove any blank options.",
+    "invalidDate": "Field \"{{name}}\": Both dates are required. Start Date cannot be after End Date.",
+    "invalidPattern": "Field \"{{name}}\": Invalid pattern. Use tokens like {digits:6}, {letters:4}, or {choice:Red|Blue}. Lengths must be 1–100, and choices need at least 2 options."
+  },
   "appDescription": "Generate fake data for testing.",
   "configureDataset": "Configure dataset"
 }

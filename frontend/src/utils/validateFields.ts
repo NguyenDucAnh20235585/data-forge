@@ -3,7 +3,7 @@ import type { CustomField } from "../types/generator";
 export type FieldValidationError = {
   fieldIndex: number;
   target: "name" | "config";
-  message: string;
+  messageKey: string;
 };
 
 export function validateFields(
@@ -15,7 +15,7 @@ export function validateFields(
     return {
       fieldIndex: emptyNameIndex,
       target: "name",
-      message: "Field name cannot be empty.",
+      messageKey: "validation.emptyName",
     };
   }
 
@@ -103,7 +103,7 @@ export function validateFields(
     return {
       fieldIndex: fields.indexOf(invalidNumber),
       target: "config",
-      message: `Field "${invalidNumber.name}": Min and Max must be valid integers. Min cannot be greater than Max.`,
+      messageKey: "validation.invalidNumber",
     };
   }
 
@@ -111,7 +111,7 @@ export function validateFields(
     return {
       fieldIndex: fields.indexOf(invalidString),
       target: "config",
-      message: `Field "${invalidString.name}": String length must be between 1 and 100.`,
+      messageKey: "validation.invalidString",
     };
   }
 
@@ -119,7 +119,7 @@ export function validateFields(
     return {
       fieldIndex: fields.indexOf(invalidChoice),
       target: "config",
-      message: `Field "${invalidChoice.name}": Enter at least one non-empty option and remove any blank options.`,
+      messageKey: "validation.invalidChoice",
     };
   }
 
@@ -127,7 +127,7 @@ export function validateFields(
     return {
       fieldIndex: fields.indexOf(invalidDate),
       target: "config",
-      message: `Field "${invalidDate.name}": Both dates are required. Start Date cannot be after End Date.`,
+      messageKey: "validation.invalidDate",
     };
   }
 
@@ -135,7 +135,7 @@ export function validateFields(
     return {
       fieldIndex: fields.indexOf(invalidPattern),
       target: "config",
-      message: `Field "${invalidPattern.name}": Invalid pattern. Use tokens like {digits:6}, {letters:4}, or {choice:Red|Blue}. Lengths must be 1–100, and choices need at least 2 options.`,
+      messageKey: "validation.invalidPattern",
     };
   }
 
@@ -147,8 +147,7 @@ export function validateFields(
     return {
       fieldIndex: duplicateIndex,
       target: "name",
-      message:
-        "Field names must be unique, regardless of uppercase or lowercase.",
+      messageKey: "validation.duplicateName",
     };
   }
 

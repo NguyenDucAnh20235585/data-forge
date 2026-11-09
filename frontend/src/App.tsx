@@ -76,7 +76,6 @@ function App() {
 
       if (validationError) {
         setFieldError(validationError);
-        setError(validationError.message);
         return;
       }
     }

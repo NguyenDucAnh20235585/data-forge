@@ -7,7 +7,7 @@
   },
   "configuration": {
     "description": "Chọn 1 mẫu có sẵn hoặc tự định nghĩa các trường dữ liệu.",
-    "generationMode": "Khởi tạo sẵn",
+    "generationMode": "Chế độ tạo dữ liệu",
     "quickPreset": "Mẫu có sẵn",
     "customFields": "Trường dữ liệu tuỳ chỉnh",
     "preset": "Mẫu dữ liệu",
@@ -29,11 +29,46 @@
     "exportJson": "Xuất JSON",
     "exportCsv": "Xuất CSV",
     "emptyTitle": "Dữ liệu của bạn sẽ xuất hiện ở đây",
-    "emptyDescription": "Cấu hình dữ liệu và nhấn Tạo dữ liệu.",
-    "staleWarning": "Cấu hình đã thay đổi. Phần xem trước và dữ liệu xuất vẫn sử dụng kết quả tạo trước đó. Hãy tạo lại dữ liệu để cập nhật。"
+    "emptyDescription": "Cấu hình bộ dữ liệu và nhấn Tạo dữ liệu.",
+    "staleWarning": "Cấu hình đã thay đổi. Phần xem trước và dữ liệu xuất vẫn sử dụng kết quả tạo trước đó. Hãy tạo lại dữ liệu để cập nhật."
   },
   "errors": {
     "generateFailed": "Không thể tạo dữ liệu. Vui lòng thử lại."
+  },
+  "fieldEditor": {
+    "fieldName": "Tên trường",
+    "fieldType": "Kiểu dữ liệu",
+    "min": "Min:",
+    "max": "Max:",
+    "length": "Độ dài:",
+    "options": "Lựa chọn:",
+    "start": "Bắt đầu:",
+    "end": "Kết thúc:",
+    "remove": "Xóa",
+    "choicePlaceholder": "Thường, Hiếm, Sử thi",
+    "choiceHint": "Ngăn cách các lựa chọn bằng dấu phẩy, ví dụ: Thường, Hiếm, Sử thi.",
+    "patternHint": "Sử dụng {letters:4}, {digits:6} hoặc {choice:Red|Blue}.",
+    "types": {
+      "personName": "Tên người",
+      "productName": "Tên sản phẩm",
+      "companyName": "Tên công ty",
+      "number": "Số",
+      "email": "Email",
+      "string": "Chuỗi ký tự",
+      "choice": "Lựa chọn",
+      "phoneNumber": "Số điện thoại",
+      "date": "Ngày tháng",
+      "pattern": "Mẫu tùy chỉnh"
+    }
+  },
+  "validation": {
+    "emptyName": "Tên trường dữ liệu không được để trống.",
+    "duplicateName": "Tên các trường dữ liệu không được trùng nhau, kể cả khi khác chữ hoa hoặc chữ thường.",
+    "invalidNumber": "Trường \"{{name}}\": Min và Max phải là số nguyên hợp lệ. Min không được lớn hơn Max.",
+    "invalidString": "Trường \"{{name}}\": Độ dài chuỗi phải từ 1 đến 100.",
+    "invalidChoice": "Trường \"{{name}}\": Cần ít nhất một lựa chọn không rỗng và không được có lựa chọn bỏ trống.",
+    "invalidDate": "Trường \"{{name}}\": Cần nhập cả hai ngày. Ngày bắt đầu không được sau ngày kết thúc.",
+    "invalidPattern": "Trường \"{{name}}\": Mẫu không hợp lệ. Sử dụng {digits:6}, {letters:4} hoặc {choice:Red|Blue}. Độ dài phải từ 1–100 và Choice cần ít nhất 2 lựa chọn."
   },
   "appDescription": "Tạo dữ liệu giả để kiểm thử.",
   "configureDataset": "Cấu hình bộ dữ liệu"
