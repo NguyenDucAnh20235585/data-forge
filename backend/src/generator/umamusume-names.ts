@@ -14,9 +14,11 @@ export const UMAMUSUME_NAMES = [
   'Grass Wonder',
   'Seiun Sky',
   'Seeking The Pearl',
+  'Nakayama Festa',
   'Messi Doto',
   'T.M Cristiano Ronaldo O',
   'Mambo',
+  'Fraud Motion',
 
   // Classic legends
   'Special Week',
@@ -59,7 +61,7 @@ export const UMAMUSUME_NAMES = [
   'Satono Diamond',
   'Narita Top Road',
 
-  // New generations' umamusume
+  // New umas released in umamusume
   'Jungle Pocket',
   'Duramente',
   'Gentildonna',
@@ -75,7 +77,9 @@ export const UMAMUSUME_NAMES = [
   'Dream Journey',
   'Still in Love',
   'Sakura Laurel',
+  'Sakura Chiyono O',
   'Daitaku Helios',
   'Matikanetannhauser',
   'Sirius Symboli',
+  'Forever Young',
 ];
