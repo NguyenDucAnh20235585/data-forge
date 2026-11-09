@@ -35,7 +35,7 @@ export default function PreviewTable({ records }: PreviewTableProps) {
                   key={column}
                   className="whitespace-nowrap px-4 py-3 text-ink"
                 >
-                  {record[column]}
+                  {String(record[column])}
                 </td>
               ))}
             </tr>

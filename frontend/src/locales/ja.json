@@ -58,7 +58,15 @@
       "choice": "選択肢",
       "phoneNumber": "電話番号",
       "date": "日付",
-      "pattern": "カスタムパターン"
+      "pattern": "カスタムパターン",
+      "firstName": "名",
+      "lastName": "姓",
+      "city": "都市",
+      "country": "国",
+      "url": "URL",
+      "ipv4": "IPv4アドレス",
+      "uuid": "UUID",
+      "boolean": "真偽値"
     }
   },
   "validation": {

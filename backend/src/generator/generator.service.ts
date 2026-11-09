@@ -24,7 +24,15 @@ type CustomField = {
     | 'choice'
     | 'phoneNumber'
     | 'date'
-    | 'pattern';
+    | 'pattern'
+    | 'firstName'
+    | 'lastName'
+    | 'city'
+    | 'country'
+    | 'url'
+    | 'ipv4'
+    | 'uuid'
+    | 'boolean';
   min?: number;
   max?: number;
   length?: number;
@@ -56,14 +64,30 @@ export class GeneratorService {
     validateDateRanges(fields);
     validatePatterns(fields);
 
-    const records: Record<string, string | number>[] = [];
+    const records: Record<string, string | number | boolean>[] = [];
 
     for (let i = 0; i < count; i++) {
-      const record: Record<string, string | number> = {};
+      const record: Record<string, string | number | boolean> = {};
 
       for (const field of fields) {
         if (field.type === 'personName') {
           record[field.name] = faker.person.fullName();
+        } else if (field.type === 'firstName') {
+          record[field.name] = faker.person.firstName();
+        } else if (field.type === 'lastName') {
+          record[field.name] = faker.person.lastName();
+        } else if (field.type === 'city') {
+          record[field.name] = faker.location.city();
+        } else if (field.type === 'country') {
+          record[field.name] = faker.location.country();
+        } else if (field.type === 'url') {
+          record[field.name] = faker.internet.url();
+        } else if (field.type === 'ipv4') {
+          record[field.name] = faker.internet.ipv4();
+        } else if (field.type === 'uuid') {
+          record[field.name] = faker.string.uuid();
+        } else if (field.type === 'boolean') {
+          record[field.name] = faker.datatype.boolean();
         } else if (field.type === 'productName') {
           record[field.name] = faker.commerce.productName();
         } else if (field.type === 'companyName') {

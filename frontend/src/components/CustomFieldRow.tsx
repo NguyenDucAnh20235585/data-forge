@@ -78,6 +78,14 @@ export default function CustomFieldRow({
           </option>
           <option value="date">{t("fieldEditor.types.date")}</option>
           <option value="pattern">{t("fieldEditor.types.pattern")}</option>
+          <option value="firstName">{t("fieldEditor.types.firstName")}</option>
+          <option value="lastName">{t("fieldEditor.types.lastName")}</option>
+          <option value="city">{t("fieldEditor.types.city")}</option>
+          <option value="country">{t("fieldEditor.types.country")}</option>
+          <option value="url">{t("fieldEditor.types.url")}</option>
+          <option value="ipv4">{t("fieldEditor.types.ipv4")}</option>
+          <option value="uuid">{t("fieldEditor.types.uuid")}</option>
+          <option value="boolean">{t("fieldEditor.types.boolean")}</option>
         </select>
       </div>
 

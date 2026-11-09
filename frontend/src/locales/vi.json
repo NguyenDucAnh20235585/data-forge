@@ -58,7 +58,15 @@
       "choice": "Lựa chọn",
       "phoneNumber": "Số điện thoại",
       "date": "Ngày tháng",
-      "pattern": "Mẫu tùy chỉnh"
+      "pattern": "Mẫu tùy chỉnh",
+      "firstName": "Tên",
+      "lastName": "Họ",
+      "city": "Thành phố",
+      "country": "Quốc gia",
+      "url": "URL",
+      "ipv4": "Địa chỉ IPv4",
+      "uuid": "UUID",
+      "boolean": "Đúng / Sai"
     }
   },
   "validation": {

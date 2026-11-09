@@ -66,6 +66,14 @@ export class CustomFieldDto {
     'phoneNumber',
     'date',
     'pattern',
+    'firstName',
+    'lastName',
+    'city',
+    'country',
+    'url',
+    'ipv4',
+    'uuid',
+    'boolean',
   ])
   type!:
     | 'personName'
@@ -77,7 +85,15 @@ export class CustomFieldDto {
     | 'choice'
     | 'phoneNumber'
     | 'date'
-    | 'pattern';
+    | 'pattern'
+    | 'firstName'
+    | 'lastName'
+    | 'city'
+    | 'country'
+    | 'url'
+    | 'ipv4'
+    | 'uuid'
+    | 'boolean';
 }
 
 export class GenerateCustomDto {

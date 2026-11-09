@@ -58,7 +58,15 @@
       "choice": "Choice",
       "phoneNumber": "Phone Number",
       "date": "Date",
-      "pattern": "Pattern"
+      "pattern": "Pattern",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "city": "City",
+      "country": "Country",
+      "url": "URL",
+      "ipv4": "IPv4 Address",
+      "uuid": "UUID",
+      "boolean": "Boolean"
     }
   },
   "validation": {

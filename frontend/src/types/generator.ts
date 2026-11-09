@@ -12,7 +12,15 @@ export type CustomField = {
     | "choice"
     | "phoneNumber"
     | "date"
-    | "pattern";
+    | "pattern"
+    | "firstName"
+    | "lastName"
+    | "city"
+    | "country"
+    | "url"
+    | "ipv4"
+    | "uuid"
+    | "boolean";
 
   min?: number;
   max?: number;
@@ -23,4 +31,4 @@ export type CustomField = {
   pattern?: string;
 };
 
-export type GeneratedRecord = Record<string, string | number>;
+export type GeneratedRecord = Record<string, string | number | boolean>;
