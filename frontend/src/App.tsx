@@ -14,7 +14,11 @@ import { exportJson, exportCsv } from "./utils/exportData";
 import type { FieldValidationError } from "./utils/validateFields";
 
 function App() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale =
+    i18n.resolvedLanguage === "vi" || i18n.resolvedLanguage === "ja"
+      ? i18n.resolvedLanguage
+      : "en";
   const [preset, setPreset] = useState<Preset>("users");
   const [count, setCount] = useState(3);
   const [records, setRecords] = useState<GeneratedRecord[]>([]);
@@ -38,7 +42,9 @@ function App() {
   };
 
   const currentConfig = JSON.stringify(
-    mode === "quick" ? { mode, count, preset } : { mode, count, fields },
+    mode === "quick"
+      ? { mode, count, preset, locale }
+      : { mode, count, fields, locale },
   );
 
   const handleAddField = () => {
@@ -104,8 +110,7 @@ function App() {
               ),
             };
 
-      const data = await generateData(mode, payload);
-
+      const data = await generateData(mode, payload, locale);
       setRecords(data);
       setGeneratedConfig(currentConfig);
     } catch (error) {
@@ -153,8 +158,8 @@ function App() {
             }}
             className={`mode-tab rounded-md px-4 py-2 text-sm font-medium ${
               mode === "quick"
-                ? "bg-white text-zinc-900 shadow-sm"
-                : "bg-transparent text-zinc-600 hover:text-zinc-900"
+                ? "bg-surface text-ink shadow-sm"
+                : "bg-transparent text-muted hover:text-ink"
             }`}
           >
             {t("configuration.quickPreset")}
@@ -170,8 +175,8 @@ function App() {
             }}
             className={`mode-tab rounded-md px-4 py-2 text-sm font-medium ${
               mode === "custom"
-                ? "bg-white text-zinc-900 shadow-sm"
-                : "bg-transparent text-zinc-600 hover:text-zinc-900"
+                ? "bg-surface text-ink shadow-sm"
+                : "bg-transparent text-muted hover:text-ink"
             }`}
           >
             {t("configuration.customFields")}
@@ -252,7 +257,7 @@ function App() {
             }
             className="
   ml-auto inline-flex h-12 w-44 items-center justify-center rounded-md px-6
-  bg-action-primary text-sm font-semibold text-ink
+  bg-action-primary text-sm font-semibold text-action-primary-ink
   transition-[transform,background-color,box-shadow]
   duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
   hover:bg-action-primary-hover 

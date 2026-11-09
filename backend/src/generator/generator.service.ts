@@ -1,5 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { faker } from '@faker-js/faker';
+import { getFaker, type DataLocale } from './faker-locale';
 import { GeneratePreset } from './dto/generate-data.dto';
 import { generatePreset } from './preset-generator';
 import { generatePattern } from './pattern-generator';
@@ -36,11 +36,20 @@ type CustomField = {
 
 @Injectable()
 export class GeneratorService {
-  generate(count: number, preset: GeneratePreset = GeneratePreset.USERS) {
-    return generatePreset(count, preset);
+  generate(
+    count: number,
+    preset: GeneratePreset = GeneratePreset.USERS,
+    locale: DataLocale = 'en',
+  ) {
+    return generatePreset(count, preset, locale);
   }
 
-  generateCustom(count: number, fields: CustomField[]) {
+  generateCustom(
+    count: number,
+    fields: CustomField[],
+    locale: DataLocale = 'en',
+  ) {
+    const faker = getFaker(locale);
     validateFieldNames(fields);
     validateNumberRanges(fields);
     validateChoiceOptions(fields);

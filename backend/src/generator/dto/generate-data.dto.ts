@@ -1,4 +1,5 @@
-import { IsEnum, IsInt, IsOptional, Max, Min } from 'class-validator';
+import { IsEnum, IsIn, IsInt, IsOptional, Max, Min } from 'class-validator';
+import type { DataLocale } from '../faker-locale';
 
 export enum GeneratePreset {
   USERS = 'users',
@@ -16,4 +17,8 @@ export class GenerateDataDto {
   @IsOptional()
   @IsEnum(GeneratePreset)
   preset?: GeneratePreset;
+
+  @IsOptional()
+  @IsIn(['en', 'vi', 'ja'])
+  locale?: DataLocale;
 }

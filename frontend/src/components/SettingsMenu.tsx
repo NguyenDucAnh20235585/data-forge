@@ -1,9 +1,18 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 function SettingsMenu() {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const { t, i18n } = useTranslation();
+  const [darkMode, setDarkMode] = useState(
+    () => localStorage.getItem("data-forge-theme") === "dark",
+  );
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkMode);
+
+    localStorage.setItem("data-forge-theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
 
   return (
     <div className="absolute right-0 top-0">
@@ -74,10 +83,38 @@ function SettingsMenu() {
           </div>
 
           <div className="flex items-center justify-between py-5">
-            <span className="text-sm font-medium">
+            <label htmlFor="settings-dark-mode" className="text-sm font-medium">
               {t("settings.darkMode")}
-            </span>
-            <span className="text-sm text-muted">{t("settings.off")}</span>
+            </label>
+
+            <label className="relative inline-flex h-[30px] w-[52px] cursor-pointer items-center">
+              <input
+                id="settings-dark-mode"
+                type="checkbox"
+                role="switch"
+                checked={darkMode}
+                onChange={(event) => setDarkMode(event.target.checked)}
+                className="peer sr-only"
+              />
+
+              <span
+                aria-hidden="true"
+                className="h-[30px] w-[52px] rounded-full bg-zinc-400
+      transition-colors duration-200
+      peer-checked:bg-violet-600
+      peer-focus-visible:outline-2
+      peer-focus-visible:outline-offset-2
+      peer-focus-visible:outline-accent"
+              />
+
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute left-[3px] top-[3px]
+      h-6 w-6 rounded-full bg-white shadow-sm
+      transition-transform duration-200
+      peer-checked:translate-x-[22px]"
+              />
+            </label>
           </div>
         </div>
       </dialog>

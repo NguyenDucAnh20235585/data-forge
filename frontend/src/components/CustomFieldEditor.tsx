@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from "react";
 import type { CustomField } from "../types/generator";
 import CustomFieldRow from "./CustomFieldRow";
 import type { FieldValidationError } from "../utils/validateFields";
+import { useTranslation } from "react-i18next";
 
 type CustomFieldEditorProps = {
   fields: CustomField[];
@@ -14,9 +15,11 @@ export default function CustomFieldEditor({
   setFields,
   fieldError,
 }: CustomFieldEditorProps) {
+  const { t } = useTranslation();
+
   return (
     <section>
-      <h2 className="mb-3">Custom Fields</h2>
+      <h2 className="mb-3">{t("configuration.customFields")}</h2>
 
       {fields.map((field, index) => (
         <div key={index}>

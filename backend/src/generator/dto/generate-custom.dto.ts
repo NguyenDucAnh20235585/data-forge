@@ -1,4 +1,5 @@
 import { Type } from 'class-transformer';
+import type { DataLocale } from '../faker-locale';
 import {
   IsArray,
   ArrayMinSize,
@@ -90,4 +91,8 @@ export class GenerateCustomDto {
   @ValidateNested({ each: true })
   @Type(() => CustomFieldDto)
   fields!: CustomFieldDto[];
+
+  @IsOptional()
+  @IsIn(['en', 'vi', 'ja'])
+  locale?: DataLocale;
 }

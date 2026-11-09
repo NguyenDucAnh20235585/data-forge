@@ -12,9 +12,26 @@
   --action-primary: #b7a4e8;
   --action-primary-hover: #a990da;
   --border-color: #d9d9d3;
+  --action-primary-ink: #1a1a1a;
 
   color: var(--ink);
   background-color: var(--canvas);
+}
+
+:root.dark {
+  color-scheme: dark;
+
+  --canvas: #12141a;
+  --surface: #20232b;
+  --surface-soft: #2e323c;
+  --muted: #b8beca;
+  --border-control: #7a8190;
+  --ink: #f4f4f6;
+  --primary: #f4f4f6;
+  --accent: #b8b9ff;
+  --action-primary: #b7a4e8;
+  --action-primary-hover: #c5b4f2;
+  --border-color: #414653;
 }
 
 @theme inline {
@@ -27,9 +44,9 @@
   --color-control-outline: var(--border-control);
   --color-primary: var(--primary);
   --color-accent: var(--accent);
-  --muted: #585851;
   --color-action-primary: var(--action-primary);
   --color-action-primary-hover: var(--action-primary-hover);
+  --color-action-primary-ink: var(--action-primary-ink);
 }
 
 * {

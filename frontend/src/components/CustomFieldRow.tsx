@@ -252,7 +252,7 @@ export default function CustomFieldRow({
             <p
               id={nameErrorId}
               role="alert"
-              className="text-xs leading-5 text-red-600"
+              className="text-xs leading-5 text-red-600 dark:text-red-400"
             >
               {t(error.messageKey, { name: field.name })}
             </p>
@@ -262,7 +262,7 @@ export default function CustomFieldRow({
             <p
               id={configErrorId}
               role="alert"
-              className="text-xs leading-5 text-red-600"
+              className="text-xs leading-5 text-red-600 dark:text-red-400"
             >
               {t(error.messageKey, { name: field.name })}
             </p>

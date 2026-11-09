@@ -4,9 +4,12 @@ type GeneratePayload =
   | { count: number; preset: Preset }
   | { count: number; fields: CustomField[] };
 
+type DataLocale = "en" | "vi" | "ja";
+
 export async function generateData(
   mode: "quick" | "custom",
   payload: GeneratePayload,
+  locale: DataLocale,
 ): Promise<GeneratedRecord[]> {
   const endpoint =
     mode === "quick"
@@ -18,7 +21,7 @@ export async function generateData(
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ ...payload, locale }),
   });
 
   if (!response.ok) {

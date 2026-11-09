@@ -9,11 +9,19 @@ export class GeneratorController {
 
   @Post()
   generate(@Body() body: GenerateDataDto) {
-    return this.generatorService.generate(body.count, body.preset);
+    return this.generatorService.generate(
+      body.count,
+      body.preset,
+      body.locale ?? 'en',
+    );
   }
 
   @Post('custom')
   generateCustom(@Body() body: GenerateCustomDto) {
-    return this.generatorService.generateCustom(body.count, body.fields);
+    return this.generatorService.generateCustom(
+      body.count,
+      body.fields,
+      body.locale ?? 'en',
+    );
   }
 }

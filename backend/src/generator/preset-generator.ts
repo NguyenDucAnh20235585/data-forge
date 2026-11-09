@@ -1,7 +1,13 @@
-import { faker } from '@faker-js/faker';
 import { GeneratePreset } from './dto/generate-data.dto';
+import { getFaker, type DataLocale } from './faker-locale';
 
-export function generatePreset(count: number, preset: GeneratePreset) {
+export function generatePreset(
+  count: number,
+  preset: GeneratePreset,
+  locale: DataLocale = 'en',
+) {
+  const faker = getFaker(locale);
+
   return Array.from({ length: count }, () => {
     switch (preset) {
       case GeneratePreset.PRODUCTS:
