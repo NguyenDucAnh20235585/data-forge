@@ -21,7 +21,6 @@ export function generatePreset(
 
       case GeneratePreset.UMAMUSUME:
         return {
-          id: faker.string.uuid(),
           name: faker.helpers.arrayElement(UMAMUSUME_NAMES),
           speed: faker.number.int({ min: 100, max: 1600 }),
           stamina: faker.number.int({ min: 100, max: 1300 }),
