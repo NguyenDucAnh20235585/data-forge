@@ -2,6 +2,13 @@ import { GeneratePreset } from './dto/generate-data.dto';
 import { getFaker, type DataLocale } from './faker-locale';
 import { UMAMUSUME_NAMES } from './umamusume-names';
 
+import {
+  PRODUCT_CATALOG,
+  CATEGORY_LABELS,
+  COLOR_VARIANTS,
+  CURRENCY_BY_LOCALE,
+} from './product-catalog';
+
 function getCareerRank(total: number): string {
   if (total >= 6000) return 'UF';
   if (total >= 5000) return 'UG';
@@ -28,13 +35,18 @@ export function generatePreset(
 
   return Array.from({ length: count }, () => {
     switch (preset) {
-      case GeneratePreset.PRODUCTS:
+      case GeneratePreset.PRODUCTS: {
+        const product = faker.helpers.arrayElement(PRODUCT_CATALOG);
+        const color = faker.helpers.arrayElement(COLOR_VARIANTS);
+
         return {
           id: faker.string.uuid(),
-          name: faker.commerce.productName(),
-          category: faker.commerce.department(),
-          price: Number(faker.commerce.price()),
+          name: `${product.name[locale]} - ${color[locale]}`,
+          category: CATEGORY_LABELS[product.category][locale],
+          price: product.price[locale],
+          currency: CURRENCY_BY_LOCALE[locale],
         };
+      }
 
       case GeneratePreset.UMAMUSUME: {
         const stats = {
