@@ -1,10 +1,34 @@
 import type { GeneratedRecord } from "../types/generator";
+import { useTranslation } from "react-i18next";
 
 type PreviewTableProps = {
   records: GeneratedRecord[];
 };
 
+function formatPreviewValue(
+  column: string,
+  value: string | number | boolean,
+  locale: string,
+) {
+  if (
+    (column === "timestamp" || column === "createdAt") &&
+    typeof value === "string" &&
+    /^\d{4}-\d{2}-\d{2}T.*Z$/.test(value)
+  ) {
+    const date = new Date(value);
+
+    if (!Number.isNaN(date.getTime())) {
+      return date.toLocaleString(locale, {
+        hour12: false,
+      });
+    }
+  }
+
+  return String(value);
+}
+
 export default function PreviewTable({ records }: PreviewTableProps) {
+  const { i18n } = useTranslation();
   const columns = records.length > 0 ? Object.keys(records[0]) : [];
 
   return (
@@ -35,7 +59,11 @@ export default function PreviewTable({ records }: PreviewTableProps) {
                   key={column}
                   className="whitespace-nowrap px-4 py-3 text-ink"
                 >
-                  {String(record[column])}
+                  {formatPreviewValue(
+                    column,
+                    record[column],
+                    i18n.resolvedLanguage ?? "en",
+                  )}
                 </td>
               ))}
             </tr>
