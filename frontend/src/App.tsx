@@ -208,6 +208,9 @@ function App() {
                 <option value="umamusume">
                   {t("configuration.presets.umamusume")}
                 </option>
+                <option value="orders">
+                  {t("configuration.presets.orders")}
+                </option>
               </select>
             </div>
           )}

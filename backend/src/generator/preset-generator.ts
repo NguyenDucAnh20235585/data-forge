@@ -78,6 +78,34 @@ export function generatePreset(
           department: faker.commerce.department(),
         };
 
+      case GeneratePreset.ORDERS: {
+        const product = faker.helpers.arrayElement(PRODUCT_CATALOG);
+        const color = faker.helpers.arrayElement(COLOR_VARIANTS);
+
+        const quantity = faker.number.int({ min: 1, max: 5 });
+        const unitPrice = product.price[locale];
+
+        const status = faker.helpers.arrayElement([
+          'pending',
+          'shipped',
+          'delivered',
+          'delivered',
+          'cancelled',
+        ]);
+
+        return {
+          orderId: faker.string.uuid(),
+          customerName: faker.person.fullName(),
+          product: `${product.name[locale]} - ${color[locale]}`,
+          quantity,
+          unitPrice,
+          total: quantity * unitPrice,
+          currency: CURRENCY_BY_LOCALE[locale],
+          status,
+          createdAt: faker.date.recent({ days: 90 }).toISOString(),
+        };
+      }
+
       default:
         return {
           id: faker.string.uuid(),

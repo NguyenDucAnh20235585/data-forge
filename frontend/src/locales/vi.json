@@ -16,7 +16,8 @@
       "users": "Người dùng",
       "products": "Sản phẩm",
       "employees": "Nhân viên",
-      "umamusume": "Mã nương"
+      "umamusume": "Mã nương",
+      "orders": "Đơn hàng"
     },
     "addField": "Thêm trường dữ liệu",
     "generateData": "Tạo dữ liệu",

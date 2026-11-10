@@ -16,7 +16,8 @@
       "users": "Users",
       "products": "Products",
       "employees": "Employees",
-      "umamusume": "Umamusume"
+      "umamusume": "Umamusume",
+      "orders": "Orders"
     },
     "addField": "Add Field",
     "generateData": "Generate Data",

@@ -1,4 +1,9 @@
-export type Preset = "users" | "products" | "employees" | "umamusume";
+export type Preset =
+  | "users"
+  | "products"
+  | "employees"
+  | "umamusume"
+  | "orders";
 
 export type CustomField = {
   name: string;

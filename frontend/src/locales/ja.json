@@ -16,7 +16,8 @@
       "users": "ユーザー",
       "products": "製品",
       "employees": "従業員",
-      "umamusume": "ウマ娘"
+      "umamusume": "ウマ娘",
+      "orders": "注文"
     },
     "addField": "フィールドを追加",
     "generateData": "データを生成",
