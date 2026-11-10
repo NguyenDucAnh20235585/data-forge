@@ -19,6 +19,7 @@ export const UMAMUSUME_NAMES = [
   'T.M Cristiano Ronaldo O',
   'Mambo',
   'Fraud Motion',
+  'Kitascam Black',
 
   // Classic legends
   'Special Week',
