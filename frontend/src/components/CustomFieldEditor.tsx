@@ -34,7 +34,7 @@ export default function CustomFieldEditor({
       <h2 className="mb-3">{t("configuration.customFields")}</h2>
 
       {fields.map((field, index) => (
-        <div key={index}>
+        <div key={index} className="mb-2 last:mb-0">
           <CustomFieldRow
             field={field}
             error={visibleError?.fieldIndex === index ? visibleError : null}

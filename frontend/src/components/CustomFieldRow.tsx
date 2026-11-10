@@ -111,15 +111,17 @@ export default function CustomFieldRow({
         }`}
       >
         {field.type === "number" && (
-          <div className="flex h-10 items-center gap-3">
-            <label className="flex items-center gap-2 text-sm text-muted">
-              <span>{t("fieldEditor.min")}</span>
+          <div className="flex h-10 items-center gap-3 xl:grid xl:grid-cols-2">
+            <label className="flex min-w-0 items-center gap-2 text-sm text-muted">
+              <span className="xl:w-12 xl:shrink-0">
+                {t("fieldEditor.min")}
+              </span>
               <input
                 type="number"
                 placeholder="1"
                 aria-invalid={hasConfigError}
                 aria-describedby={hasConfigError ? configErrorId : undefined}
-                className={`h-10 w-22 rounded-md border bg-surface px-3 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 ${
+                className={`h-10 w-22 xl:w-full xl:min-w-0 rounded-md border bg-surface px-3 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 ${
                   hasConfigError ? errorBorder : normalBorder
                 }`}
                 value={field.min ?? ""}
@@ -132,14 +134,16 @@ export default function CustomFieldRow({
               />
             </label>
 
-            <label className="flex items-center gap-2 text-sm text-muted">
-              <span>{t("fieldEditor.max")}</span>
+            <label className="flex min-w-0 items-center gap-2 text-sm text-muted">
+              <span className="xl:w-12 xl:shrink-0">
+                {t("fieldEditor.max")}
+              </span>
               <input
                 type="number"
                 placeholder="100"
                 aria-invalid={hasConfigError}
                 aria-describedby={hasConfigError ? configErrorId : undefined}
-                className={`h-10 w-22 rounded-md border bg-surface px-3 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 ${
+                className={`h-10 w-22 xl:w-full xl:min-w-0 rounded-md border bg-surface px-3 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 ${
                   hasConfigError ? errorBorder : normalBorder
                 }`}
                 value={field.max ?? ""}
@@ -156,8 +160,10 @@ export default function CustomFieldRow({
 
         {field.type === "string" && (
           <div className="flex h-10 items-center gap-2">
-            <label className="flex items-center gap-2 text-sm text-muted">
-              <span>{t("fieldEditor.length")}</span>
+            <label className="flex min-w-0 items-center gap-2 text-sm text-muted">
+              <span className="xl:w-12 xl:shrink-0">
+                {t("fieldEditor.length")}
+              </span>
               <input
                 type="number"
                 min="1"
@@ -183,7 +189,9 @@ export default function CustomFieldRow({
         {field.type === "choice" && (
           <div className="flex h-10 items-center gap-2">
             <label className="flex w-full min-w-0 items-center gap-2 text-sm text-muted">
-              <span>{t("fieldEditor.options")}</span>
+              <span className="xl:w-12 xl:shrink-0">
+                {t("fieldEditor.options")}
+              </span>
               <input
                 type="text"
                 placeholder={t("fieldEditor.choicePlaceholder")}
@@ -201,9 +209,9 @@ export default function CustomFieldRow({
         )}
 
         {field.type === "date" && (
-          <div className="flex w-full min-w-0 flex-col gap-2 sm:flex-row sm:items-center">
-            <label className="flex min-w-0 flex-1 items-center gap-2 text-sm text-muted">
-              <span className="shrink-0">{t("fieldEditor.start")}</span>
+          <div className="flex w-full min-w-0 flex-col gap-2 xl:grid xl:grid-cols-2 xl:gap-3">
+            <label className="flex min-w-0 flex-1 flex-col gap-1 text-sm text-muted xl:flex-row xl:items-center xl:gap-2">
+              <span className="shrink-0 xl:w-12">{t("fieldEditor.start")}</span>
               <input
                 type="date"
                 aria-invalid={hasConfigError}
@@ -220,8 +228,8 @@ export default function CustomFieldRow({
               />
             </label>
 
-            <label className="flex min-w-0 flex-1 items-center gap-2 text-sm text-muted">
-              <span className="shrink-0">{t("fieldEditor.end")}</span>
+            <label className="flex min-w-0 flex-1 flex-col gap-1 text-sm text-muted xl:flex-row xl:items-center xl:gap-2">
+              <span className="shrink-0 xl:w-12">{t("fieldEditor.end")}</span>
               <input
                 type="date"
                 aria-invalid={hasConfigError}
@@ -266,7 +274,14 @@ export default function CustomFieldRow({
           type="button"
           disabled={!canRemove}
           onClick={onRemove}
-          className="h-10 rounded-md px-3 text-sm font-medium text-muted transition-colors duration-150 hover:bg-red-50 hover:text-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-40"
+          className="inline-flex h-10 items-center justify-center
+  rounded-md border border-transparent px-3
+  text-sm font-medium text-muted
+  transition-colors duration-150
+  hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-500
+  focus-visible:outline-2 focus-visible:outline-offset-2
+  focus-visible:outline-accent
+  disabled:cursor-not-allowed disabled:opacity-40"
         >
           {t("fieldEditor.remove")}
         </button>
