@@ -32,7 +32,7 @@ export default function PreviewTable({ records }: PreviewTableProps) {
   const columns = records.length > 0 ? Object.keys(records[0]) : [];
 
   return (
-    <div className="max-h-[420px] w-full overflow-auto rounded-lg border border-outline">
+    <div className="max-h-[420px] w-full overflow-auto rounded-lg border border-outline lg:max-h-[min(65vh,560px)] [scrollbar-width:thin]">
       <table className="w-full min-w-max border-collapse text-left text-sm">
         <thead className="sticky top-0 z-10 bg-surface-soft">
           <tr>
@@ -40,7 +40,7 @@ export default function PreviewTable({ records }: PreviewTableProps) {
               <th
                 key={column}
                 scope="col"
-                className="border-b border-outline px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted"
+                className="border-b border-outline px-4 py-3 text-xs font-semibold text-muted"
               >
                 {column}
               </th>

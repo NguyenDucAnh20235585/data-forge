@@ -249,19 +249,23 @@ export default function CustomFieldRow({
         )}
 
         {field.type === "pattern" && (
-          <input
-            type="text"
-            placeholder="PLR-{letters:4}-{digits:6}"
-            aria-invalid={hasConfigError}
-            aria-describedby={hasConfigError ? configErrorId : undefined}
-            className={`${baseInputClass} ${hasConfigError ? errorBorder : normalBorder}`}
-            value={field.pattern ?? ""}
-            onChange={(event) => {
-              onConfigChange({
-                pattern: event.target.value,
-              });
-            }}
-          />
+          <div className="xl:pl-14">
+            <input
+              type="text"
+              placeholder="PLR-{letters:4}-{digits:6}"
+              aria-invalid={hasConfigError}
+              aria-describedby={hasConfigError ? configErrorId : undefined}
+              className={`${baseInputClass} ${
+                hasConfigError ? errorBorder : normalBorder
+              }`}
+              value={field.pattern ?? ""}
+              onChange={(event) => {
+                onConfigChange({
+                  pattern: event.target.value,
+                });
+              }}
+            />
+          </div>
         )}
 
         {!["number", "string", "choice", "date", "pattern"].includes(
