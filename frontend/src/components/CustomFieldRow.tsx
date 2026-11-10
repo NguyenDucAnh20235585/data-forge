@@ -278,19 +278,46 @@ export default function CustomFieldRow({
           type="button"
           disabled={!canRemove}
           onClick={onRemove}
-          className="inline-flex h-10 items-center justify-center
-  rounded-md border border-transparent px-3
-  text-sm font-medium text-muted
-  transition-colors duration-150
-  hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-500
-  focus-visible:outline-2 focus-visible:outline-offset-2
-  focus-visible:outline-accent
-  disabled:cursor-not-allowed disabled:opacity-40"
+          aria-label={t("fieldEditor.remove")}
+          title={t("fieldEditor.remove")}
+          className="
+      group inline-flex h-10 w-10 items-center justify-center
+      rounded-lg border border-transparent text-muted
+      transition-[background-color,border-color,color,transform]
+      duration-200 ease-out
+      hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-500
+      active:scale-90
+      focus-visible:outline-2 focus-visible:outline-offset-2
+      focus-visible:outline-accent
+      disabled:cursor-not-allowed disabled:opacity-40
+      motion-reduce:transition-none
+    "
         >
-          {t("fieldEditor.remove")}
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+            className="
+        transition-transform duration-200 ease-out
+        group-hover:-rotate-12
+        motion-reduce:transform-none
+        motion-reduce:transition-none
+      "
+          >
+            <path d="M3 6h18" />
+            <path d="M8 6V4h8v2" />
+            <path d="M19 6l-1 14H6L5 6" />
+            <path d="M10 11v5" />
+            <path d="M14 11v5" />
+          </svg>
         </button>
       </div>
-
       {(error !== null ||
         field.type === "choice" ||
         field.type === "pattern") && (
