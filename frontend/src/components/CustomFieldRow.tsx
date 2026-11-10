@@ -35,6 +35,13 @@ export default function CustomFieldRow({
 
   const hasNameError = error?.target === "name";
   const hasConfigError = error?.target === "config";
+  const needsConfig = [
+    "number",
+    "string",
+    "choice",
+    "date",
+    "pattern",
+  ].includes(field.type);
 
   const baseInputClass =
     "h-10 w-full min-w-0 rounded-md border bg-surface px-3 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20";
@@ -44,8 +51,10 @@ export default function CustomFieldRow({
 
   return (
     <div
-      className="grid w-full grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,2.2fr)_auto] 
-    gap-x-3 gap-y-2 rounded-lg border border-outline bg-canvas p-3"
+      className="grid w-full grid-cols-1
+  sm:grid-cols-2
+  xl:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,2.2fr)_auto]
+  gap-x-3 gap-y-2 rounded-lg border border-outline bg-canvas p-3"
     >
       <div className="min-w-0">
         <input
@@ -96,7 +105,11 @@ export default function CustomFieldRow({
         </select>
       </div>
 
-      <div className="min-w-0">
+      <div
+        className={`min-w-0 sm:col-span-2 xl:col-span-1 ${
+          needsConfig ? "" : "hidden xl:block"
+        }`}
+      >
         {field.type === "number" && (
           <div className="flex h-10 items-center gap-3">
             <label className="flex items-center gap-2 text-sm text-muted">
@@ -188,7 +201,7 @@ export default function CustomFieldRow({
         )}
 
         {field.type === "date" && (
-          <div className="flex h-10 w-full min-w-0 items-center gap-3">
+          <div className="flex w-full min-w-0 flex-col gap-2 sm:flex-row sm:items-center">
             <label className="flex min-w-0 flex-1 items-center gap-2 text-sm text-muted">
               <span className="shrink-0">{t("fieldEditor.start")}</span>
               <input
@@ -248,7 +261,7 @@ export default function CustomFieldRow({
         ) && <div className="h-10" />}
       </div>
 
-      <div className="flex items-start">
+      <div className="col-span-full flex justify-end xl:col-span-1 xl:justify-start">
         <button
           type="button"
           disabled={!canRemove}
