@@ -17,7 +17,8 @@
       "products": "製品",
       "employees": "従業員",
       "umamusume": "ウマ娘",
-      "orders": "注文"
+      "orders": "注文",
+      "apiLogs": "APIログI"
     },
     "addField": "フィールドを追加",
     "generateData": "データを生成",

@@ -7,6 +7,7 @@ export enum GeneratePreset {
   EMPLOYEES = 'employees',
   UMAMUSUME = 'umamusume',
   ORDERS = 'orders',
+  API_LOGS = 'apiLogs',
 }
 
 export class GenerateDataDto {

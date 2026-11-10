@@ -211,6 +211,9 @@ function App() {
                 <option value="orders">
                   {t("configuration.presets.orders")}
                 </option>
+                <option value="apiLogs">
+                  {t("configuration.presets.apiLogs")}
+                </option>
               </select>
             </div>
           )}

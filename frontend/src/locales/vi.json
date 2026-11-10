@@ -17,7 +17,8 @@
       "products": "Sản phẩm",
       "employees": "Nhân viên",
       "umamusume": "Mã nương",
-      "orders": "Đơn hàng"
+      "orders": "Đơn hàng",
+      "apiLogs": "Nhật ký API"
     },
     "addField": "Thêm trường dữ liệu",
     "generateData": "Tạo dữ liệu",

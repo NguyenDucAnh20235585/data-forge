@@ -26,6 +26,16 @@ function getCareerRank(total: number): string {
   return 'D';
 }
 
+const API_ROUTES = [
+  { method: 'GET', endpoint: '/api/users', successStatus: 200 },
+  { method: 'GET', endpoint: '/api/products', successStatus: 200 },
+  { method: 'GET', endpoint: '/api/orders', successStatus: 200 },
+  { method: 'GET', endpoint: '/api/health', successStatus: 200 },
+  { method: 'POST', endpoint: '/api/orders', successStatus: 201 },
+  { method: 'POST', endpoint: '/api/auth/login', successStatus: 200 },
+  { method: 'PATCH', endpoint: '/api/users/me', successStatus: 200 },
+];
+
 export function generatePreset(
   count: number,
   preset: GeneratePreset,
@@ -103,6 +113,33 @@ export function generatePreset(
           currency: CURRENCY_BY_LOCALE[locale],
           status,
           createdAt: faker.date.recent({ days: 90 }).toISOString(),
+        };
+      }
+      case GeneratePreset.API_LOGS: {
+        const route = faker.helpers.arrayElement(API_ROUTES);
+
+        const isSuccess =
+          faker.number.int({
+            min: 1,
+            max: 100,
+          }) <= 80;
+
+        const statusCode = isSuccess
+          ? route.successStatus
+          : faker.helpers.arrayElement([400, 401, 403, 404, 429, 500]);
+
+        const responseTimeMs = faker.number.int({
+          min: statusCode >= 500 ? 500 : 20,
+          max: statusCode >= 500 ? 3000 : 800,
+        });
+
+        return {
+          timestamp: faker.date.recent({ days: 7 }).toISOString(),
+          method: route.method,
+          endpoint: route.endpoint,
+          ipAddress: faker.internet.ipv4(),
+          statusCode,
+          responseTimeMs,
         };
       }
 

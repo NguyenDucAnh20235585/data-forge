@@ -17,7 +17,8 @@
       "products": "Products",
       "employees": "Employees",
       "umamusume": "Umamusume",
-      "orders": "Orders"
+      "orders": "Orders",
+      "apiLogs": "API Logs"
     },
     "addField": "Add Field",
     "generateData": "Generate Data",

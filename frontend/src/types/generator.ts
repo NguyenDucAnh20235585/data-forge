@@ -3,7 +3,8 @@ export type Preset =
   | "products"
   | "employees"
   | "umamusume"
-  | "orders";
+  | "orders"
+  | "apiLogs";
 
 export type CustomField = {
   name: string;
