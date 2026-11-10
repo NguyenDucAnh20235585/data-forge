@@ -49,7 +49,8 @@
     "remove": "Xóa",
     "choicePlaceholder": "Thường, Hiếm, Sử thi",
     "choiceHint": "Ngăn cách các lựa chọn bằng dấu phẩy, ví dụ: Thường, Hiếm, Sử thi.",
-    "patternHint": "Sử dụng {letters:4}, {digits:6} hoặc {choice:Red|Blue}.",
+    "patternHint": "Dùng {digits:6} để tạo 6 chữ số, {letters:4} để tạo 4 chữ cái, hoặc {choice:Red|Blue} để chọn một giá trị.",
+    "quickTemplates": "Mẫu có sẵn:",
     "types": {
       "personName": "Tên người",
       "productName": "Tên sản phẩm",

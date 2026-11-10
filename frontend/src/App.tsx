@@ -79,6 +79,8 @@ function App() {
   const handleGenerate = async () => {
     if (mode === "custom") {
       const validationError = validateFields(fields);
+      console.log("FIELDS:", fields);
+      console.log("VALIDATION ERROR:", validationError);
 
       if (validationError) {
         setFieldError(validationError);

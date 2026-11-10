@@ -64,6 +64,7 @@ export function validateFields(
 
   const invalidPattern = fields.find((field) => {
     if (field.type !== "pattern") return false;
+    if (!field.pattern?.trim()) return true;
 
     let hasInvalidToken = false;
 

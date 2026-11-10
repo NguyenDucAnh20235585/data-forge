@@ -13,6 +13,13 @@ type CustomFieldRowProps = {
   canRemove: boolean;
 };
 
+const PATTERN_TEMPLATES = [
+  { label: "Order ID", value: "ORD-{digits:6}" },
+  { label: "User Code", value: "USR-{letters:4}" },
+  { label: "Invoice", value: "INV-{digits:8}" },
+  { label: "Product SKU", value: "SKU-{letters:3}-{digits:4}" },
+];
+
 export default function CustomFieldRow({
   field,
   onNameChange,
@@ -282,10 +289,31 @@ export default function CustomFieldRow({
             </p>
           )}
 
-          {!error && field.type === "pattern" && (
-            <p className="text-xs leading-5 text-muted">
-              {t("fieldEditor.patternHint")}
-            </p>
+          {field.type === "pattern" && (
+            <div className="space-y-2">
+              {!error && (
+                <p className="text-xs leading-5 text-muted">
+                  {t("fieldEditor.patternHint")}
+                </p>
+              )}
+
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-xs text-muted">
+                  {t("fieldEditor.quickTemplates")}
+                </span>
+
+                {PATTERN_TEMPLATES.map((template) => (
+                  <button
+                    key={template.label}
+                    type="button"
+                    onClick={() => onConfigChange({ pattern: template.value })}
+                    className="rounded-md border border-control-outline bg-surface px-3 py-1.5 text-xs text-ink transition-colors hover:border-accent"
+                  >
+                    {template.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           )}
         </div>
       )}

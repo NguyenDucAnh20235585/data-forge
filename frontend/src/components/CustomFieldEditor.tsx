@@ -3,6 +3,7 @@ import type { CustomField } from "../types/generator";
 import CustomFieldRow from "./CustomFieldRow";
 import type { FieldValidationError } from "../utils/validateFields";
 import { useTranslation } from "react-i18next";
+import { validateFields } from "../utils/validateFields";
 
 type CustomFieldEditorProps = {
   fields: CustomField[];
@@ -17,6 +18,17 @@ export default function CustomFieldEditor({
 }: CustomFieldEditorProps) {
   const { t } = useTranslation();
 
+  const currentError = validateFields(fields);
+
+  const visibleError =
+    fieldError &&
+    currentError &&
+    fieldError.fieldIndex === currentError.fieldIndex &&
+    fieldError.target === currentError.target &&
+    fieldError.messageKey === currentError.messageKey
+      ? fieldError
+      : null;
+
   return (
     <section>
       <h2 className="mb-3">{t("configuration.customFields")}</h2>
@@ -25,7 +37,7 @@ export default function CustomFieldEditor({
         <div key={index}>
           <CustomFieldRow
             field={field}
-            error={fieldError?.fieldIndex === index ? fieldError : null}
+            error={visibleError?.fieldIndex === index ? visibleError : null}
             onNameChange={(name) => {
               setFields((previous) =>
                 previous.map((item, i) =>

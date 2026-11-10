@@ -49,7 +49,8 @@
     "remove": "削除",
     "choicePlaceholder": "通常, レア, エピック",
     "choiceHint": "選択肢をカンマで区切ってください。例：通常, レア, エピック。",
-    "patternHint": "{letters:4}、{digits:6}、{choice:Red|Blue} などを使用してください。",
+    "patternHint": "{digits:6} は6桁の数字、{letters:4} は4文字の英字、{choice:Red|Blue} は候補から1つを選びます。",
+    "quickTemplates": "テンプレート:",
     "types": {
       "personName": "氏名",
       "productName": "製品名",
