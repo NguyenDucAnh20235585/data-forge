@@ -119,17 +119,15 @@ export default function CustomFieldRow({
   ${needsConfig ? "" : "hidden xl:block"}`}
       >
         {field.type === "number" && (
-          <div className="flex h-10 items-center gap-3 xl:grid xl:grid-cols-2">
-            <label className="flex min-w-0 items-center gap-2 text-sm text-muted">
-              <span className="xl:w-12 xl:shrink-0">
-                {t("fieldEditor.min")}
-              </span>
+          <div className="grid w-full min-w-0 grid-cols-2 gap-3 xl:h-10">
+            <label className="flex min-w-0 flex-col gap-1 text-sm text-muted xl:flex-row xl:items-center xl:gap-2">
+              <span className="shrink-0 xl:w-12">{t("fieldEditor.min")}</span>
               <input
                 type="number"
                 placeholder="1"
                 aria-invalid={hasConfigError}
                 aria-describedby={hasConfigError ? configErrorId : undefined}
-                className={`h-10 w-22 xl:w-full xl:min-w-0 rounded-md border bg-surface px-3 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 ${
+                className={`h-10 w-full min-w-0 rounded-md border bg-surface px-3 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 ${
                   hasConfigError ? errorBorder : normalBorder
                 }`}
                 value={field.min ?? ""}
@@ -142,16 +140,14 @@ export default function CustomFieldRow({
               />
             </label>
 
-            <label className="flex min-w-0 items-center gap-2 text-sm text-muted">
-              <span className="xl:w-12 xl:shrink-0">
-                {t("fieldEditor.max")}
-              </span>
+            <label className="flex min-w-0 flex-col gap-1 text-sm text-muted xl:flex-row xl:items-center xl:gap-2">
+              <span className="shrink-0 xl:w-12">{t("fieldEditor.max")}</span>
               <input
                 type="number"
                 placeholder="100"
                 aria-invalid={hasConfigError}
                 aria-describedby={hasConfigError ? configErrorId : undefined}
-                className={`h-10 w-22 xl:w-full xl:min-w-0 rounded-md border bg-surface px-3 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 ${
+                className={`h-10 w-full min-w-0 rounded-md border bg-surface px-3 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 ${
                   hasConfigError ? errorBorder : normalBorder
                 }`}
                 value={field.max ?? ""}
