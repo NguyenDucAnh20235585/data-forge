@@ -22,6 +22,33 @@ jest.mock('@faker-js/faker', () => {
 describe('GeneratorService', () => {
   let service: GeneratorService;
 
+  it('rejects excessive generation workload', () => {
+    const fields = Array.from({ length: 50 }, (_, index) => ({
+      name: `field${index}`,
+      type: 'number' as const,
+      min: 1,
+      max: 100,
+    }));
+
+    expect(() => service.generateCustom(401, fields)).toThrow(
+      'Generation request is too large.',
+    );
+  });
+
+  it('allows generation at the workload limit', () => {
+    const fields = Array.from({ length: 50 }, (_, index) => ({
+      name: `field${index}`,
+      type: 'number' as const,
+      min: 1,
+      max: 100,
+    }));
+
+    const records = service.generateCustom(400, fields);
+
+    expect(records).toHaveLength(400);
+    expect(Object.keys(records[0])).toHaveLength(50);
+  });
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [GeneratorService],

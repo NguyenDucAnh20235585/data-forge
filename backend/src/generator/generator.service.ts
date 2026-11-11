@@ -57,6 +57,9 @@ export class GeneratorService {
     fields: CustomField[],
     locale: DataLocale = 'en',
   ) {
+    if (fields.length > 50 || count * fields.length > 20_000) {
+      throw new BadRequestException('Generation request is too large.');
+    }
     const faker = getFaker(locale);
     validateFieldNames(fields);
     validateNumberRanges(fields);

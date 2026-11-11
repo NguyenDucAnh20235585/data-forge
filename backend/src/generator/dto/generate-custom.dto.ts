@@ -12,10 +12,13 @@ import {
   Matches,
   IsOptional,
   IsDateString,
+  ArrayMaxSize,
+  MaxLength,
 } from 'class-validator';
 
 export class CustomFieldDto {
   @IsString()
+  @MaxLength(64)
   @Matches(/\S/, {
     message: 'Field name cannot be empty.',
   })
@@ -37,7 +40,9 @@ export class CustomFieldDto {
 
   @IsOptional()
   @IsArray()
+  @ArrayMaxSize(20)
   @IsString({ each: true })
+  @MaxLength(100, { each: true })
   options?: string[];
 
   @IsOptional()
@@ -50,6 +55,7 @@ export class CustomFieldDto {
 
   @IsOptional()
   @IsString()
+  @MaxLength(200)
   @Matches(/\S/, {
     message: 'Pattern cannot be empty.',
   })
@@ -104,6 +110,7 @@ export class GenerateCustomDto {
 
   @IsArray()
   @ArrayMinSize(1)
+  @ArrayMaxSize(50)
   @ValidateNested({ each: true })
   @Type(() => CustomFieldDto)
   fields!: CustomFieldDto[];
