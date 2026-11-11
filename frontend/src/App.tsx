@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { generateData } from "./api/generatorApi";
 import { validateAllFields } from "./utils/validateFields";
@@ -14,6 +14,7 @@ import { exportJson, exportCsv } from "./utils/exportData";
 
 function App() {
   const { t, i18n } = useTranslation();
+  const previewRef = useRef<HTMLElement>(null);
   const locale =
     i18n.resolvedLanguage === "vi" || i18n.resolvedLanguage === "ja"
       ? i18n.resolvedLanguage
@@ -92,6 +93,7 @@ function App() {
     const minimumLoading = new Promise<void>((resolve) => {
       setTimeout(resolve, 600);
     });
+    let generationSucceeded = false;
 
     try {
       const payload =
@@ -112,12 +114,24 @@ function App() {
       const data = await generateData(mode, payload, locale);
       setRecords(data);
       setGeneratedConfig(currentConfig);
+      generationSucceeded = true;
     } catch (error) {
       console.error(error);
       setError("errors.generateFailed");
     } finally {
       await minimumLoading;
       setLoading(false);
+
+      if (generationSucceeded) {
+        const reduceMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+
+        previewRef.current?.scrollIntoView({
+          behavior: reduceMotion ? "instant" : "smooth",
+          block: "start",
+        });
+      }
     }
   };
 
@@ -309,7 +323,10 @@ sm:ml-auto sm:w-44
           </p>
         )}
 
-        <section className="mt-8 rounded-xl border border-outline bg-surface p-4 sm:p-6 shadow-[0_6px_24px_rgba(26,26,26,0.07)]">
+        <section
+          ref={previewRef}
+          className="mt-8 scroll-mt-[88px] sm:scroll-mt-[104px] lg:scroll-mt-[152px] rounded-xl border border-outline bg-surface p-4 sm:p-6 shadow-[0_6px_24px_rgba(26,26,26,0.07)]"
+        >
           <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold text-ink">
