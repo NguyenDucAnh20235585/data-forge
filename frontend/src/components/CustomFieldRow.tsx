@@ -51,10 +51,12 @@ export default function CustomFieldRow({
 
   return (
     <div
-      className="grid w-full grid-cols-1
-  sm:grid-cols-2
+      className="relative grid w-full
+  grid-cols-1
+  min-[600px]:grid-cols-2
   xl:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,2.2fr)_auto]
-  gap-x-3 gap-y-2 rounded-lg border border-outline bg-canvas p-3"
+  gap-x-3 gap-y-2 rounded-lg border border-outline
+  bg-canvas p-3 pr-14 xl:pr-3"
     >
       <div className="min-w-0">
         <input
@@ -106,9 +108,10 @@ export default function CustomFieldRow({
       </div>
 
       <div
-        className={`min-w-0 sm:col-span-2 xl:col-span-1 ${
-          needsConfig ? "" : "hidden xl:block"
-        }`}
+        className={`min-w-0
+  min-[600px]:col-span-2
+  xl:col-span-1 xl:col-start-3 xl:row-start-1
+  ${needsConfig ? "" : "hidden xl:block"}`}
       >
         {field.type === "number" && (
           <div className="flex h-10 items-center gap-3 xl:grid xl:grid-cols-2">
@@ -209,14 +212,14 @@ export default function CustomFieldRow({
         )}
 
         {field.type === "date" && (
-          <div className="flex w-full min-w-0 flex-col gap-2 xl:grid xl:grid-cols-2 xl:gap-3">
+          <div className="grid w-full min-w-0 grid-cols-1 gap-3 min-[600px]:grid-cols-2">
             <label className="flex min-w-0 flex-1 flex-col gap-1 text-sm text-muted xl:flex-row xl:items-center xl:gap-2">
               <span className="shrink-0 xl:w-12">{t("fieldEditor.start")}</span>
               <input
                 type="date"
                 aria-invalid={hasConfigError}
                 aria-describedby={hasConfigError ? configErrorId : undefined}
-                className={`${baseInputClass} flex-1 px-2 ${
+                className={`${baseInputClass} tabular-nums px-2 ${
                   hasConfigError ? errorBorder : normalBorder
                 }`}
                 value={field.startDate ?? ""}
@@ -234,7 +237,7 @@ export default function CustomFieldRow({
                 type="date"
                 aria-invalid={hasConfigError}
                 aria-describedby={hasConfigError ? configErrorId : undefined}
-                className={`${baseInputClass} flex-1 px-2 ${
+                className={`${baseInputClass} tabular-nums px-2 ${
                   hasConfigError ? errorBorder : normalBorder
                 }`}
                 value={field.endDate ?? ""}
@@ -273,7 +276,13 @@ export default function CustomFieldRow({
         ) && <div className="h-10" />}
       </div>
 
-      <div className="col-span-full flex justify-end xl:col-span-1 xl:justify-start">
+      <div
+        className="absolute right-2 top-1/2 flex -translate-y-1/2
+    items-center justify-center
+    min-[600px]:top-3 min-[600px]:translate-y-0
+    xl:static xl:col-start-4 xl:row-start-1
+    xl:translate-y-0"
+      >
         <button
           type="button"
           disabled={!canRemove}
@@ -318,6 +327,7 @@ export default function CustomFieldRow({
           </svg>
         </button>
       </div>
+
       {(error !== null ||
         field.type === "choice" ||
         field.type === "pattern") && (

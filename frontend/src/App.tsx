@@ -143,7 +143,7 @@ function App() {
       </header>
 
       <main className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
-        <div className="flex flex-col gap-4 rounded-xl border border-outline bg-surface p-6 shadow-[0_6px_24px_rgba(26,26,26,0.07)]">
+        <div className="flex flex-col gap-4 rounded-xl border border-outline bg-surface p-4 sm:p-6 shadow-[0_6px_24px_rgba(26,26,26,0.07)]">
           <div>
             <h2 className="text-xl font-semibold text-ink">
               {t("configureDataset")}
@@ -153,7 +153,7 @@ function App() {
             </p>
           </div>
           <div
-            className="flex w-fit gap-1 rounded-lg bg-surface-soft p-1"
+            className="flex w-full gap-1 rounded-lg bg-surface-soft p-1 sm:w-fit"
             role="group"
             aria-label={t("configuration.generationMode")}
           >
@@ -165,7 +165,7 @@ function App() {
                 setError("");
                 setFieldError(null);
               }}
-              className={`mode-tab rounded-md px-4 py-2 text-sm font-medium ${
+              className={`mode-tab min-w-0 flex-1 whitespace-nowrap rounded-md px-2 py-2 text-xs sm:flex-none sm:px-4 sm:text-sm font-medium ${
                 mode === "quick"
                   ? "bg-surface text-ink shadow-sm"
                   : "bg-transparent text-muted hover:text-ink"
@@ -182,7 +182,7 @@ function App() {
                 setError("");
                 setFieldError(null);
               }}
-              className={`mode-tab rounded-md px-4 py-2 text-sm font-medium ${
+              className={`mode-tab min-w-0 flex-1 whitespace-nowrap rounded-md px-2 py-2 text-xs sm:flex-none sm:px-4 sm:text-sm font-medium ${
                 mode === "custom"
                   ? "bg-surface text-ink shadow-sm"
                   : "bg-transparent text-muted hover:text-ink"
@@ -192,9 +192,9 @@ function App() {
             </button>
           </div>
 
-          <div className="flex flex-wrap items-center gap-6">
+          <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-6">
             {mode === "quick" && (
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3">
                 <label
                   htmlFor="preset"
                   className="text-sm font-medium text-ink"
@@ -230,7 +230,7 @@ function App() {
               </div>
             )}
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3">
               <label htmlFor="count" className="text-sm font-medium text-ink">
                 {t("configuration.numberOfRecords")}
               </label>
@@ -310,7 +310,7 @@ sm:ml-auto sm:w-44
           </p>
         )}
 
-        <section className="mt-8 rounded-xl border border-outline bg-surface p-6 shadow-[0_6px_24px_rgba(26,26,26,0.07)]">
+        <section className="mt-8 rounded-xl border border-outline bg-surface p-4 sm:p-6 shadow-[0_6px_24px_rgba(26,26,26,0.07)]">
           <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold text-ink">
