@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { generateData } from "./api/generatorApi";
-import { validateFields } from "./utils/validateFields";
+import { validateAllFields } from "./utils/validateFields";
 import SettingsMenu from "./components/SettingsMenu";
 import { useTranslation } from "react-i18next";
 import "./i18n";
@@ -11,7 +11,6 @@ import type { Preset, CustomField, GeneratedRecord } from "./types/generator";
 import PreviewTable from "./components/PreviewTable";
 import CustomFieldEditor from "./components/CustomFieldEditor";
 import { exportJson, exportCsv } from "./utils/exportData";
-import type { FieldValidationError } from "./utils/validateFields";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -31,13 +30,13 @@ function App() {
     { name: "playerName", type: "personName" },
   ]);
 
-  const [fieldError, setFieldError] = useState<FieldValidationError | null>(
-    null,
-  );
+  const [hasTriedGenerate, setHasTriedGenerate] = useState(false);
+
+  const fieldErrors =
+    mode === "custom" && hasTriedGenerate ? validateAllFields(fields) : [];
 
   const updateFields: typeof setFields = (update) => {
     setFields(update);
-    setFieldError(null);
     setError("");
   };
 
@@ -78,15 +77,15 @@ function App() {
 
   const handleGenerate = async () => {
     if (mode === "custom") {
-      const validationError = validateFields(fields);
+      setHasTriedGenerate(true);
 
-      if (validationError) {
-        setFieldError(validationError);
+      if (validateAllFields(fields).length > 0) {
+        setError("");
         return;
       }
     }
 
-    setFieldError(null);
+    setHasTriedGenerate(false);
     setLoading(true);
     setError("");
 
@@ -163,7 +162,7 @@ function App() {
               onClick={() => {
                 setMode("quick");
                 setError("");
-                setFieldError(null);
+                setHasTriedGenerate(false);
               }}
               className={`mode-tab min-w-0 flex-1 whitespace-nowrap rounded-md px-2 py-2 text-xs sm:flex-none sm:px-4 sm:text-sm font-medium ${
                 mode === "quick"
@@ -180,7 +179,7 @@ function App() {
               onClick={() => {
                 setMode("custom");
                 setError("");
-                setFieldError(null);
+                setHasTriedGenerate(false);
               }}
               className={`mode-tab min-w-0 flex-1 whitespace-nowrap rounded-md px-2 py-2 text-xs sm:flex-none sm:px-4 sm:text-sm font-medium ${
                 mode === "custom"
@@ -251,7 +250,7 @@ function App() {
             <CustomFieldEditor
               fields={fields}
               setFields={updateFields}
-              fieldError={fieldError}
+              fieldErrors={fieldErrors}
             />
           )}
 
@@ -304,7 +303,7 @@ sm:ml-auto sm:w-44
           </div>
         </div>
 
-        {error && !fieldError && (
+        {error && (
           <p role="alert" className="mt-4 text-sm text-red-600">
             {t(error)}
           </p>

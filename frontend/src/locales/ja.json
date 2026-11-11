@@ -79,7 +79,7 @@
     "invalidString": "フィールド「{{name}}」：文字列の長さは1～100の範囲で指定してください。",
     "invalidChoice": "フィールド「{{name}}」：空でない選択肢を1つ以上入力し、空欄を削除してください。",
     "invalidDate": "フィールド「{{name}}」：開始日と終了日の両方が必要です。開始日は終了日より後にできません。",
-    "invalidPattern": "フィールド「{{name}}」：パターンが無効です。{digits:6}、{letters:4}、{choice:Red|Blue} などを使用してください。長さは1～100、選択肢は2つ以上必要です。"
+    "invalidPattern": "パターンが無効です。テンプレートを確認してください。"
   },
   "appDescription": "テスト用のダミーデータを生成します。",
   "configureDataset": "データセットの設定"

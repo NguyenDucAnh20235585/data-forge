@@ -6,151 +6,135 @@ export type FieldValidationError = {
   messageKey: string;
 };
 
-export function validateFields(
-  fields: CustomField[],
-): FieldValidationError | null {
-  const emptyNameIndex = fields.findIndex((field) => field.name.trim() === "");
+function isInvalidPattern(pattern?: string): boolean {
+  if (!pattern?.trim()) return true;
 
-  if (emptyNameIndex !== -1) {
-    return {
-      fieldIndex: emptyNameIndex,
-      target: "name",
-      messageKey: "validation.emptyName",
-    };
-  }
+  let hasInvalidToken = false;
+
+  const remaining = pattern
+    .replace(/\{digits:(\d+)\}/g, (_match, rawLength: string) => {
+      const length = Number(rawLength);
+
+      if (!Number.isInteger(length) || length < 1 || length > 100) {
+        hasInvalidToken = true;
+      }
+
+      return "";
+    })
+    .replace(/\{letters:(\d+)\}/g, (_match, rawLength: string) => {
+      const length = Number(rawLength);
+
+      if (!Number.isInteger(length) || length < 1 || length > 100) {
+        hasInvalidToken = true;
+      }
+
+      return "";
+    })
+    .replace(/\{choice:([^{}]+)\}/g, (_match, rawOptions: string) => {
+      const options = rawOptions.split("|").map((option) => option.trim());
+
+      if (options.length < 2 || options.some((option) => option === "")) {
+        hasInvalidToken = true;
+      }
+
+      return "";
+    });
+
+  return hasInvalidToken || /[{}]/.test(remaining);
+}
+
+export function validateAllFields(
+  fields: CustomField[],
+): FieldValidationError[] {
+  const errors: FieldValidationError[] = [];
 
   const names = fields.map((field) => field.name.trim().toLowerCase());
 
-  const hasDuplicates = new Set(names).size !== names.length;
+  const nameCounts = new Map<string, number>();
 
-  const invalidNumber = fields.find((field) => {
-    if (field.type !== "number") return false;
-
-    const min = field.min ?? 1;
-    const max = field.max ?? 100;
-
-    return (
-      !Number.isSafeInteger(min) || !Number.isSafeInteger(max) || min > max
-    );
+  names.forEach((name) => {
+    if (name) {
+      nameCounts.set(name, (nameCounts.get(name) ?? 0) + 1);
+    }
   });
 
-  const invalidString = fields.find((field) => {
-    if (field.type !== "string") return false;
+  const addError = (
+    fieldIndex: number,
+    target: FieldValidationError["target"],
+    messageKey: string,
+  ) => {
+    errors.push({ fieldIndex, target, messageKey });
+  };
 
-    const length = field.length ?? 8;
+  fields.forEach((field, index) => {
+    const name = names[index];
 
-    return !Number.isInteger(length) || length < 1 || length > 100;
-  });
-
-  const invalidChoice = fields.find((field) => {
-    if (field.type !== "choice") return false;
-
-    if (!field.options || field.options.length === 0) {
-      return true;
+    if (!name) {
+      addError(index, "name", "validation.emptyName");
+    } else if ((nameCounts.get(name) ?? 0) > 1) {
+      addError(index, "name", "validation.duplicateName");
     }
 
-    return field.options.some((option) => option.trim() === "");
-  });
+    switch (field.type) {
+      case "number": {
+        const min = field.min ?? 1;
+        const max = field.max ?? 100;
 
-  const invalidDate = fields.find((field) => {
-    if (field.type !== "date") return false;
+        if (
+          !Number.isSafeInteger(min) ||
+          !Number.isSafeInteger(max) ||
+          min > max
+        ) {
+          addError(index, "config", "validation.invalidNumber");
+        }
+        break;
+      }
 
-    if (!field.startDate || !field.endDate) {
-      return true;
+      case "string": {
+        const length = field.length ?? 8;
+
+        if (!Number.isInteger(length) || length < 1 || length > 100) {
+          addError(index, "config", "validation.invalidString");
+        }
+        break;
+      }
+
+      case "choice": {
+        if (
+          !field.options?.length ||
+          field.options.some((option) => option.trim() === "")
+        ) {
+          addError(index, "config", "validation.invalidChoice");
+        }
+        break;
+      }
+
+      case "date": {
+        if (
+          !field.startDate ||
+          !field.endDate ||
+          field.startDate > field.endDate
+        ) {
+          addError(index, "config", "validation.invalidDate");
+        }
+        break;
+      }
+
+      case "pattern": {
+        if (isInvalidPattern(field.pattern)) {
+          addError(index, "config", "validation.invalidPattern");
+        }
+        break;
+      }
     }
-
-    return field.startDate > field.endDate;
   });
 
-  const invalidPattern = fields.find((field) => {
-    if (field.type !== "pattern") return false;
-    if (!field.pattern?.trim()) return true;
+  return errors;
+}
 
-    let hasInvalidToken = false;
-
-    const remaining = (field.pattern ?? "")
-      .replace(/\{digits:(\d+)\}/g, (_match, rawLength: string) => {
-        const length = Number(rawLength);
-
-        if (!Number.isInteger(length) || length < 1 || length > 100) {
-          hasInvalidToken = true;
-        }
-
-        return "";
-      })
-      .replace(/\{letters:(\d+)\}/g, (_match, rawLength: string) => {
-        const length = Number(rawLength);
-
-        if (!Number.isInteger(length) || length < 1 || length > 100) {
-          hasInvalidToken = true;
-        }
-
-        return "";
-      })
-      .replace(/\{choice:([^{}]+)\}/g, (_match, rawOptions: string) => {
-        const options = rawOptions.split("|").map((option) => option.trim());
-
-        if (options.length < 2 || options.some((option) => option === "")) {
-          hasInvalidToken = true;
-        }
-
-        return "";
-      });
-
-    return hasInvalidToken || /[{}]/.test(remaining);
-  });
-
-  if (invalidNumber) {
-    return {
-      fieldIndex: fields.indexOf(invalidNumber),
-      target: "config",
-      messageKey: "validation.invalidNumber",
-    };
-  }
-
-  if (invalidString) {
-    return {
-      fieldIndex: fields.indexOf(invalidString),
-      target: "config",
-      messageKey: "validation.invalidString",
-    };
-  }
-
-  if (invalidChoice) {
-    return {
-      fieldIndex: fields.indexOf(invalidChoice),
-      target: "config",
-      messageKey: "validation.invalidChoice",
-    };
-  }
-
-  if (invalidDate) {
-    return {
-      fieldIndex: fields.indexOf(invalidDate),
-      target: "config",
-      messageKey: "validation.invalidDate",
-    };
-  }
-
-  if (invalidPattern) {
-    return {
-      fieldIndex: fields.indexOf(invalidPattern),
-      target: "config",
-      messageKey: "validation.invalidPattern",
-    };
-  }
-
-  if (hasDuplicates) {
-    const duplicateIndex = names.findIndex(
-      (name, index) => names.indexOf(name) !== index,
-    );
-
-    return {
-      fieldIndex: duplicateIndex,
-      target: "name",
-      messageKey: "validation.duplicateName",
-    };
-  }
-
-  return null;
+// Keep the existing API working during migration.
+export function validateFields(
+  fields: CustomField[],
+): FieldValidationError | null {
+  return validateAllFields(fields)[0] ?? null;
 }

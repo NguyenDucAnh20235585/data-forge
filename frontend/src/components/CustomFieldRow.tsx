@@ -8,7 +8,7 @@ type CustomFieldRowProps = {
   onNameChange: (name: string) => void;
   onTypeChange: (type: CustomField["type"]) => void;
   onConfigChange: (changes: Partial<CustomField>) => void;
-  error: FieldValidationError | null;
+  errors: FieldValidationError[];
   onRemove: () => void;
   canRemove: boolean;
 };
@@ -25,7 +25,7 @@ export default function CustomFieldRow({
   onNameChange,
   onTypeChange,
   onConfigChange,
-  error,
+  errors,
   onRemove,
   canRemove,
 }: CustomFieldRowProps) {
@@ -33,8 +33,11 @@ export default function CustomFieldRow({
   const nameErrorId = useId();
   const configErrorId = useId();
 
-  const hasNameError = error?.target === "name";
-  const hasConfigError = error?.target === "config";
+  const nameError = errors.find((error) => error.target === "name");
+  const configError = errors.find((error) => error.target === "config");
+
+  const hasNameError = Boolean(nameError);
+  const hasConfigError = Boolean(configError);
   const needsConfig = [
     "number",
     "string",
@@ -322,31 +325,31 @@ export default function CustomFieldRow({
         </button>
       </div>
 
-      {(error !== null ||
+      {(errors.length > 0 ||
         field.type === "choice" ||
         field.type === "pattern") && (
         <div className="col-span-full text-left">
-          {hasNameError && (
+          {nameError && (
             <p
               id={nameErrorId}
               role="alert"
               className="text-xs leading-5 text-red-600 dark:text-red-400"
             >
-              {t(error.messageKey, { name: field.name })}
+              {t(nameError.messageKey, { name: field.name })}
             </p>
           )}
 
-          {hasConfigError && (
+          {configError && (
             <p
               id={configErrorId}
               role="alert"
               className="text-xs leading-5 text-red-600 dark:text-red-400"
             >
-              {t(error.messageKey, { name: field.name })}
+              {t(configError.messageKey, { name: field.name })}
             </p>
           )}
 
-          {!error && field.type === "choice" && (
+          {!configError && field.type === "choice" && (
             <p className="text-xs leading-5 text-muted">
               {t("fieldEditor.choiceHint")}
             </p>
@@ -359,11 +362,9 @@ export default function CustomFieldRow({
               </summary>
 
               <div className="mt-3 space-y-3">
-                {!error && (
-                  <p className="text-xs leading-5 text-muted">
-                    {t("fieldEditor.patternHint")}
-                  </p>
-                )}
+                <p className="text-xs leading-5 text-muted">
+                  {t("fieldEditor.patternHint")}
+                </p>
 
                 <div className="flex flex-wrap gap-2">
                   {PATTERN_TEMPLATES.map((template) => (

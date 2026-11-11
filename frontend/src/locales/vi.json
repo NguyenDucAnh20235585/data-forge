@@ -79,7 +79,7 @@
     "invalidString": "Trường \"{{name}}\": Độ dài chuỗi phải từ 1 đến 100.",
     "invalidChoice": "Trường \"{{name}}\": Cần ít nhất một lựa chọn không rỗng và không được có lựa chọn bỏ trống.",
     "invalidDate": "Trường \"{{name}}\": Cần nhập cả hai ngày. Ngày bắt đầu không được sau ngày kết thúc.",
-    "invalidPattern": "Trường \"{{name}}\": Mẫu không hợp lệ. Sử dụng {digits:6}, {letters:4} hoặc {choice:Red|Blue}. Độ dài phải từ 1–100 và Choice cần ít nhất 2 lựa chọn."
+    "invalidPattern": "Pattern không hợp lệ. Xem Mẫu nhanh."
   },
   "appDescription": "Tạo dữ liệu giả để kiểm thử.",
   "configureDataset": "Cấu hình bộ dữ liệu"
