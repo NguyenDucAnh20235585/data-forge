@@ -54,9 +54,9 @@ export default function CustomFieldRow({
       className="relative grid w-full
   grid-cols-1
   min-[600px]:grid-cols-2
-  xl:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,2.2fr)_auto]
+  xl:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,2.2fr)]
   gap-x-3 gap-y-2 rounded-lg border border-outline
-  bg-canvas p-3 pr-14 xl:pr-3"
+  bg-canvas p-3 pr-14"
     >
       <div className="min-w-0">
         <input
@@ -276,13 +276,7 @@ export default function CustomFieldRow({
         ) && <div className="h-10" />}
       </div>
 
-      <div
-        className="absolute right-2 top-1/2 flex -translate-y-1/2
-    items-center justify-center
-    min-[600px]:top-3 min-[600px]:translate-y-0
-    xl:static xl:col-start-4 xl:row-start-1
-    xl:translate-y-0"
-      >
+      <div className="absolute right-2 top-1/2 flex -translate-y-1/2 items-center justify-center">
         <button
           type="button"
           disabled={!canRemove}
@@ -359,30 +353,34 @@ export default function CustomFieldRow({
           )}
 
           {field.type === "pattern" && (
-            <div className="space-y-2">
-              {!error && (
-                <p className="text-xs leading-5 text-muted">
-                  {t("fieldEditor.patternHint")}
-                </p>
-              )}
+            <details className="group">
+              <summary className="cursor-pointer select-none text-sm font-medium text-muted transition-colors hover:text-accent">
+                {t("fieldEditor.quickTemplates")}
+              </summary>
 
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-xs text-muted">
-                  {t("fieldEditor.quickTemplates")}
-                </span>
+              <div className="mt-3 space-y-3">
+                {!error && (
+                  <p className="text-xs leading-5 text-muted">
+                    {t("fieldEditor.patternHint")}
+                  </p>
+                )}
 
-                {PATTERN_TEMPLATES.map((template) => (
-                  <button
-                    key={template.label}
-                    type="button"
-                    onClick={() => onConfigChange({ pattern: template.value })}
-                    className="rounded-md border border-control-outline bg-surface px-3 py-1.5 text-xs text-ink transition-colors hover:border-accent"
-                  >
-                    {template.label}
-                  </button>
-                ))}
+                <div className="flex flex-wrap gap-2">
+                  {PATTERN_TEMPLATES.map((template) => (
+                    <button
+                      key={template.label}
+                      type="button"
+                      onClick={() =>
+                        onConfigChange({ pattern: template.value })
+                      }
+                      className="rounded-md border border-control-outline bg-surface px-3 py-1.5 text-xs text-ink transition-colors hover:border-accent"
+                    >
+                      {template.label}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            </details>
           )}
         </div>
       )}
