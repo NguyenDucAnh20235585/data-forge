@@ -63,6 +63,7 @@ export default function CustomFieldRow({
     >
       <div className="min-w-0">
         <input
+          data-error-target="name"
           aria-label={t("fieldEditor.fieldName")}
           aria-invalid={hasNameError}
           aria-describedby={hasNameError ? nameErrorId : undefined}
@@ -111,6 +112,7 @@ export default function CustomFieldRow({
       </div>
 
       <div
+        data-error-target="config"
         className={`min-w-0
   min-[600px]:col-span-2
   xl:col-span-1 xl:col-start-3 xl:row-start-1

@@ -15,6 +15,7 @@ import { exportJson, exportCsv } from "./utils/exportData";
 function App() {
   const { t, i18n } = useTranslation();
   const previewRef = useRef<HTMLElement>(null);
+  const customFieldsRef = useRef<HTMLDivElement>(null);
   const locale =
     i18n.resolvedLanguage === "vi" || i18n.resolvedLanguage === "ja"
       ? i18n.resolvedLanguage
@@ -80,8 +81,36 @@ function App() {
     if (mode === "custom") {
       setHasTriedGenerate(true);
 
-      if (validateAllFields(fields).length > 0) {
+      const errors = validateAllFields(fields);
+
+      if (errors.length > 0) {
         setError("");
+
+        const firstError = errors[0];
+
+        requestAnimationFrame(() => {
+          const row = customFieldsRef.current?.querySelector<HTMLElement>(
+            `[data-field-index="${firstError.fieldIndex}"]`,
+          );
+
+          const selector =
+            firstError.target === "name"
+              ? '[data-error-target="name"]'
+              : '[data-error-target="config"] input';
+
+          const input = row?.querySelector<HTMLInputElement>(selector);
+
+          input?.focus({ preventScroll: true });
+
+          row?.scrollIntoView({
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+              .matches
+              ? "auto"
+              : "smooth",
+            block: "start",
+          });
+        });
+
         return;
       }
     }
@@ -261,11 +290,13 @@ function App() {
           </div>
 
           {mode === "custom" && (
-            <CustomFieldEditor
-              fields={fields}
-              setFields={updateFields}
-              fieldErrors={fieldErrors}
-            />
+            <div ref={customFieldsRef}>
+              <CustomFieldEditor
+                fields={fields}
+                setFields={updateFields}
+                fieldErrors={fieldErrors}
+              />
+            </div>
           )}
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

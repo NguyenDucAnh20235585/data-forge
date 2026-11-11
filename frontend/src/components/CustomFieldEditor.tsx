@@ -21,7 +21,11 @@ export default function CustomFieldEditor({
       <h2 className="mb-3">{t("configuration.customFields")}</h2>
 
       {fields.map((field, index) => (
-        <div key={index} className="mb-2 last:mb-0">
+        <div
+          key={index}
+          data-field-index={index}
+          className="mb-2 last:mb-0 scroll-mt-[88px] sm:scroll-mt-[104px] lg:scroll-mt-[152px]"
+        >
           <CustomFieldRow
             field={field}
             errors={fieldErrors.filter((error) => error.fieldIndex === index)}
