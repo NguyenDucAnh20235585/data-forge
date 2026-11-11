@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { generateData } from "./api/generatorApi";
 import { validateAllFields } from "./utils/validateFields";
@@ -16,6 +16,7 @@ function App() {
   const { t, i18n } = useTranslation();
   const previewRef = useRef<HTMLElement>(null);
   const customFieldsRef = useRef<HTMLDivElement>(null);
+  const pendingNewFieldIndexRef = useRef<number | null>(null);
   const locale =
     i18n.resolvedLanguage === "vi" || i18n.resolvedLanguage === "ja"
       ? i18n.resolvedLanguage
@@ -49,6 +50,7 @@ function App() {
   );
 
   const handleAddField = () => {
+    pendingNewFieldIndexRef.current = fields.length;
     updateFields((previous) => {
       let next = 2;
 
@@ -63,6 +65,34 @@ function App() {
       return [...previous, { name: `field${next}`, type: "number" }];
     });
   };
+
+  useEffect(() => {
+    const index = pendingNewFieldIndexRef.current;
+
+    if (index === null) return;
+
+    const row = customFieldsRef.current?.querySelector<HTMLElement>(
+      `[data-field-index="${index}"]`,
+    );
+
+    const input = row?.querySelector<HTMLInputElement>(
+      '[data-error-target="name"]',
+    );
+
+    if (!row || !input) return;
+
+    pendingNewFieldIndexRef.current = null;
+
+    input.focus({ preventScroll: true });
+    input.select();
+
+    row.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+      block: "nearest",
+    });
+  }, [fields.length]);
 
   const isPreviewStale =
     records.length > 0 &&
