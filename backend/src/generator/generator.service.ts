@@ -67,7 +67,10 @@ export class GeneratorService {
     const records: Record<string, string | number | boolean>[] = [];
 
     for (let i = 0; i < count; i++) {
-      const record: Record<string, string | number | boolean> = {};
+      const record = Object.create(null) as Record<
+        string,
+        string | number | boolean
+      >;
 
       for (const field of fields) {
         if (field.type === 'personName') {
