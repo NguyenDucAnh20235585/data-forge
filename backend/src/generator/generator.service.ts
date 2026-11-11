@@ -3,6 +3,7 @@ import { getFaker, type DataLocale } from './faker-locale';
 import { GeneratePreset } from './dto/generate-data.dto';
 import { generatePreset } from './preset-generator';
 import { generatePattern } from './pattern-generator';
+import { ensureResponseSize } from './response-size';
 
 import {
   validateFieldNames,
@@ -49,7 +50,11 @@ export class GeneratorService {
     preset: GeneratePreset = GeneratePreset.USERS,
     locale: DataLocale = 'en',
   ) {
-    return generatePreset(count, preset, locale);
+    const records = generatePreset(count, preset, locale);
+
+    ensureResponseSize(records);
+
+    return records;
   }
 
   generateCustom(
@@ -140,6 +145,8 @@ export class GeneratorService {
 
       records.push(record);
     }
+
+    ensureResponseSize(records);
 
     return records;
   }
