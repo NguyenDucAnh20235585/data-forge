@@ -1,0 +1,86 @@
+{
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "darkMode": "Dark Mode",
+    "off": "Off"
+  },
+  "configuration": {
+    "description": "Choose a preset or define your own fields.",
+    "generationMode": "Generation mode",
+    "quickPreset": "Quick Preset",
+    "customFields": "Custom Fields",
+    "preset": "Preset",
+    "numberOfRecords": "Number of records",
+    "presets": {
+      "users": "Users",
+      "products": "Products",
+      "employees": "Employees",
+      "umamusume": "Umamusume",
+      "orders": "Orders",
+      "apiLogs": "API Logs"
+    },
+    "addField": "Add Field",
+    "generateData": "Generate Data",
+    "generating": "Generating..."
+  },
+  "preview": {
+    "title": "Data Preview",
+    "generatedRecords_one": "{{count}} generated record",
+    "generatedRecords_other": "{{count}} generated records",
+    "exportJson": "Export JSON",
+    "exportCsv": "Export CSV",
+    "emptyTitle": "Your data will appear here",
+    "emptyDescription": "Configure your dataset and click Generate Data.",
+    "staleWarning": "Configuration changed. Preview and exports still use the last generated data. Generate again to update them."
+  },
+  "errors": {
+    "generateFailed": "Unable to generate data."
+  },
+  "fieldEditor": {
+    "fieldName": "Field name",
+    "fieldType": "Field type",
+    "min": "Min:",
+    "max": "Max:",
+    "length": "Length:",
+    "options": "Options:",
+    "start": "Start:",
+    "end": "End:",
+    "remove": "Remove",
+    "choicePlaceholder": "Common, Rare, Epic",
+    "choiceHint": "Separate options with commas, e.g. Common, Rare, Epic.",
+    "patternHint": "Use {digits:6} for 6 digits, {letters:4} for 4 letters, or {choice:Red|Blue} to pick a value.",
+    "quickTemplates": "Quick templates:",
+    "types": {
+      "personName": "Person Name",
+      "productName": "Product Name",
+      "companyName": "Company Name",
+      "number": "Number",
+      "email": "Email",
+      "string": "String",
+      "choice": "Choice",
+      "phoneNumber": "Phone Number",
+      "date": "Date",
+      "pattern": "Pattern",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "city": "City",
+      "country": "Country",
+      "url": "URL",
+      "ipv4": "IPv4 Address",
+      "uuid": "UUID",
+      "boolean": "Boolean"
+    }
+  },
+  "validation": {
+    "emptyName": "Field name cannot be empty.",
+    "duplicateName": "Field names must be unique, regardless of uppercase or lowercase.",
+    "invalidNumber": "Field \"{{name}}\": Min and Max must be valid integers. Min cannot be greater than Max.",
+    "invalidString": "Field \"{{name}}\": String length must be between 1 and 100.",
+    "invalidChoice": "Field \"{{name}}\": Enter at least one non-empty option and remove any blank options.",
+    "invalidDate": "Field \"{{name}}\": Both dates are required. Start Date cannot be after End Date.",
+    "invalidPattern": "Invalid pattern. See Quick templates."
+  },
+  "appDescription": "Generate fake data for testing.",
+  "configureDataset": "Configure dataset"
+}
