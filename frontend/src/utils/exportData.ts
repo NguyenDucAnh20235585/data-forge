@@ -26,8 +26,21 @@ export function exportCsv(records: GeneratedRecord[]): void {
 
   const rows = records.map((record) => headers.map((header) => record[header]));
 
-  const escapeCsvCell = (value: string | number): string =>
-    `"${String(value).replace(/"/g, '""')}"`;
+  const escapeCsvCell = (value: string | number | boolean): string => {
+    const text = String(value);
+
+    const isDangerous =
+      typeof value === "string" &&
+      (/^[=+\-@＝＋－＠]/u.test(text.trimStart()) ||
+        text.startsWith("\t") ||
+        text.startsWith("\r") ||
+        text.startsWith("\n") ||
+        text.startsWith("\0"));
+
+    const safeText = isDangerous ? `'${text}` : text;
+
+    return `"${safeText.replace(/"/g, '""')}"`;
+  };
 
   const csv = [
     headers.map(escapeCsvCell).join(","),
