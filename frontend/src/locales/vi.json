@@ -1,0 +1,86 @@
+{
+  "settings": {
+    "title": "Cài đặt",
+    "language": "Ngôn ngữ",
+    "darkMode": "Chế độ tối",
+    "off": "Tắt"
+  },
+  "configuration": {
+    "description": "Chọn 1 mẫu có sẵn hoặc tự định nghĩa các trường dữ liệu.",
+    "generationMode": "Chế độ tạo dữ liệu",
+    "quickPreset": "Mẫu có sẵn",
+    "customFields": "Trường dữ liệu tuỳ chỉnh",
+    "preset": "Mẫu dữ liệu",
+    "numberOfRecords": "Số bản ghi",
+    "presets": {
+      "users": "Người dùng",
+      "products": "Sản phẩm",
+      "employees": "Nhân viên",
+      "umamusume": "Mã nương",
+      "orders": "Đơn hàng",
+      "apiLogs": "Nhật ký API"
+    },
+    "addField": "Thêm trường dữ liệu",
+    "generateData": "Tạo dữ liệu",
+    "generating": "Đang tạo..."
+  },
+  "preview": {
+    "title": "Xem trước dữ liệu",
+    "generatedRecords_one": "Đã tạo {{count}} bản ghi",
+    "generatedRecords_other": "Đã tạo {{count}} bản ghi",
+    "exportJson": "Xuất JSON",
+    "exportCsv": "Xuất CSV",
+    "emptyTitle": "Dữ liệu của bạn sẽ xuất hiện ở đây",
+    "emptyDescription": "Cấu hình bộ dữ liệu và nhấn Tạo dữ liệu.",
+    "staleWarning": "Cấu hình đã thay đổi. Phần xem trước và dữ liệu xuất vẫn sử dụng kết quả tạo trước đó. Hãy tạo lại dữ liệu để cập nhật."
+  },
+  "errors": {
+    "generateFailed": "Không thể tạo dữ liệu. Vui lòng thử lại."
+  },
+  "fieldEditor": {
+    "fieldName": "Tên trường",
+    "fieldType": "Kiểu dữ liệu",
+    "min": "Min:",
+    "max": "Max:",
+    "length": "Độ dài:",
+    "options": "Lựa chọn:",
+    "start": "Bắt đầu:",
+    "end": "Kết thúc:",
+    "remove": "Xóa",
+    "choicePlaceholder": "Thường, Hiếm, Sử thi",
+    "choiceHint": "Ngăn cách các lựa chọn bằng dấu phẩy, ví dụ: Thường, Hiếm, Sử thi.",
+    "patternHint": "Dùng {digits:6} để tạo 6 chữ số, {letters:4} để tạo 4 chữ cái, hoặc {choice:Red|Blue} để chọn một giá trị.",
+    "quickTemplates": "Mẫu có sẵn:",
+    "types": {
+      "personName": "Tên người",
+      "productName": "Tên sản phẩm",
+      "companyName": "Tên công ty",
+      "number": "Số",
+      "email": "Email",
+      "string": "Chuỗi ký tự",
+      "choice": "Lựa chọn",
+      "phoneNumber": "Số điện thoại",
+      "date": "Ngày tháng",
+      "pattern": "Mẫu tùy chỉnh",
+      "firstName": "Tên",
+      "lastName": "Họ",
+      "city": "Thành phố",
+      "country": "Quốc gia",
+      "url": "URL",
+      "ipv4": "Địa chỉ IPv4",
+      "uuid": "UUID",
+      "boolean": "Đúng / Sai"
+    }
+  },
+  "validation": {
+    "emptyName": "Tên trường dữ liệu không được để trống.",
+    "duplicateName": "Tên các trường dữ liệu không được trùng nhau, kể cả khi khác chữ hoa hoặc chữ thường.",
+    "invalidNumber": "Trường \"{{name}}\": Min và Max phải là số nguyên hợp lệ. Min không được lớn hơn Max.",
+    "invalidString": "Trường \"{{name}}\": Độ dài chuỗi phải từ 1 đến 100.",
+    "invalidChoice": "Trường \"{{name}}\": Cần ít nhất một lựa chọn không rỗng và không được có lựa chọn bỏ trống.",
+    "invalidDate": "Trường \"{{name}}\": Cần nhập cả hai ngày. Ngày bắt đầu không được sau ngày kết thúc.",
+    "invalidPattern": "Pattern không hợp lệ. Xem Mẫu nhanh."
+  },
+  "appDescription": "Tạo dữ liệu giả để kiểm thử.",
+  "configureDataset": "Cấu hình bộ dữ liệu"
+}

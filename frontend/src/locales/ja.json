@@ -1,0 +1,86 @@
+{
+  "settings": {
+    "title": "設定",
+    "language": "言語",
+    "darkMode": "ダークモード",
+    "off": "オフ"
+  },
+  "configuration": {
+    "description": "プリセットを選択するか、独自のフィールドを定義してください。",
+    "generationMode": "生成モード",
+    "quickPreset": "クイックプリセット",
+    "customFields": "カスタムフィールド",
+    "preset": "プリセット",
+    "numberOfRecords": "レコード数",
+    "presets": {
+      "users": "ユーザー",
+      "products": "製品",
+      "employees": "従業員",
+      "umamusume": "ウマ娘",
+      "orders": "注文",
+      "apiLogs": "APIログI"
+    },
+    "addField": "フィールドを追加",
+    "generateData": "データを生成",
+    "generating": "生成中..."
+  },
+  "preview": {
+    "title": "データプレビュー",
+    "generatedRecords_one": "{{count}} 件のレコードを生成",
+    "generatedRecords_other": "{{count}} 件のレコードを生成",
+    "exportJson": "JSONをエクスポート",
+    "exportCsv": "CSVをエクスポート",
+    "emptyTitle": "ここにデータが表示されます",
+    "emptyDescription": "データセットを設定して「データを生成」をクリックしてください。",
+    "staleWarning": "設定が変更されました。プレビューとエクスポートには前回生成したデータが使用されます。更新するには再生成してください。"
+  },
+  "errors": {
+    "generateFailed": "データを生成できませんでした。もう一度お試しください。"
+  },
+  "fieldEditor": {
+    "fieldName": "フィールド名",
+    "fieldType": "フィールドの種類",
+    "min": "最小:",
+    "max": "最大:",
+    "length": "長さ:",
+    "options": "選択肢:",
+    "start": "開始:",
+    "end": "終了:",
+    "remove": "削除",
+    "choicePlaceholder": "通常, レア, エピック",
+    "choiceHint": "選択肢をカンマで区切ってください。例：通常, レア, エピック。",
+    "patternHint": "{digits:6} は6桁の数字、{letters:4} は4文字の英字、{choice:Red|Blue} は候補から1つを選びます。",
+    "quickTemplates": "テンプレート:",
+    "types": {
+      "personName": "氏名",
+      "productName": "製品名",
+      "companyName": "会社名",
+      "number": "数値",
+      "email": "メールアドレス",
+      "string": "文字列",
+      "choice": "選択肢",
+      "phoneNumber": "電話番号",
+      "date": "日付",
+      "pattern": "カスタムパターン",
+      "firstName": "名",
+      "lastName": "姓",
+      "city": "都市",
+      "country": "国",
+      "url": "URL",
+      "ipv4": "IPv4アドレス",
+      "uuid": "UUID",
+      "boolean": "真偽値"
+    }
+  },
+  "validation": {
+    "emptyName": "フィールド名を入力してください。",
+    "duplicateName": "フィールド名は、大文字と小文字の違いに関係なく重複できません。",
+    "invalidNumber": "フィールド「{{name}}」：Min と Max には有効な整数を指定してください。Min は Max 以下である必要があります。",
+    "invalidString": "フィールド「{{name}}」：文字列の長さは1～100の範囲で指定してください。",
+    "invalidChoice": "フィールド「{{name}}」：空でない選択肢を1つ以上入力し、空欄を削除してください。",
+    "invalidDate": "フィールド「{{name}}」：開始日と終了日の両方が必要です。開始日は終了日より後にできません。",
+    "invalidPattern": "パターンが無効です。テンプレートを確認してください。"
+  },
+  "appDescription": "テスト用のダミーデータを生成します。",
+  "configureDataset": "データセットの設定"
+}
