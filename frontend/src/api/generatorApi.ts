@@ -6,15 +6,24 @@ type GeneratePayload =
 
 type DataLocale = "en" | "vi" | "ja";
 
+const API_BASE_URL = (
+  import.meta.env.VITE_API_URL ??
+  (import.meta.env.DEV ? "http://localhost:3000" : "")
+).replace(/\/+$/, "");
+
 export async function generateData(
   mode: "quick" | "custom",
   payload: GeneratePayload,
   locale: DataLocale,
 ): Promise<GeneratedRecord[]> {
+  if (!API_BASE_URL) {
+    throw new Error("VITE_API_URL is required in production.");
+  }
+
   const endpoint =
     mode === "quick"
-      ? "http://localhost:3000/generate"
-      : "http://localhost:3000/generate/custom";
+      ? `${API_BASE_URL}/generate`
+      : `${API_BASE_URL}/generate/custom`;
 
   const response = await fetch(endpoint, {
     method: "POST",
