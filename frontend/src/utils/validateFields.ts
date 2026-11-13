@@ -132,7 +132,6 @@ export function validateAllFields(
   return errors;
 }
 
-// Keep the existing API working during migration.
 export function validateFields(
   fields: CustomField[],
 ): FieldValidationError | null {

@@ -1,75 +1,49 @@
-# React + TypeScript + Vite
+# Data Forge
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple fullstack fake data generator for development and testing. Built as a personal project to practice fullstack development and application security.
 
-Currently, two official plugins are available:
+**Live demo:** https://data-forge-e67e.vercel.app/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Quick generation with predefined presets
+- Custom generation with 18 field types
+- Configurable fields and record counts
+- Data preview and JSON/CSV export
+- English, Vietnamese, and Japanese support
+- Responsive interface and input validation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- **Frontend:** React, TypeScript, Vite, Tailwind CSS
+- **Backend:** NestJS, TypeScript
+- **Data generation:** Faker.js
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Run Locally
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Start the backend:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+cd backend
+npm install
+npm run start:dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+In another terminal, start the frontend:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+cd frontend
+npm install
+npm run dev
 ```
+
+Frontend: http://localhost:5173
+
+Backend: http://localhost:3000
+
+## Configuration
+
+- `VITE_API_URL`: backend API URL used by the frontend at build time
+- `CORS_ORIGIN`: allowed frontend origin(s) for the backend
+
+Local development uses localhost defaults. The demo is deployed on Vercel.
