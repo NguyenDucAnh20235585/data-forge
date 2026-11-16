@@ -62,15 +62,7 @@ export class GeneratorService {
     fields: CustomField[],
     locale: DataLocale = 'en',
   ) {
-    if (fields.length > 50 || count * fields.length > 20_000) {
-      throw new BadRequestException('Generation request is too large.');
-    }
-    const faker = getFaker(locale);
-    validateFieldNames(fields);
-    validateNumberRanges(fields);
-    validateChoiceOptions(fields);
-    validateDateRanges(fields);
-    validatePatterns(fields);
+    const faker = this.prepareCustomGeneration(count, fields, locale);
 
     const records: Record<string, string | number | boolean>[] = [];
 
@@ -80,6 +72,36 @@ export class GeneratorService {
     ensureResponseSize(records);
 
     return records;
+  }
+
+  private prepareCustomGeneration(
+    count: number,
+    fields: CustomField[],
+    locale: DataLocale,
+  ): ReturnType<typeof getFaker> {
+    if (fields.length > 50 || count * fields.length > 20_000) {
+      throw new BadRequestException('Generation request is too large.');
+    }
+
+    const faker = getFaker(locale);
+
+    validateFieldNames(fields);
+    validateNumberRanges(fields);
+    validateChoiceOptions(fields);
+    validateDateRanges(fields);
+    validatePatterns(fields);
+
+    return faker;
+  }
+
+  *generateCustomBatches(
+    count: number,
+    fields: CustomField[],
+    locale: DataLocale = 'en',
+  ): Generator<Record<string, string | number | boolean>[]> {
+    const faker = this.prepareCustomGeneration(count, fields, locale);
+
+    yield* this.createCustomBatches(count, fields, faker);
   }
 
   private *createCustomBatches(
