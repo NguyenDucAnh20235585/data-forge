@@ -4,6 +4,7 @@ import { generateData } from "./api/generatorApi";
 import { validateAllFields } from "./utils/validateFields";
 import SettingsMenu from "./components/SettingsMenu";
 import { useTranslation } from "react-i18next";
+import { GenerationProgress } from "./components/GenerationProgress";
 import "./i18n";
 
 import type { Preset, CustomField, GeneratedRecord } from "./types/generator";
@@ -375,6 +376,9 @@ sm:ml-auto sm:w-44
                 t("configuration.generateData")
               )}
             </button>
+          </div>
+          <div className="mt-4">
+            <GenerationProgress completed={650} total={1000} />
           </div>
         </div>
 
