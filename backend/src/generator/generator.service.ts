@@ -74,13 +74,31 @@ export class GeneratorService {
 
     const records: Record<string, string | number | boolean>[] = [];
 
-    for (let i = 0; i < count; i++) {
-      records.push(this.createCustomRecord(fields, faker));
+    for (const batch of this.createCustomBatches(count, fields, faker)) {
+      records.push(...batch);
     }
-
     ensureResponseSize(records);
 
     return records;
+  }
+
+  private *createCustomBatches(
+    count: number,
+    fields: CustomField[],
+    faker: ReturnType<typeof getFaker>,
+    batchSize = 50,
+  ): Generator<Record<string, string | number | boolean>[]> {
+    for (let start = 0; start < count; start += batchSize) {
+      const batch: Record<string, string | number | boolean>[] = [];
+
+      const size = Math.min(batchSize, count - start);
+
+      for (let i = 0; i < size; i++) {
+        batch.push(this.createCustomRecord(fields, faker));
+      }
+
+      yield batch;
+    }
   }
 
   private createCustomRecord(
