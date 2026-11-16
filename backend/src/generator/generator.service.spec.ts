@@ -78,4 +78,27 @@ describe('GeneratorService', () => {
     expect(json).toContain('"__proto__":');
     expect(json).toContain('"constructor":1');
   });
+  it('should split 125 records into batches of 50, 50, 25', () => {
+    const service = new GeneratorService();
+
+    const batches = [
+      ...service.generateCustomBatches(125, [
+        { name: 'score', type: 'number' },
+      ]),
+    ];
+
+    expect(batches.map((batch) => batch.length)).toEqual([50, 50, 25]);
+  });
+  it('should reject oversized batch generation', () => {
+    const service = new GeneratorService();
+
+    const fields = Array.from({ length: 50 }, (_, i) => ({
+      name: `field${i}`,
+      type: 'number' as const,
+    }));
+
+    expect(() => [...service.generateCustomBatches(401, fields)]).toThrow(
+      'Generation request is too large.',
+    );
+  });
 });
