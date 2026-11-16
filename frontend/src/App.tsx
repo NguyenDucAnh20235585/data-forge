@@ -377,9 +377,7 @@ sm:ml-auto sm:w-44
               )}
             </button>
           </div>
-          <div className="mt-4">
-            <GenerationProgress completed={650} total={1000} />
-          </div>
+          <div className="mt-4">{loading && <GenerationProgress />}</div>
         </div>
 
         {error && (
