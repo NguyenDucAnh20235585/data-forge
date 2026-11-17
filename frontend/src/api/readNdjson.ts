@@ -1,17 +1,17 @@
 export type GenerationStreamEvent =
   | {
-      type: 'batch';
+      type: "batch";
       records: Record<string, string | number | boolean>[];
       completed: number;
       total: number;
     }
   | {
-      type: 'done';
+      type: "done";
       completed: number;
       total: number;
     }
   | {
-      type: 'error';
+      type: "error";
       message: string;
     };
 
@@ -21,7 +21,7 @@ export async function readNdjson(
 ): Promise<void> {
   const reader = stream.getReader();
   const decoder = new TextDecoder();
-  let buffer = '';
+  let buffer = "";
 
   try {
     while (true) {
@@ -31,8 +31,8 @@ export async function readNdjson(
 
       buffer += decoder.decode(value, { stream: true });
 
-      const lines = buffer.split('\n');
-      buffer = lines.pop() ?? '';
+      const lines = buffer.split("\n");
+      buffer = lines.pop() ?? "";
 
       for (const line of lines) {
         if (line.trim()) {
