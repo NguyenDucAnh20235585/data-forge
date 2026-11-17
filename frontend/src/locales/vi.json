@@ -24,6 +24,15 @@
     "generateData": "Tạo dữ liệu",
     "generating": "Đang tạo..."
   },
+  "generation": {
+    "preparing": "Đang chuẩn bị dữ liệu...",
+    "generating": "Đang tạo dữ liệu...",
+    "finishing": "Đang hoàn tất chiết xuất...",
+    "complete": "Tạo dữ liệu thành công!",
+    "progressLabel": "Tiến độ tạo dữ liệu",
+    "records": "{{completed}} / {{total}} bản ghi",
+    "received": "Đã nhận {{completed}} trên {{total}} bản ghi"
+  },
   "preview": {
     "title": "Xem trước dữ liệu",
     "generatedRecords_one": "Đã tạo {{count}} bản ghi",
@@ -35,7 +44,8 @@
     "staleWarning": "Cấu hình đã thay đổi. Phần xem trước và dữ liệu xuất vẫn sử dụng kết quả tạo trước đó. Hãy tạo lại dữ liệu để cập nhật."
   },
   "errors": {
-    "generateFailed": "Không thể tạo dữ liệu. Vui lòng thử lại."
+    "generateFailed": "Không thể tạo dữ liệu. Vui lòng thử lại.",
+    "partialGeneration": "Đã nhận {{count}} bản ghi. Dữ liệu chưa hoàn chỉnh — không thể xuất file."
   },
   "fieldEditor": {
     "fieldName": "Tên trường",

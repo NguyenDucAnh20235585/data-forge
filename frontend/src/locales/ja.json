@@ -24,6 +24,15 @@
     "generateData": "データを生成",
     "generating": "生成中..."
   },
+  "generation": {
+    "preparing": "データを準備中...",
+    "generating": "データを生成中...",
+    "finishing": "抽出処理を完了中...",
+    "complete": "データ生成完了！",
+    "progressLabel": "データ生成の進捗",
+    "records": "{{completed}} / {{total}} 件",
+    "received": "{{total}} 件中 {{completed}} 件を受信"
+  },
   "preview": {
     "title": "データプレビュー",
     "generatedRecords_one": "{{count}} 件のレコードを生成",
@@ -35,7 +44,8 @@
     "staleWarning": "設定が変更されました。プレビューとエクスポートには前回生成したデータが使用されます。更新するには再生成してください。"
   },
   "errors": {
-    "generateFailed": "データを生成できませんでした。もう一度お試しください。"
+    "generateFailed": "データを生成できませんでした。もう一度お試しください。",
+    "partialGeneration": "{{count}} 件を受信しました。データが不完全なため、エクスポートできません。"
   },
   "fieldEditor": {
     "fieldName": "フィールド名",

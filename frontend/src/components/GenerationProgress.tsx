@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 type GenerationProgressProps = {
   completed?: number;
   total?: number;
@@ -9,6 +11,7 @@ export function GenerationProgress({
   total,
   isComplete = false,
 }: GenerationProgressProps) {
+  const { t } = useTranslation();
   const hasProgress =
     completed !== undefined &&
     total !== undefined &&
@@ -26,12 +29,12 @@ export function GenerationProgress({
 
   const statusText =
     percentage === null
-      ? "Preparing data..."
+      ? t("generation.preparing")
       : confirmedComplete
-        ? "Generation Complete!"
+        ? t("generation.complete")
         : completed === total
-          ? "Finalizing..."
-          : "Generating...";
+          ? t("generation.finishing")
+          : t("generation.generating");
 
   return (
     <div className="w-full min-w-0 space-y-2">
@@ -47,21 +50,40 @@ export function GenerationProgress({
 
       <div
         role="progressbar"
-        aria-label="Generation progress"
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={percentage ?? undefined}
+        aria-label={t("generation.progressLabel")}
         aria-valuetext={
           percentage === null
-            ? "Preparing data"
+            ? t("generation.preparing")
             : confirmedComplete
-              ? `${completed} of ${total} records received. Generation complete`
-              : `${completed} of ${total} records received`
+              ? t("generation.complete")
+              : t("generation.received", { completed, total })
         }
         className="relative h-8 w-full overflow-hidden rounded-full border border-fuchsia-400/20 bg-[#251B32] shadow-[inset_0_2px_8px_rgba(0,0,0,0.25)] sm:h-10"
       >
-        {percentage === null ? (
-          <div className="relative h-full w-full overflow-hidden">
+        <div
+          className="forge-energy-fill relative h-full overflow-hidden rounded-full transition-[width] duration-[1800ms] ease-out motion-reduce:transition-none"
+          data-complete={confirmedComplete}
+          style={{ width: `${percentage ?? 0}%` }}
+        >
+          {[15, 35, 55, 75, 90].map((left, index) => (
+            <span
+              key={left}
+              aria-hidden="true"
+              className="forge-energy-bubble absolute h-2 w-2 rounded-full border border-white/70"
+              style={{
+                left: `${left}%`,
+                top: index % 2 === 0 ? "55%" : "20%",
+                animationDelay: `${index * -0.25}s`,
+              }}
+            />
+          ))}
+        </div>
+
+        {percentage === null && (
+          <div className="absolute inset-0 overflow-hidden">
             <div className="forge-energy-band">
               {[20, 45, 70, 85].map((left, index) => (
                 <span
@@ -77,31 +99,12 @@ export function GenerationProgress({
               ))}
             </div>
           </div>
-        ) : (
-          <div
-            className="forge-energy-fill h-full overflow-hidden rounded-full transition-[width] duration-300 ease-out"
-            data-complete={confirmedComplete}
-            style={{ width: `${percentage}%` }}
-          >
-            {[15, 35, 55, 75, 90].map((left, index) => (
-              <span
-                key={left}
-                aria-hidden="true"
-                className="forge-energy-bubble absolute h-2 w-2 rounded-full border border-white/70"
-                style={{
-                  left: `${left}%`,
-                  top: index % 2 === 0 ? "55%" : "20%",
-                  animationDelay: `${index * -0.25}s`,
-                }}
-              />
-            ))}
-          </div>
         )}
       </div>
 
       {percentage !== null && (
         <p className="text-xs tabular-nums text-muted">
-          {completed} / {total} records
+          {t("generation.records", { completed, total })}
         </p>
       )}
     </div>

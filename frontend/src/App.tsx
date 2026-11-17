@@ -197,6 +197,7 @@ function App() {
 
         setStreamProgress({ completed: data.length, total: count });
       }
+      await new Promise<void>((resolve) => setTimeout(resolve, 1800));
 
       setRecords(data);
       setGeneratedConfig(currentConfig);
