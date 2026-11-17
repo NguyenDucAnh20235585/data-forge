@@ -1,0 +1,7 @@
+{
+  "count": 125,
+  "fields": [
+    { "name": "score", "type": "number" }
+  ],
+  "locale": "en"
+}
