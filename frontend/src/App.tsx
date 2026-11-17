@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { generateData } from "./api/generatorApi";
+import { generateData, generateCustomDataStream } from "./api/generatorApi";
 import { validateAllFields } from "./utils/validateFields";
 import SettingsMenu from "./components/SettingsMenu";
 import { useTranslation } from "react-i18next";
@@ -12,6 +12,8 @@ import type { Preset, CustomField, GeneratedRecord } from "./types/generator";
 import PreviewTable from "./components/PreviewTable";
 import CustomFieldEditor from "./components/CustomFieldEditor";
 import { exportJson, exportCsv } from "./utils/exportData";
+
+type ProgressPhase = "idle" | "generating" | "complete" | "fading";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -27,6 +29,14 @@ function App() {
   const [records, setRecords] = useState<GeneratedRecord[]>([]);
   const [generatedConfig, setGeneratedConfig] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [streamProgress, setStreamProgress] = useState<{
+    completed: number;
+    total: number;
+  } | null>(null);
+  const [progressPhase, setProgressPhase] = useState<ProgressPhase>("idle");
+  const [incompleteRecords, setIncompleteRecords] = useState<GeneratedRecord[]>(
+    [],
+  );
   const [error, setError] = useState("");
   const [mode, setMode] = useState<"quick" | "custom">("quick");
 
@@ -149,51 +159,92 @@ function App() {
     setHasTriedGenerate(false);
     setLoading(true);
     setError("");
-
-    const minimumLoading = new Promise<void>((resolve) => {
-      setTimeout(resolve, 600);
-    });
-    let generationSucceeded = false;
+    setStreamProgress(null);
+    setIncompleteRecords([]);
+    setProgressPhase("generating");
+    let lastPartial: GeneratedRecord[] = [];
 
     try {
-      const payload =
-        mode === "quick"
-          ? { count, preset }
-          : {
-              count,
-              fields: fields.map((field) =>
-                field.type === "choice"
-                  ? {
-                      ...field,
-                      options: field.options?.map((option) => option.trim()),
-                    }
-                  : field,
-              ),
-            };
+      let data: GeneratedRecord[];
 
-      const data = await generateData(mode, payload, locale);
+      if (mode === "custom") {
+        const normalizedFields = fields.map((field) =>
+          field.type === "choice"
+            ? {
+                ...field,
+                options: field.options?.map((option) => option.trim()),
+              }
+            : field,
+        );
+
+        data = await generateCustomDataStream(
+          { count, fields: normalizedFields },
+          locale,
+          (completed, total, partialRecords) => {
+            lastPartial = partialRecords;
+            setStreamProgress({ completed, total });
+          },
+        );
+      } else {
+        data = await generateData("quick", { count, preset }, locale);
+      }
+
+      // Chỉ thay dataset hoàn chỉnh khi API đã thành công.
+      if (mode === "quick") {
+        if (!Array.isArray(data) || data.length !== count) {
+          throw new Error("Incomplete generation response.");
+        }
+
+        setStreamProgress({ completed: data.length, total: count });
+      }
+
       setRecords(data);
       setGeneratedConfig(currentConfig);
-      generationSucceeded = true;
+      setProgressPhase("complete");
     } catch (error) {
       console.error(error);
       setError("errors.generateFailed");
-    } finally {
-      await minimumLoading;
-      setLoading(false);
+      setProgressPhase("idle");
 
-      if (generationSucceeded) {
-        const reduceMotion = window.matchMedia(
-          "(prefers-reduced-motion: reduce)",
-        ).matches;
-
-        previewRef.current?.scrollIntoView({
-          behavior: reduceMotion ? "instant" : "smooth",
-          block: "start",
-        });
+      if (mode === "custom" && lastPartial.length > 0) {
+        setIncompleteRecords(lastPartial);
       }
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (progressPhase === "complete") {
+      const timer = window.setTimeout(() => {
+        setProgressPhase("fading");
+      }, 1200);
+
+      return () => window.clearTimeout(timer);
+    }
+
+    if (progressPhase === "fading") {
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      const timer = window.setTimeout(
+        () => {
+          setProgressPhase("idle");
+
+          requestAnimationFrame(() => {
+            previewRef.current?.scrollIntoView({
+              behavior: reduceMotion ? "auto" : "smooth",
+              block: "start",
+            });
+          });
+        },
+        reduceMotion ? 0 : 300,
+      );
+
+      return () => window.clearTimeout(timer);
+    }
+  }, [progressPhase]);
 
   return (
     <>
@@ -377,13 +428,43 @@ sm:ml-auto sm:w-44
               )}
             </button>
           </div>
-          <div className="mt-4">{loading && <GenerationProgress />}</div>
+          <div className="mt-4">
+            {progressPhase !== "idle" && (
+              <div
+                className={`mt-4 transition-opacity duration-300 motion-reduce:transition-none ${
+                  progressPhase === "fading" ? "opacity-0" : "opacity-100"
+                }`}
+              >
+                <GenerationProgress
+                  completed={streamProgress?.completed}
+                  total={streamProgress?.total}
+                  isComplete={
+                    progressPhase === "complete" || progressPhase === "fading"
+                  }
+                />
+              </div>
+            )}
+          </div>
         </div>
 
         {error && (
           <p role="alert" className="mt-4 text-sm text-red-600">
             {t(error)}
           </p>
+        )}
+
+        {incompleteRecords.length > 0 && (
+          <section className="mt-4 rounded-xl border border-outline bg-surface p-4">
+            <p role="status" className="mb-4 text-sm text-ink">
+              {t("errors.partialGeneration", {
+                count: incompleteRecords.length,
+                defaultValue:
+                  "{{count}} records received. Incomplete dataset — export unavailable.",
+              })}
+            </p>
+
+            <PreviewTable records={incompleteRecords} />
+          </section>
         )}
 
         <section
