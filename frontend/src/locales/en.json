@@ -24,6 +24,15 @@
     "generateData": "Generate Data",
     "generating": "Generating..."
   },
+  "generation": {
+    "preparing": "Preparing data...",
+    "generating": "Generating...",
+    "finishing": "Finishing extraction...",
+    "complete": "Generation Complete!",
+    "progressLabel": "Generation progress",
+    "records": "{{completed}} / {{total}} records",
+    "received": "{{completed}} of {{total}} records received"
+  },
   "preview": {
     "title": "Data Preview",
     "generatedRecords_one": "{{count}} generated record",
@@ -35,7 +44,8 @@
     "staleWarning": "Configuration changed. Preview and exports still use the last generated data. Generate again to update them."
   },
   "errors": {
-    "generateFailed": "Unable to generate data."
+    "generateFailed": "Unable to generate data.",
+    "partialGeneration": "{{count}} records received. Incomplete dataset — export unavailable."
   },
   "fieldEditor": {
     "fieldName": "Field name",
