@@ -1,13 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { GeneratorService } from './generator.service';
+import { GeneratePreset } from './dto/generate-data.dto';
 
 jest.mock('@faker-js/faker', () => {
   const fakerMock = {
     string: {
       alphanumeric: () => 'SAMPLE',
+      uuid: () => 'mock-uuid',
     },
     number: {
       int: () => 1,
+    },
+    person: {
+      fullName: () => 'Test User',
+    },
+    internet: {
+      email: () => 'test@example.com',
+    },
+    phone: {
+      number: () => '0123456789',
     },
   };
 
@@ -96,6 +107,15 @@ describe('GeneratorService', () => {
       name: `field${i}`,
       type: 'number' as const,
     }));
+
+    it('should split Quick Generate into batches of 50, 50, 25', () => {
+      const batches = [
+        ...service.generateQuickBatches(125, GeneratePreset.USERS, 'en'),
+      ];
+
+      expect(batches.map((batch) => batch.length)).toEqual([50, 50, 25]);
+      expect(batches.flat()).toHaveLength(125);
+    });
 
     expect(() => [...service.generateCustomBatches(401, fields)]).toThrow(
       'Generation request is too large.',

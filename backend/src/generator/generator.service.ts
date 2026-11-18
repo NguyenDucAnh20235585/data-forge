@@ -57,6 +57,19 @@ export class GeneratorService {
     return records;
   }
 
+  *generateQuickBatches(
+    count: number,
+    preset: GeneratePreset = GeneratePreset.USERS,
+    locale: DataLocale = 'en',
+    batchSize = 50,
+  ) {
+    for (let start = 0; start < count; start += batchSize) {
+      const size = Math.min(batchSize, count - start);
+
+      yield generatePreset(size, preset, locale);
+    }
+  }
+
   generateCustom(
     count: number,
     fields: CustomField[],
