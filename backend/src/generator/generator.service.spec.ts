@@ -100,25 +100,24 @@ describe('GeneratorService', () => {
 
     expect(batches.map((batch) => batch.length)).toEqual([50, 50, 25]);
   });
-  it('should reject oversized batch generation', () => {
-    const service = new GeneratorService();
 
+  it('should reject oversized batch generation', () => {
     const fields = Array.from({ length: 50 }, (_, i) => ({
       name: `field${i}`,
       type: 'number' as const,
     }));
 
-    it('should split Quick Generate into batches of 50, 50, 25', () => {
-      const batches = [
-        ...service.generateQuickBatches(125, GeneratePreset.USERS, 'en'),
-      ];
-
-      expect(batches.map((batch) => batch.length)).toEqual([50, 50, 25]);
-      expect(batches.flat()).toHaveLength(125);
-    });
-
     expect(() => [...service.generateCustomBatches(401, fields)]).toThrow(
       'Generation request is too large.',
     );
+  });
+
+  it('should split Quick Generate into batches of 50, 50, 25', () => {
+    const batches = [
+      ...service.generateQuickBatches(125, GeneratePreset.USERS, 'en'),
+    ];
+
+    expect(batches.map((batch) => batch.length)).toEqual([50, 50, 25]);
+    expect(batches.flat()).toHaveLength(125);
   });
 });

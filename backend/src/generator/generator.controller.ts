@@ -26,31 +26,6 @@ export class GeneratorController {
     );
   }
 
-  @Post('stream-demo')
-  @HttpCode(200)
-  async streamDemo(@Res() res: Response) {
-    res.setHeader('Content-Type', 'application/x-ndjson; charset=utf-8');
-    res.setHeader('Cache-Control', 'no-cache, no-transform');
-
-    for (let completed = 1; completed <= 3; completed++) {
-      if (res.destroyed) return;
-
-      res.write(
-        JSON.stringify({
-          type: 'progress',
-          completed,
-          total: 3,
-        }) + '\n',
-      );
-
-      if (completed < 3) {
-        await new Promise<void>((resolve) => setTimeout(resolve, 700));
-      }
-    }
-
-    res.end();
-  }
-
   @Post('custom/stream')
   @HttpCode(200)
   async generateCustomStream(
