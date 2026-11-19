@@ -29,7 +29,7 @@ function formatPreviewValue(
 }
 
 export default function PreviewTable({ records }: PreviewTableProps) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const PAGE_SIZE = 100;
   const [page, setPage] = useState(1);
 
@@ -91,11 +91,14 @@ export default function PreviewTable({ records }: PreviewTableProps) {
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             className="rounded-md border border-outline px-3 py-2 disabled:opacity-40"
           >
-            Previous
+            {t("preview.previous")}
           </button>
 
           <span>
-            Page {currentPage} / {totalPages}
+            {t("preview.pageIndicator", {
+              current: currentPage,
+              total: totalPages,
+            })}
           </span>
 
           <button
@@ -104,7 +107,7 @@ export default function PreviewTable({ records }: PreviewTableProps) {
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             className="rounded-md border border-outline px-3 py-2 disabled:opacity-40"
           >
-            Next
+            {t("preview.next")}
           </button>
         </div>
       )}

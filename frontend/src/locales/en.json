@@ -41,7 +41,10 @@
     "exportCsv": "Export CSV",
     "emptyTitle": "Your data will appear here",
     "emptyDescription": "Configure your dataset and click Generate Data.",
-    "staleWarning": "Configuration changed. Preview and exports still use the last generated data. Generate again to update them."
+    "staleWarning": "Configuration changed. Preview and exports still use the last generated data. Generate again to update them.",
+    "previous": "Previous",
+    "next": "Next",
+    "pageIndicator": "Page {{current}} / {{total}}"
   },
   "errors": {
     "generateFailed": "Unable to generate data.",

@@ -41,7 +41,10 @@
     "exportCsv": "Xuất CSV",
     "emptyTitle": "Dữ liệu của bạn sẽ xuất hiện ở đây",
     "emptyDescription": "Cấu hình bộ dữ liệu và nhấn Tạo dữ liệu.",
-    "staleWarning": "Cấu hình đã thay đổi. Phần xem trước và dữ liệu xuất vẫn sử dụng kết quả tạo trước đó. Hãy tạo lại dữ liệu để cập nhật."
+    "staleWarning": "Cấu hình đã thay đổi. Phần xem trước và dữ liệu xuất vẫn sử dụng kết quả tạo trước đó. Hãy tạo lại dữ liệu để cập nhật.",
+    "previous": "Trước",
+    "next": "Sau",
+    "pageIndicator": "Trang {{current}} / {{total}}"
   },
   "errors": {
     "generateFailed": "Không thể tạo dữ liệu. Vui lòng thử lại.",
