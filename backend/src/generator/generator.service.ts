@@ -43,6 +43,11 @@ type CustomField = {
   pattern?: string;
 };
 
+type GenerationLimits = {
+  maxRecords: number;
+  maxCells: number;
+};
+
 @Injectable()
 export class GeneratorService {
   generate(
@@ -75,7 +80,10 @@ export class GeneratorService {
     fields: CustomField[],
     locale: DataLocale = 'en',
   ) {
-    const faker = this.prepareCustomGeneration(count, fields, locale);
+    const faker = this.prepareCustomGeneration(count, fields, locale, {
+      maxRecords: 1_000,
+      maxCells: 20_000,
+    });
 
     const records: Record<string, string | number | boolean>[] = [];
 
@@ -91,8 +99,15 @@ export class GeneratorService {
     count: number,
     fields: CustomField[],
     locale: DataLocale,
+    limits: GenerationLimits,
   ): ReturnType<typeof getFaker> {
-    if (fields.length > 50 || count * fields.length > 20_000) {
+    if (
+      !Number.isInteger(count) ||
+      count < 1 ||
+      count > limits.maxRecords ||
+      fields.length > 50 ||
+      count * fields.length > limits.maxCells
+    ) {
       throw new BadRequestException('Generation request is too large.');
     }
 
@@ -112,7 +127,10 @@ export class GeneratorService {
     fields: CustomField[],
     locale: DataLocale = 'en',
   ): Generator<Record<string, string | number | boolean>[]> {
-    const faker = this.prepareCustomGeneration(count, fields, locale);
+    const faker = this.prepareCustomGeneration(count, fields, locale, {
+      maxRecords: 10_000,
+      maxCells: 200_000,
+    });
 
     yield* this.createCustomBatches(count, fields, faker);
   }

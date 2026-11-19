@@ -39,7 +39,7 @@ export class GeneratorController {
     );
     let next = batches.next();
 
-    const maxBytes = 2 * 1024 * 1024;
+    const maxBytes = 24 * 1024 * 1024;
     const total = body.count;
 
     const doneLine =
