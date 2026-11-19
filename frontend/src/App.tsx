@@ -27,6 +27,7 @@ function App() {
   const [preset, setPreset] = useState<Preset>("users");
   const [count, setCount] = useState(3);
   const [records, setRecords] = useState<GeneratedRecord[]>([]);
+  const [previewVersion, setPreviewVersion] = useState(0);
   const [generatedConfig, setGeneratedConfig] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [streamProgress, setStreamProgress] = useState<{
@@ -39,6 +40,7 @@ function App() {
   );
   const [error, setError] = useState("");
   const [mode, setMode] = useState<"quick" | "custom">("quick");
+  const maxRecords = mode === "custom" ? 10_000 : 1_000;
 
   const [fields, setFields] = useState<CustomField[]>([
     { name: "playerName", type: "personName" },
@@ -189,7 +191,7 @@ function App() {
         data = await generateData("quick", { count, preset }, locale);
       }
 
-      // Chỉ thay dataset hoàn chỉnh khi API đã thành công.
+      // Chỉ thay dataset hoàn chỉnh khi API clear.
       if (mode === "quick") {
         if (!Array.isArray(data) || data.length !== count) {
           throw new Error("Incomplete generation response.");
@@ -200,6 +202,7 @@ function App() {
       await new Promise<void>((resolve) => setTimeout(resolve, 1800));
 
       setRecords(data);
+      setPreviewVersion((version) => version + 1);
       setGeneratedConfig(currentConfig);
       setProgressPhase("complete");
     } catch (error) {
@@ -364,7 +367,7 @@ function App() {
                 id="count"
                 type="number"
                 min="1"
-                max="1000"
+                max={maxRecords}
                 value={count}
                 onChange={(event) => setCount(Number(event.target.value))}
                 className="w-32 rounded-md border border-control-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
@@ -398,7 +401,10 @@ function App() {
               onClick={handleGenerate}
               aria-busy={loading}
               disabled={
-                loading || !Number.isInteger(count) || count < 1 || count > 1000
+                loading ||
+                !Number.isInteger(count) ||
+                count < 1 ||
+                count > maxRecords
               }
               className="
   inline-flex h-12 w-full items-center justify-center rounded-md px-6
@@ -511,7 +517,7 @@ sm:ml-auto sm:w-44
                 </p>
               )}
 
-              <PreviewTable records={records} />
+              <PreviewTable key={previewVersion} records={records} />
             </>
           ) : (
             <div className="rounded-lg border border-dashed border-outline bg-canvas px-6 py-12 text-center">

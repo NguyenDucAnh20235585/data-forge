@@ -105,7 +105,7 @@ export class CustomFieldDto {
 export class GenerateCustomDto {
   @IsInt()
   @Min(1)
-  @Max(1000)
+  @Max(10_000)
   count!: number;
 
   @IsArray()

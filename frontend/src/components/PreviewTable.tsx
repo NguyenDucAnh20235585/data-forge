@@ -1,5 +1,6 @@
 import type { GeneratedRecord } from "../types/generator";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 
 type PreviewTableProps = {
   records: GeneratedRecord[];
@@ -29,47 +30,84 @@ function formatPreviewValue(
 
 export default function PreviewTable({ records }: PreviewTableProps) {
   const { i18n } = useTranslation();
+  const PAGE_SIZE = 100;
+  const [page, setPage] = useState(1);
+
+  const totalPages = Math.max(1, Math.ceil(records.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const startIndex = (currentPage - 1) * PAGE_SIZE;
+
+  const visibleRecords = records.slice(startIndex, startIndex + PAGE_SIZE);
+
   const columns = records.length > 0 ? Object.keys(records[0]) : [];
 
   return (
-    <div className="max-h-[420px] w-full overflow-auto rounded-lg border border-outline lg:max-h-[min(65vh,560px)] [scrollbar-width:thin]">
-      <table className="w-full min-w-max border-collapse text-left text-sm">
-        <thead className="sticky top-0 z-10 bg-surface-soft">
-          <tr>
-            {columns.map((column) => (
-              <th
-                key={column}
-                scope="col"
-                className="border-b border-outline px-4 py-3 text-xs font-semibold text-muted"
-              >
-                {column}
-              </th>
-            ))}
-          </tr>
-        </thead>
-
-        <tbody>
-          {records.map((record, index) => (
-            <tr
-              key={index}
-              className="border-b border-outline/70 transition-colors hover:bg-surface-soft/50 last:border-b-0"
-            >
+    <div className="space-y-3">
+      <div className="max-h-[420px] w-full overflow-auto rounded-lg border border-outline lg:max-h-[min(65vh,560px)] [scrollbar-width:thin]">
+        <table className="w-full min-w-max border-collapse text-left text-sm">
+          <thead className="sticky top-0 z-10 bg-surface-soft">
+            <tr>
               {columns.map((column) => (
-                <td
+                <th
                   key={column}
-                  className="whitespace-nowrap px-4 py-3 text-ink"
+                  scope="col"
+                  className="border-b border-outline px-4 py-3 text-xs font-semibold text-muted"
                 >
-                  {formatPreviewValue(
-                    column,
-                    record[column],
-                    i18n.resolvedLanguage ?? "en",
-                  )}
-                </td>
+                  {column}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {visibleRecords.map((record, index) => (
+              <tr
+                key={index}
+                className="border-b border-outline/70 transition-colors hover:bg-surface-soft/50 last:border-b-0"
+              >
+                {columns.map((column) => (
+                  <td
+                    key={column}
+                    className="whitespace-nowrap px-4 py-3 text-ink"
+                  >
+                    {formatPreviewValue(
+                      column,
+                      record[column],
+                      i18n.resolvedLanguage ?? "en",
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between gap-3 text-sm text-ink">
+          <button
+            type="button"
+            disabled={currentPage === 1}
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            className="rounded-md border border-outline px-3 py-2 disabled:opacity-40"
+          >
+            Previous
+          </button>
+
+          <span>
+            Page {currentPage} / {totalPages}
+          </span>
+
+          <button
+            type="button"
+            disabled={currentPage === totalPages}
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            className="rounded-md border border-outline px-3 py-2 disabled:opacity-40"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }
