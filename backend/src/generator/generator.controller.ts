@@ -1,4 +1,13 @@
-import { Body, Controller, HttpCode, Post, Res } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  Query,
+  Res,
+} from '@nestjs/common';
 import type { Response } from 'express';
 import { GeneratorService } from './generator.service';
 import { GenerateDataDto } from './dto/generate-data.dto';
@@ -7,6 +16,15 @@ import { GenerateCustomDto } from './dto/generate-custom.dto';
 @Controller('generate')
 export class GeneratorController {
   constructor(private readonly generatorService: GeneratorService) {}
+
+  @Get('epl/season')
+  getEplSeason(@Query('locale') locale = 'en') {
+    if (locale !== 'en' && locale !== 'vi' && locale !== 'ja') {
+      throw new BadRequestException('Unsupported locale.');
+    }
+
+    return this.generatorService.getEplSeason(locale);
+  }
 
   @Post()
   generate(@Body() body: GenerateDataDto) {
@@ -39,7 +57,7 @@ export class GeneratorController {
     );
     let next = batches.next();
 
-    const maxBytes = 2 * 1024 * 1024;
+    const maxBytes = 24 * 1024 * 1024;
     const total = body.count;
 
     const doneLine =

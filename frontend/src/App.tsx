@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 
-import { generateData, generateCustomDataStream } from "./api/generatorApi";
+import {
+  generateData,
+  generateCustomDataStream,
+  generateEplSeason,
+  type EplSeasonResponse,
+} from "./api/generatorApi";
 import { validateAllFields } from "./utils/validateFields";
 import SettingsMenu from "./components/SettingsMenu";
 import { useTranslation } from "react-i18next";
@@ -10,6 +15,7 @@ import "./i18n";
 import type { Preset, CustomField, GeneratedRecord } from "./types/generator";
 
 import PreviewTable from "./components/PreviewTable";
+import EplSeasonRecap from "./components/EplSeasonRecap";
 import CustomFieldEditor from "./components/CustomFieldEditor";
 import { exportJson, exportCsv } from "./utils/exportData";
 
@@ -27,6 +33,10 @@ function App() {
   const [preset, setPreset] = useState<Preset>("users");
   const [count, setCount] = useState(3);
   const [records, setRecords] = useState<GeneratedRecord[]>([]);
+  const [eplRecap, setEplRecap] = useState<EplSeasonResponse["recap"] | null>(
+    null,
+  );
+  const [previewVersion, setPreviewVersion] = useState(0);
   const [generatedConfig, setGeneratedConfig] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [streamProgress, setStreamProgress] = useState<{
@@ -39,10 +49,14 @@ function App() {
   );
   const [error, setError] = useState("");
   const [mode, setMode] = useState<"quick" | "custom">("quick");
+  const maxRecords = mode === "custom" ? 10_000 : 1_000;
 
   const [fields, setFields] = useState<CustomField[]>([
     { name: "playerName", type: "personName" },
   ]);
+
+  const isEplTable = mode === "quick" && preset === "eplTable";
+  const effectiveCount = isEplTable ? 20 : count;
 
   const [hasTriedGenerate, setHasTriedGenerate] = useState(false);
 
@@ -56,7 +70,7 @@ function App() {
 
   const currentConfig = JSON.stringify(
     mode === "quick"
-      ? { mode, count, preset, locale }
+      ? { mode, count: effectiveCount, preset, locale }
       : { mode, count, fields, locale },
   );
 
@@ -162,10 +176,11 @@ function App() {
     setStreamProgress(null);
     setIncompleteRecords([]);
     setProgressPhase("generating");
-    let lastPartial: GeneratedRecord[] = [];
+    const lastPartial: GeneratedRecord[] = [];
 
     try {
       let data: GeneratedRecord[];
+      let nextRecap: EplSeasonResponse["recap"] | null = null;
 
       if (mode === "custom") {
         const normalizedFields = fields.map((field) =>
@@ -180,26 +195,40 @@ function App() {
         data = await generateCustomDataStream(
           { count, fields: normalizedFields },
           locale,
-          (completed, total, partialRecords) => {
-            lastPartial = partialRecords;
+          (completed, total, batch) => {
+            lastPartial.push(...batch);
             setStreamProgress({ completed, total });
           },
         );
+      } else if (isEplTable) {
+        const season = await generateEplSeason(locale);
+
+        data = season.standings;
+        nextRecap = season.recap;
       } else {
-        data = await generateData("quick", { count, preset }, locale);
+        data = await generateData(
+          "quick",
+          { count: effectiveCount, preset },
+          locale,
+        );
       }
 
-      // Chỉ thay dataset hoàn chỉnh khi API đã thành công.
+      // Chỉ thay dataset hoàn chỉnh khi API clear.
       if (mode === "quick") {
-        if (!Array.isArray(data) || data.length !== count) {
+        if (!Array.isArray(data) || data.length !== effectiveCount) {
           throw new Error("Incomplete generation response.");
         }
 
-        setStreamProgress({ completed: data.length, total: count });
+        setStreamProgress({
+          completed: data.length,
+          total: effectiveCount,
+        });
       }
       await new Promise<void>((resolve) => setTimeout(resolve, 1800));
 
       setRecords(data);
+      setEplRecap(nextRecap);
+      setPreviewVersion((version) => version + 1);
       setGeneratedConfig(currentConfig);
       setProgressPhase("complete");
     } catch (error) {
@@ -330,7 +359,14 @@ function App() {
                 <select
                   id="preset"
                   value={preset}
-                  onChange={(event) => setPreset(event.target.value as Preset)}
+                  onChange={(event) => {
+                    const next = event.target.value as Preset;
+                    setPreset(next);
+
+                    if (next === "eplTable") {
+                      setCount(20);
+                    }
+                  }}
                   className="w-56 rounded-md border border-control-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
                 >
                   <option value="users">
@@ -341,6 +377,9 @@ function App() {
                   </option>
                   <option value="employees">
                     {t("configuration.presets.employees")}
+                  </option>
+                  <option value="eplTable">
+                    {t("configuration.presets.eplTable")}
                   </option>
                   <option value="umamusume">
                     {t("configuration.presets.umamusume")}
@@ -364,8 +403,9 @@ function App() {
                 id="count"
                 type="number"
                 min="1"
-                max="1000"
-                value={count}
+                max={maxRecords}
+                value={effectiveCount}
+                disabled={isEplTable}
                 onChange={(event) => setCount(Number(event.target.value))}
                 className="w-32 rounded-md border border-control-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
               />
@@ -398,7 +438,10 @@ function App() {
               onClick={handleGenerate}
               aria-busy={loading}
               disabled={
-                loading || !Number.isInteger(count) || count < 1 || count > 1000
+                loading ||
+                !Number.isInteger(effectiveCount) ||
+                effectiveCount < 1 ||
+                effectiveCount > maxRecords
               }
               className="
   inline-flex h-12 w-full items-center justify-center rounded-md px-6
@@ -511,7 +554,11 @@ sm:ml-auto sm:w-44
                 </p>
               )}
 
-              <PreviewTable records={records} />
+              <PreviewTable key={previewVersion} records={records} />
+
+              {eplRecap && !isPreviewStale && (
+                <EplSeasonRecap recap={eplRecap} />
+              )}
             </>
           ) : (
             <div className="rounded-lg border border-dashed border-outline bg-canvas px-6 py-12 text-center">

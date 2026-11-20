@@ -2,6 +2,7 @@ export type Preset =
   | "users"
   | "products"
   | "employees"
+  | "eplTable"
   | "umamusume"
   | "orders"
   | "apiLogs";

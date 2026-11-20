@@ -1,6 +1,28 @@
 import type { Preset, CustomField, GeneratedRecord } from "../types/generator";
 import { readNdjson } from "./readNdjson";
 
+export type EplRecapTeam = {
+  club: string;
+  style: string;
+  points: number;
+  goalsFor: number;
+  goalsAgainst: number;
+};
+
+export type EplSeasonResponse = {
+  standings: GeneratedRecord[];
+  recap: {
+    champion: EplRecapTeam;
+    championsLeague: EplRecapTeam[];
+    relegated: EplRecapTeam[];
+    relegationBattle: {
+      survivor: EplRecapTeam;
+      firstRelegated: EplRecapTeam;
+      pointsGap: number;
+    };
+  };
+};
+
 type GeneratePayload =
   | { count: number; preset: Preset }
   | { count: number; fields: CustomField[] };
@@ -48,7 +70,7 @@ export async function generateCustomDataStream(
   onProgress: (
     completed: number,
     total: number,
-    partialRecords: GeneratedRecord[],
+    batch: GeneratedRecord[],
   ) => void,
   signal?: AbortSignal,
 ): Promise<GeneratedRecord[]> {
@@ -97,7 +119,7 @@ export async function generateCustomDataStream(
 
       records.push(...event.records);
 
-      onProgress(records.length, payload.count, [...records]);
+      onProgress(records.length, payload.count, event.records);
     }
 
     if (event.type === "done") {
@@ -118,4 +140,18 @@ export async function generateCustomDataStream(
   }
 
   return records;
+}
+
+export async function generateEplSeason(
+  locale: "en" | "vi" | "ja",
+): Promise<EplSeasonResponse> {
+  const response = await fetch(
+    `${API_BASE_URL}/generate/epl/season?locale=${locale}`,
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to generate EPL season.");
+  }
+
+  return (await response.json()) as EplSeasonResponse;
 }

@@ -18,7 +18,6 @@ function SettingsMenu() {
     localStorage.setItem("data-forge-theme", darkMode ? "dark" : "light");
   }, [darkMode]);
 
-  // Lock background scrolling while Settings is open
   useEffect(() => {
     if (!settingsOpen) return;
 

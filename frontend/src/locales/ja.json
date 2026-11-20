@@ -17,6 +17,7 @@
       "products": "製品",
       "employees": "従業員",
       "umamusume": "ウマ娘",
+      "eplTable": "プレミアリーグ順位表",
       "orders": "注文",
       "apiLogs": "APIログI"
     },
@@ -41,8 +42,39 @@
     "exportCsv": "CSVをエクスポート",
     "emptyTitle": "ここにデータが表示されます",
     "emptyDescription": "データセットを設定して「データを生成」をクリックしてください。",
-    "staleWarning": "設定が変更されました。プレビューとエクスポートには前回生成したデータが使用されます。更新するには再生成してください。"
+    "staleWarning": "設定が変更されました。プレビューとエクスポートには前回生成したデータが使用されます。更新するには再生成してください。",
+    "previous": "前へ",
+    "next": "次へ",
+    "pageIndicator": "ページ {{current}} / {{total}}"
   },
+
+  "eplRecap": {
+    "title": "プレミアリーグ シーズン総括",
+    "champion": "優勝クラブ",
+    "championDescription": "{{gf}}得点、{{ga}}失点を記録。",
+    "championsLeague": "チャンピオンズリーグ出場枠 — トップ4",
+    "relegated": "降格クラブ",
+    "relegationBattle": "残留争い",
+    "relegationGap": "{{survivor}}は{{relegated}}に{{gap}}ポイント差をつけて残留。",
+    "relegationTie": "{{survivor}}と{{relegated}}は{{points}}ポイントで並び、順位決定基準により{{survivor}}が17位。",
+    "styles": {
+      "attacking": "攻撃重視",
+      "defensive": "守備重視",
+      "gegenpressing": "ゲーゲンプレス",
+      "counter": "カウンター",
+      "possession": "ポゼッション",
+      "adaptive": "柔軟な戦術"
+    },
+    "tieGD": "{{survivor}}と{{relegated}}は勝ち点で並びましたが、得失点差で{{survivor}}が残留しました。",
+    "tieGF": "{{survivor}}は総得点で{{relegated}}を上回りました。",
+    "tieFurther": "勝ち点、得失点差、総得点が同じため、直接対決の結果による判定が必要です。",
+
+    "titleGap": "{{champion}}は{{points}}ポイントで優勝し、2位の{{runnerUp}}に{{gap}}ポイント差をつけました。",
+    "titleGD": "{{champion}}と{{runnerUp}}は{{points}}ポイントで並びましたが、得失点差で{{champion}}が優勝しました。",
+    "titleGF": "勝ち点と得失点差で並び、総得点で上回った{{champion}}が{{runnerUp}}を抑えて優勝しました。",
+    "titleAlphabetical": "勝ち点、得失点差、総得点がすべて同じため、Data Forgeではクラブ名のアルファベット順で順位を決定しました。"
+  },
+
   "errors": {
     "generateFailed": "データを生成できませんでした。もう一度お試しください。",
     "partialGeneration": "{{count}} 件を受信しました。データが不完全なため、エクスポートできません。"

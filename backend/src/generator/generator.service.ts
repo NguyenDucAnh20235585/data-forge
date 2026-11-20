@@ -4,6 +4,7 @@ import { GeneratePreset } from './dto/generate-data.dto';
 import { generatePreset } from './preset-generator';
 import { generatePattern } from './pattern-generator';
 import { ensureResponseSize } from './response-size';
+import { generateEplSeason } from './epl-generator';
 
 import {
   validateFieldNames,
@@ -43,6 +44,11 @@ type CustomField = {
   pattern?: string;
 };
 
+type GenerationLimits = {
+  maxRecords: number;
+  maxCells: number;
+};
+
 @Injectable()
 export class GeneratorService {
   generate(
@@ -50,6 +56,10 @@ export class GeneratorService {
     preset: GeneratePreset = GeneratePreset.USERS,
     locale: DataLocale = 'en',
   ) {
+    if (preset === GeneratePreset.EPL_TABLE && count !== 20) {
+      throw new BadRequestException('EPL table requires exactly 20 records.');
+    }
+
     const records = generatePreset(count, preset, locale);
 
     ensureResponseSize(records);
@@ -63,6 +73,14 @@ export class GeneratorService {
     locale: DataLocale = 'en',
     batchSize = 50,
   ) {
+    if (preset === GeneratePreset.EPL_TABLE) {
+      if (count !== 20) {
+        throw new BadRequestException('EPL table requires exactly 20 records.');
+      }
+
+      yield generatePreset(20, preset, locale);
+      return;
+    }
     for (let start = 0; start < count; start += batchSize) {
       const size = Math.min(batchSize, count - start);
 
@@ -75,7 +93,10 @@ export class GeneratorService {
     fields: CustomField[],
     locale: DataLocale = 'en',
   ) {
-    const faker = this.prepareCustomGeneration(count, fields, locale);
+    const faker = this.prepareCustomGeneration(count, fields, locale, {
+      maxRecords: 1_000,
+      maxCells: 20_000,
+    });
 
     const records: Record<string, string | number | boolean>[] = [];
 
@@ -87,12 +108,23 @@ export class GeneratorService {
     return records;
   }
 
+  getEplSeason(locale: DataLocale = 'en') {
+    return generateEplSeason(locale);
+  }
+
   private prepareCustomGeneration(
     count: number,
     fields: CustomField[],
     locale: DataLocale,
+    limits: GenerationLimits,
   ): ReturnType<typeof getFaker> {
-    if (fields.length > 50 || count * fields.length > 20_000) {
+    if (
+      !Number.isInteger(count) ||
+      count < 1 ||
+      count > limits.maxRecords ||
+      fields.length > 50 ||
+      count * fields.length > limits.maxCells
+    ) {
       throw new BadRequestException('Generation request is too large.');
     }
 
@@ -112,7 +144,10 @@ export class GeneratorService {
     fields: CustomField[],
     locale: DataLocale = 'en',
   ): Generator<Record<string, string | number | boolean>[]> {
-    const faker = this.prepareCustomGeneration(count, fields, locale);
+    const faker = this.prepareCustomGeneration(count, fields, locale, {
+      maxRecords: 10_000,
+      maxCells: 200_000,
+    });
 
     yield* this.createCustomBatches(count, fields, faker);
   }
@@ -183,7 +218,6 @@ export class GeneratorService {
         if (!field.options) {
           throw new BadRequestException('Invalid choice options.');
         }
-
         record[field.name] = faker.helpers.arrayElement(field.options);
       } else if (field.type === 'phoneNumber') {
         record[field.name] = faker.phone.number();

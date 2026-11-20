@@ -1,6 +1,7 @@
 import { GeneratePreset } from './dto/generate-data.dto';
 import { getFaker, type DataLocale } from './faker-locale';
 import { UMAMUSUME_NAMES } from './umamusume-names';
+import { generateEplTable } from './epl-generator';
 
 import {
   PRODUCT_CATALOG,
@@ -41,6 +42,10 @@ export function generatePreset(
   preset: GeneratePreset,
   locale: DataLocale = 'en',
 ) {
+  if (preset === GeneratePreset.EPL_TABLE) {
+    return generateEplTable(locale);
+  }
+
   const faker = getFaker(locale);
 
   return Array.from({ length: count }, () => {

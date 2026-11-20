@@ -16,6 +16,7 @@
       "users": "Users",
       "products": "Products",
       "employees": "Employees",
+      "eplTable": "EPL Table",
       "umamusume": "Umamusume",
       "orders": "Orders",
       "apiLogs": "API Logs"
@@ -41,8 +42,38 @@
     "exportCsv": "Export CSV",
     "emptyTitle": "Your data will appear here",
     "emptyDescription": "Configure your dataset and click Generate Data.",
-    "staleWarning": "Configuration changed. Preview and exports still use the last generated data. Generate again to update them."
+    "staleWarning": "Configuration changed. Preview and exports still use the last generated data. Generate again to update them.",
+    "previous": "Previous",
+    "next": "Next",
+    "pageIndicator": "Page {{current}} / {{total}}"
   },
+
+  "eplRecap": {
+    "title": "Premier League Season Recap",
+    "champion": "Champions",
+    "championDescription": "Scored {{gf}} goals and conceded {{ga}}.",
+    "championsLeague": "Champions League — Top 4",
+    "relegated": "Relegated Clubs",
+    "relegationBattle": "Relegation Battle",
+    "relegationGap": "{{survivor}} survived, finishing {{gap}} points ahead of {{relegated}}.",
+    "relegationTie": "{{survivor}} and {{relegated}} finished level on {{points}} points. {{survivor}} ranked 17th on tiebreakers.",
+    "styles": {
+      "attacking": "Attacking",
+      "defensive": "Defensive",
+      "gegenpressing": "Gegenpressing",
+      "counter": "Counter-attacking",
+      "possession": "Possession",
+      "adaptive": "Adaptive"
+    },
+    "tieGD": "{{survivor}} and {{relegated}} finished level on points. {{survivor}} survived on goal difference.",
+    "tieGF": "{{survivor}} finished above {{relegated}} on goals scored.",
+    "tieFurther": "Both clubs finished level on points, goal difference and goals scored. Head-to-head results are required.",
+    "titleGap": "{{champion}} won the title with {{points}} points, finishing {{gap}} points ahead of {{runnerUp}}.",
+    "titleGD": "{{champion}} and {{runnerUp}} finished level on {{points}} points. {{champion}} won the title on goal difference.",
+    "titleGF": "{{champion}} won the title over {{runnerUp}} on goals scored after finishing level on points and goal difference.",
+    "titleAlphabetical": "Both clubs finished level on points, goal difference, and goals scored. Data Forge used alphabetical order as a fallback."
+  },
+
   "errors": {
     "generateFailed": "Unable to generate data.",
     "partialGeneration": "{{count}} records received. Incomplete dataset — export unavailable."

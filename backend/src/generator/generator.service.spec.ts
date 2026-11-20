@@ -41,7 +41,7 @@ describe('GeneratorService', () => {
       max: 100,
     }));
 
-    expect(() => service.generateCustom(401, fields)).toThrow(
+    expect(() => service.generateCustom(4001, fields)).toThrow(
       'Generation request is too large.',
     );
   });
@@ -107,7 +107,7 @@ describe('GeneratorService', () => {
       type: 'number' as const,
     }));
 
-    expect(() => [...service.generateCustomBatches(401, fields)]).toThrow(
+    expect(() => [...service.generateCustomBatches(4001, fields)]).toThrow(
       'Generation request is too large.',
     );
   });
