@@ -47,6 +47,26 @@
     "next": "次へ",
     "pageIndicator": "ページ {{current}} / {{total}}"
   },
+
+  "eplRecap": {
+    "title": "プレミアリーグ シーズン総括",
+    "champion": "優勝クラブ",
+    "championDescription": "{{gf}}得点、{{ga}}失点を記録。",
+    "championsLeague": "チャンピオンズリーグ出場枠 — トップ4",
+    "relegated": "降格クラブ",
+    "relegationBattle": "残留争い",
+    "relegationGap": "{{survivor}}は{{relegated}}に{{gap}}ポイント差をつけて残留。",
+    "relegationTie": "{{survivor}}と{{relegated}}は{{points}}ポイントで並び、順位決定基準により{{survivor}}が17位。",
+    "styles": {
+      "attacking": "攻撃重視",
+      "defensive": "守備重視",
+      "gegenpressing": "ゲーゲンプレス",
+      "counter": "カウンター",
+      "possession": "ポゼッション",
+      "adaptive": "柔軟な戦術"
+    }
+  },
+
   "errors": {
     "generateFailed": "データを生成できませんでした。もう一度お試しください。",
     "partialGeneration": "{{count}} 件を受信しました。データが不完全なため、エクスポートできません。"

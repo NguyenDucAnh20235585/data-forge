@@ -11,6 +11,10 @@ jest.mock('./faker-locale', () => ({
 
         arrayElement: <T>(items: readonly T[]) => items[index++ % items.length],
       },
+      number: {
+        float: ({ min, max }: { min: number; max: number }) =>
+          min + (max - min) * ((index++ % 100) / 100),
+      },
     };
   },
 }));

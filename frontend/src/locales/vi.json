@@ -47,6 +47,26 @@
     "next": "Sau",
     "pageIndicator": "Trang {{current}} / {{total}}"
   },
+
+  "eplRecap": {
+    "title": "Tổng kết mùa giải Premier League",
+    "champion": "Nhà vô địch",
+    "championDescription": "Ghi {{gf}} bàn và thủng lưới {{ga}} bàn.",
+    "championsLeague": "Top 4 dự Champions League",
+    "relegated": "Các đội xuống hạng",
+    "relegationBattle": "Cuộc đua trụ hạng",
+    "relegationGap": "{{survivor}} trụ hạng thành công, hơn {{relegated}} {{gap}} điểm.",
+    "relegationTie": "{{survivor}} và {{relegated}} cùng có {{points}} điểm. {{survivor}} xếp thứ 17 nhờ tiêu chí phụ.",
+    "styles": {
+      "attacking": "Tấn công tổng lực",
+      "defensive": "Phòng ngự chặt",
+      "gegenpressing": "Pressing tầm cao",
+      "counter": "Phản công",
+      "possession": "Kiểm soát bóng",
+      "adaptive": "Linh hoạt"
+    }
+  },
+
   "errors": {
     "generateFailed": "Không thể tạo dữ liệu. Vui lòng thử lại.",
     "partialGeneration": "Đã nhận {{count}} bản ghi. Dữ liệu chưa hoàn chỉnh — không thể xuất file."

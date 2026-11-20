@@ -47,6 +47,26 @@
     "next": "Next",
     "pageIndicator": "Page {{current}} / {{total}}"
   },
+
+  "eplRecap": {
+    "title": "Premier League Season Recap",
+    "champion": "Champions",
+    "championDescription": "Scored {{gf}} goals and conceded {{ga}}.",
+    "championsLeague": "Champions League — Top 4",
+    "relegated": "Relegated Clubs",
+    "relegationBattle": "Relegation Battle",
+    "relegationGap": "{{survivor}} survived, finishing {{gap}} points ahead of {{relegated}}.",
+    "relegationTie": "{{survivor}} and {{relegated}} finished level on {{points}} points. {{survivor}} ranked 17th on tiebreakers.",
+    "styles": {
+      "attacking": "Attacking",
+      "defensive": "Defensive",
+      "gegenpressing": "Gegenpressing",
+      "counter": "Counter-attacking",
+      "possession": "Possession",
+      "adaptive": "Adaptive"
+    }
+  },
+
   "errors": {
     "generateFailed": "Unable to generate data.",
     "partialGeneration": "{{count}} records received. Incomplete dataset — export unavailable."

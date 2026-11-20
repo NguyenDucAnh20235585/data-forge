@@ -4,6 +4,7 @@ import { GeneratePreset } from './dto/generate-data.dto';
 import { generatePreset } from './preset-generator';
 import { generatePattern } from './pattern-generator';
 import { ensureResponseSize } from './response-size';
+import { generateEplSeason } from './epl-generator';
 
 import {
   validateFieldNames,
@@ -105,6 +106,10 @@ export class GeneratorService {
     ensureResponseSize(records);
 
     return records;
+  }
+
+  getEplSeason(locale: DataLocale = 'en') {
+    return generateEplSeason(locale);
   }
 
   private prepareCustomGeneration(

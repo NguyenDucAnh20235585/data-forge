@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 
-import { generateData, generateCustomDataStream } from "./api/generatorApi";
+import {
+  generateData,
+  generateCustomDataStream,
+  generateEplSeason,
+  type EplSeasonResponse,
+} from "./api/generatorApi";
 import { validateAllFields } from "./utils/validateFields";
 import SettingsMenu from "./components/SettingsMenu";
 import { useTranslation } from "react-i18next";
@@ -10,6 +15,7 @@ import "./i18n";
 import type { Preset, CustomField, GeneratedRecord } from "./types/generator";
 
 import PreviewTable from "./components/PreviewTable";
+import EplSeasonRecap from "./components/EplSeasonRecap";
 import CustomFieldEditor from "./components/CustomFieldEditor";
 import { exportJson, exportCsv } from "./utils/exportData";
 
@@ -27,6 +33,9 @@ function App() {
   const [preset, setPreset] = useState<Preset>("users");
   const [count, setCount] = useState(3);
   const [records, setRecords] = useState<GeneratedRecord[]>([]);
+  const [eplRecap, setEplRecap] = useState<EplSeasonResponse["recap"] | null>(
+    null,
+  );
   const [previewVersion, setPreviewVersion] = useState(0);
   const [generatedConfig, setGeneratedConfig] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -171,6 +180,7 @@ function App() {
 
     try {
       let data: GeneratedRecord[];
+      let nextRecap: EplSeasonResponse["recap"] | null = null;
 
       if (mode === "custom") {
         const normalizedFields = fields.map((field) =>
@@ -190,6 +200,11 @@ function App() {
             setStreamProgress({ completed, total });
           },
         );
+      } else if (isEplTable) {
+        const season = await generateEplSeason(locale);
+
+        data = season.standings;
+        nextRecap = season.recap;
       } else {
         data = await generateData(
           "quick",
@@ -212,6 +227,7 @@ function App() {
       await new Promise<void>((resolve) => setTimeout(resolve, 1800));
 
       setRecords(data);
+      setEplRecap(nextRecap);
       setPreviewVersion((version) => version + 1);
       setGeneratedConfig(currentConfig);
       setProgressPhase("complete");
@@ -539,6 +555,10 @@ sm:ml-auto sm:w-44
               )}
 
               <PreviewTable key={previewVersion} records={records} />
+
+              {eplRecap && !isPreviewStale && (
+                <EplSeasonRecap recap={eplRecap} />
+              )}
             </>
           ) : (
             <div className="rounded-lg border border-dashed border-outline bg-canvas px-6 py-12 text-center">
