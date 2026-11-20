@@ -10,6 +10,18 @@ export default function EplSeasonRecap({ recap }: Props) {
 
   const { champion, championsLeague, relegated, relegationBattle } = recap;
 
+  const { survivor, firstRelegated } = relegationBattle;
+
+  const survivorGD = survivor.goalsFor - survivor.goalsAgainst;
+  const relegatedGD = firstRelegated.goalsFor - firstRelegated.goalsAgainst;
+
+  const tieReason =
+    survivorGD !== relegatedGD
+      ? "eplRecap.tieGD"
+      : survivor.goalsFor !== firstRelegated.goalsFor
+        ? "eplRecap.tieGF"
+        : "eplRecap.tieFurther";
+
   const styleName = (style: string) => t(`eplRecap.styles.${style}`);
 
   return (
@@ -40,14 +52,26 @@ export default function EplSeasonRecap({ recap }: Props) {
           {t("eplRecap.championsLeague")}
         </h3>
 
-        <ul className="mt-3 space-y-2">
+        <ul className="mt-2 divide-y divide-outline">
           {championsLeague.map((team, index) => (
-            <li key={team.club} className="text-sm text-ink">
-              {index + 1}. {team.club} — {team.points} Pts
-              <span className="block text-muted">
-                {styleName(team.style)} · GF {team.goalsFor}
-                {" · "}GA {team.goalsAgainst}
-              </span>
+            <li key={team.club} className="py-3">
+              <div className="flex items-center gap-3">
+                <span className="w-5 shrink-0 text-sm text-muted">
+                  {index + 1}
+                </span>
+
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-ink">{team.club}</p>
+                  <p className="mt-1 text-xs text-muted">
+                    {styleName(team.style)} · GF {team.goalsFor}
+                    {" · "}GA {team.goalsAgainst}
+                  </p>
+                </div>
+
+                <span className="shrink-0 text-sm font-semibold tabular-nums text-ink">
+                  {team.points} pts
+                </span>
+              </div>
             </li>
           ))}
         </ul>
@@ -56,14 +80,27 @@ export default function EplSeasonRecap({ recap }: Props) {
       <div className="mt-6">
         <h3 className="font-semibold text-ink">{t("eplRecap.relegated")}</h3>
 
-        <ul className="mt-3 space-y-2">
+        <ul className="mt-2 divide-y divide-outline">
           {relegated.map((team, index) => (
-            <li key={team.club} className="text-sm text-ink">
-              {index + 18}. {team.club} — {team.points} Pts
-              <span className="block text-muted">
-                {styleName(team.style)} · GF {team.goalsFor}
-                {" · "}GA {team.goalsAgainst}
-              </span>
+            <li key={team.club} className="py-3">
+              <div className="flex items-center gap-3">
+                <span className="w-5 shrink-0 text-sm tabular-nums text-muted">
+                  {index + 18}
+                </span>
+
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-ink">{team.club}</p>
+
+                  <p className="mt-1 text-xs text-muted">
+                    {styleName(team.style)} · GF {team.goalsFor}
+                    {" · "}GA {team.goalsAgainst}
+                  </p>
+                </div>
+
+                <span className="shrink-0 text-sm font-semibold tabular-nums text-ink">
+                  {team.points} pts
+                </span>
+              </div>
             </li>
           ))}
         </ul>
@@ -77,7 +114,7 @@ export default function EplSeasonRecap({ recap }: Props) {
         <p className="mt-2 text-sm text-muted">
           {t(
             relegationBattle.pointsGap === 0
-              ? "eplRecap.relegationTie"
+              ? tieReason
               : "eplRecap.relegationGap",
             {
               survivor: relegationBattle.survivor.club,

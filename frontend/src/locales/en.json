@@ -64,7 +64,10 @@
       "counter": "Counter-attacking",
       "possession": "Possession",
       "adaptive": "Adaptive"
-    }
+    },
+    "tieGD": "{{survivor}} and {{relegated}} finished level on points. {{survivor}} survived on goal difference.",
+    "tieGF": "{{survivor}} finished above {{relegated}} on goals scored.",
+    "tieFurther": "Both clubs finished level on points, goal difference and goals scored. Head-to-head results are required."
   },
 
   "errors": {

@@ -64,7 +64,10 @@
       "counter": "カウンター",
       "possession": "ポゼッション",
       "adaptive": "柔軟な戦術"
-    }
+    },
+    "tieGD": "{{survivor}}と{{relegated}}は勝ち点で並びましたが、得失点差で{{survivor}}が残留しました。",
+    "tieGF": "{{survivor}}は総得点で{{relegated}}を上回りました。",
+    "tieFurther": "勝ち点、得失点差、総得点が同じため、直接対決の結果による判定が必要です。"
   },
 
   "errors": {
