@@ -67,7 +67,11 @@
     },
     "tieGD": "{{survivor}} và {{relegated}} cùng có {{points}} điểm. {{survivor}} trụ hạng nhờ hiệu số bàn thắng bại tốt hơn.",
     "tieGF": "{{survivor}} và {{relegated}} bằng điểm và hiệu số. {{survivor}} xếp trên nhờ ghi nhiều bàn thắng hơn.",
-    "tieFurther": "Hai đội bằng điểm, hiệu số và số bàn thắng ghi được. Data Forge sử dụng thứ tự tên CLB (A–Z) để phân định thứ hạng."
+    "tieFurther": "Hai đội bằng điểm, hiệu số và số bàn thắng ghi được. Data Forge sử dụng thứ tự tên CLB (A–Z) để phân định thứ hạng.",
+    "titleGap": "{{champion}} vô địch với {{points}} điểm, hơn {{runnerUp}} {{gap}} điểm.",
+    "titleGD": "{{champion}} và {{runnerUp}} cùng có {{points}} điểm. {{champion}} vô địch nhờ hiệu số tốt hơn.",
+    "titleGF": "{{champion}} vô địch nhờ ghi nhiều bàn hơn {{runnerUp}} khi hai đội bằng điểm và hiệu số.",
+    "titleAlphabetical": "Hai đội bằng điểm, hiệu số và bàn thắng ghi được. Data Forge phân định theo tên CLB (A–Z)."
   },
 
   "errors": {

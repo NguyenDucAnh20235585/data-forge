@@ -22,6 +22,22 @@ export default function EplSeasonRecap({ recap }: Props) {
         ? "eplRecap.tieGF"
         : "eplRecap.tieFurther";
 
+  const runnerUp = championsLeague[1];
+
+  const championGD = champion.goalsFor - champion.goalsAgainst;
+  const runnerUpGD = runnerUp.goalsFor - runnerUp.goalsAgainst;
+
+  const titleGap = champion.points - runnerUp.points;
+
+  const titleReason =
+    titleGap > 0
+      ? "eplRecap.titleGap"
+      : championGD !== runnerUpGD
+        ? "eplRecap.titleGD"
+        : champion.goalsFor !== runnerUp.goalsFor
+          ? "eplRecap.titleGF"
+          : "eplRecap.titleAlphabetical";
+
   const styleName = (style: string) => t(`eplRecap.styles.${style}`);
 
   return (
@@ -43,6 +59,14 @@ export default function EplSeasonRecap({ recap }: Props) {
           {t("eplRecap.championDescription", {
             gf: champion.goalsFor,
             ga: champion.goalsAgainst,
+          })}
+        </p>
+        <p className="mt-4 border-t border-outline pt-3 text-sm leading-relaxed text-muted">
+          {t(titleReason, {
+            champion: champion.club,
+            runnerUp: runnerUp.club,
+            points: champion.points,
+            gap: titleGap,
           })}
         </p>
       </div>

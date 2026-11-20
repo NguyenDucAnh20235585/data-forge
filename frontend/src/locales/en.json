@@ -67,7 +67,11 @@
     },
     "tieGD": "{{survivor}} and {{relegated}} finished level on points. {{survivor}} survived on goal difference.",
     "tieGF": "{{survivor}} finished above {{relegated}} on goals scored.",
-    "tieFurther": "Both clubs finished level on points, goal difference and goals scored. Head-to-head results are required."
+    "tieFurther": "Both clubs finished level on points, goal difference and goals scored. Head-to-head results are required.",
+    "titleGap": "{{champion}} won the title with {{points}} points, finishing {{gap}} points ahead of {{runnerUp}}.",
+    "titleGD": "{{champion}} and {{runnerUp}} finished level on {{points}} points. {{champion}} won the title on goal difference.",
+    "titleGF": "{{champion}} won the title over {{runnerUp}} on goals scored after finishing level on points and goal difference.",
+    "titleAlphabetical": "Both clubs finished level on points, goal difference, and goals scored. Data Forge used alphabetical order as a fallback."
   },
 
   "errors": {
