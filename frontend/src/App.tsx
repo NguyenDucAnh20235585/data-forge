@@ -46,6 +46,9 @@ function App() {
     { name: "playerName", type: "personName" },
   ]);
 
+  const isEplTable = mode === "quick" && preset === "eplTable";
+  const effectiveCount = isEplTable ? 20 : count;
+
   const [hasTriedGenerate, setHasTriedGenerate] = useState(false);
 
   const fieldErrors =
@@ -58,7 +61,7 @@ function App() {
 
   const currentConfig = JSON.stringify(
     mode === "quick"
-      ? { mode, count, preset, locale }
+      ? { mode, count: effectiveCount, preset, locale }
       : { mode, count, fields, locale },
   );
 
@@ -164,7 +167,7 @@ function App() {
     setStreamProgress(null);
     setIncompleteRecords([]);
     setProgressPhase("generating");
-    let lastPartial: GeneratedRecord[] = [];
+    const lastPartial: GeneratedRecord[] = [];
 
     try {
       let data: GeneratedRecord[];
@@ -182,22 +185,29 @@ function App() {
         data = await generateCustomDataStream(
           { count, fields: normalizedFields },
           locale,
-          (completed, total, partialRecords) => {
-            lastPartial = partialRecords;
+          (completed, total, batch) => {
+            lastPartial.push(...batch);
             setStreamProgress({ completed, total });
           },
         );
       } else {
-        data = await generateData("quick", { count, preset }, locale);
+        data = await generateData(
+          "quick",
+          { count: effectiveCount, preset },
+          locale,
+        );
       }
 
       // Chỉ thay dataset hoàn chỉnh khi API clear.
       if (mode === "quick") {
-        if (!Array.isArray(data) || data.length !== count) {
+        if (!Array.isArray(data) || data.length !== effectiveCount) {
           throw new Error("Incomplete generation response.");
         }
 
-        setStreamProgress({ completed: data.length, total: count });
+        setStreamProgress({
+          completed: data.length,
+          total: effectiveCount,
+        });
       }
       await new Promise<void>((resolve) => setTimeout(resolve, 1800));
 
@@ -333,7 +343,14 @@ function App() {
                 <select
                   id="preset"
                   value={preset}
-                  onChange={(event) => setPreset(event.target.value as Preset)}
+                  onChange={(event) => {
+                    const next = event.target.value as Preset;
+                    setPreset(next);
+
+                    if (next === "eplTable") {
+                      setCount(20);
+                    }
+                  }}
                   className="w-56 rounded-md border border-control-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
                 >
                   <option value="users">
@@ -344,6 +361,9 @@ function App() {
                   </option>
                   <option value="employees">
                     {t("configuration.presets.employees")}
+                  </option>
+                  <option value="eplTable">
+                    {t("configuration.presets.eplTable")}
                   </option>
                   <option value="umamusume">
                     {t("configuration.presets.umamusume")}
@@ -368,7 +388,8 @@ function App() {
                 type="number"
                 min="1"
                 max={maxRecords}
-                value={count}
+                value={effectiveCount}
+                disabled={isEplTable}
                 onChange={(event) => setCount(Number(event.target.value))}
                 className="w-32 rounded-md border border-control-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
               />
@@ -402,9 +423,9 @@ function App() {
               aria-busy={loading}
               disabled={
                 loading ||
-                !Number.isInteger(count) ||
-                count < 1 ||
-                count > maxRecords
+                !Number.isInteger(effectiveCount) ||
+                effectiveCount < 1 ||
+                effectiveCount > maxRecords
               }
               className="
   inline-flex h-12 w-full items-center justify-center rounded-md px-6

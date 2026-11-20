@@ -48,7 +48,7 @@ export async function generateCustomDataStream(
   onProgress: (
     completed: number,
     total: number,
-    partialRecords: GeneratedRecord[],
+    batch: GeneratedRecord[],
   ) => void,
   signal?: AbortSignal,
 ): Promise<GeneratedRecord[]> {
@@ -97,7 +97,7 @@ export async function generateCustomDataStream(
 
       records.push(...event.records);
 
-      onProgress(records.length, payload.count, [...records]);
+      onProgress(records.length, payload.count, event.records);
     }
 
     if (event.type === "done") {

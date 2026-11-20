@@ -55,6 +55,10 @@ export class GeneratorService {
     preset: GeneratePreset = GeneratePreset.USERS,
     locale: DataLocale = 'en',
   ) {
+    if (preset === GeneratePreset.EPL_TABLE && count !== 20) {
+      throw new BadRequestException('EPL table requires exactly 20 records.');
+    }
+
     const records = generatePreset(count, preset, locale);
 
     ensureResponseSize(records);
@@ -68,6 +72,14 @@ export class GeneratorService {
     locale: DataLocale = 'en',
     batchSize = 50,
   ) {
+    if (preset === GeneratePreset.EPL_TABLE) {
+      if (count !== 20) {
+        throw new BadRequestException('EPL table requires exactly 20 records.');
+      }
+
+      yield generatePreset(20, preset, locale);
+      return;
+    }
     for (let start = 0; start < count; start += batchSize) {
       const size = Math.min(batchSize, count - start);
 
@@ -201,7 +213,6 @@ export class GeneratorService {
         if (!field.options) {
           throw new BadRequestException('Invalid choice options.');
         }
-
         record[field.name] = faker.helpers.arrayElement(field.options);
       } else if (field.type === 'phoneNumber') {
         record[field.name] = faker.phone.number();

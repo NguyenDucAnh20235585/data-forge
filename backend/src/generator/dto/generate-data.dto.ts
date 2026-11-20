@@ -5,6 +5,7 @@ export enum GeneratePreset {
   USERS = 'users',
   PRODUCTS = 'products',
   EMPLOYEES = 'employees',
+  EPL_TABLE = 'eplTable',
   UMAMUSUME = 'umamusume',
   ORDERS = 'orders',
   API_LOGS = 'apiLogs',
