@@ -39,7 +39,7 @@ export default function CustomFieldEditor({
             onTypeChange={(type) => {
               setFields((previous) =>
                 previous.map((item, i) =>
-                  i === index ? { ...item, type } : item,
+                  i === index ? { name: item.name, type } : item,
                 ),
               );
             }}
