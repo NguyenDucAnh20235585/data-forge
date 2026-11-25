@@ -6,41 +6,58 @@ export type FieldValidationError = {
   messageKey: string;
 };
 
-function isInvalidPattern(pattern?: string): boolean {
-  if (!pattern?.trim()) return true;
+function getPatternError(pattern?: string): string | null {
+  if (!pattern?.trim()) {
+    return "validation.patternRequired";
+  }
 
-  let hasInvalidToken = false;
+  if ([...pattern].length > 200) {
+    return "validation.patternTooLong";
+  }
+
+  let error: string | null = null;
 
   const remaining = pattern
-    .replace(/\{digits:(\d+)\}/g, (_match, rawLength: string) => {
-      const length = Number(rawLength);
+    .replace(
+      /\{(digits|letters):(\d+)\}/g,
+      (_match, _kind: string, rawLength: string) => {
+        const length = Number(rawLength);
 
-      if (!Number.isInteger(length) || length < 1 || length > 100) {
-        hasInvalidToken = true;
-      }
+        if (!Number.isSafeInteger(length) || length < 1 || length > 100) {
+          error ??= "validation.patternTokenLength";
+        }
 
-      return "";
-    })
-    .replace(/\{letters:(\d+)\}/g, (_match, rawLength: string) => {
-      const length = Number(rawLength);
-
-      if (!Number.isInteger(length) || length < 1 || length > 100) {
-        hasInvalidToken = true;
-      }
-
-      return "";
-    })
-    .replace(/\{choice:([^{}]+)\}/g, (_match, rawOptions: string) => {
+        return "";
+      },
+    )
+    .replace(/\{choice:([^{}]*)\}/g, (_match, rawOptions: string) => {
       const options = rawOptions.split("|").map((option) => option.trim());
 
-      if (options.length < 2 || options.some((option) => option === "")) {
-        hasInvalidToken = true;
+      if (options.length < 2) {
+        error ??= "validation.patternChoiceCount";
+      } else if (options.some((option) => !option)) {
+        error ??= "validation.patternChoiceEmpty";
       }
 
       return "";
     });
 
-  return hasInvalidToken || /[{}]/.test(remaining);
+  if (error) return error;
+
+  return /[{}]/.test(remaining) ? "validation.patternSyntax" : null;
+}
+
+function isValidDate(date: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    return false;
+  }
+
+  const parsed = new Date(`${date}T00:00:00.000Z`);
+
+  return (
+    !Number.isNaN(parsed.getTime()) &&
+    parsed.toISOString().slice(0, 10) === date
+  );
 }
 
 export function validateAllFields(
@@ -71,6 +88,8 @@ export function validateAllFields(
 
     if (!name) {
       addError(index, "name", "validation.emptyName");
+    } else if ([...field.name.trim()].length > 64) {
+      addError(index, "name", "validation.nameTooLong");
     } else if ((nameCounts.get(name) ?? 0) > 1) {
       addError(index, "name", "validation.duplicateName");
     }
@@ -80,50 +99,67 @@ export function validateAllFields(
         const min = field.min ?? 1;
         const max = field.max ?? 100;
 
-        if (
-          !Number.isSafeInteger(min) ||
-          !Number.isSafeInteger(max) ||
-          min > max
-        ) {
-          addError(index, "config", "validation.invalidNumber");
+        if (!Number.isSafeInteger(min)) {
+          addError(index, "config", "validation.numberMinInteger");
+        } else if (!Number.isSafeInteger(max)) {
+          addError(index, "config", "validation.numberMaxInteger");
+        } else if (min > max) {
+          addError(index, "config", "validation.numberInvalidRange");
         }
+
         break;
       }
 
       case "string": {
         const length = field.length ?? 8;
 
-        if (!Number.isInteger(length) || length < 1 || length > 100) {
-          addError(index, "config", "validation.invalidString");
+        if (!Number.isInteger(length)) {
+          addError(index, "config", "validation.stringLengthInteger");
+        } else if (length < 1 || length > 100) {
+          addError(index, "config", "validation.stringLengthRange");
         }
+
         break;
       }
 
       case "choice": {
-        if (
-          !field.options?.length ||
-          field.options.some((option) => option.trim() === "")
-        ) {
-          addError(index, "config", "validation.invalidChoice");
+        const options = field.options ?? [];
+
+        if (options.length === 0) {
+          addError(index, "config", "validation.choiceRequired");
+        } else if (options.some((option) => !option.trim())) {
+          addError(index, "config", "validation.choiceEmpty");
+        } else if (options.length > 20) {
+          addError(index, "config", "validation.choiceTooMany");
+        } else if (options.some((option) => [...option].length > 100)) {
+          addError(index, "config", "validation.choiceTooLong");
         }
+
         break;
       }
 
       case "date": {
-        if (
-          !field.startDate ||
-          !field.endDate ||
-          field.startDate > field.endDate
-        ) {
-          addError(index, "config", "validation.invalidDate");
+        const start = field.startDate;
+        const end = field.endDate;
+
+        if (!start || !end) {
+          addError(index, "config", "validation.dateRequired");
+        } else if (!isValidDate(start) || !isValidDate(end)) {
+          addError(index, "config", "validation.dateInvalid");
+        } else if (start > end) {
+          addError(index, "config", "validation.dateInvalidRange");
         }
+
         break;
       }
 
       case "pattern": {
-        if (isInvalidPattern(field.pattern)) {
-          addError(index, "config", "validation.invalidPattern");
+        const patternError = getPatternError(field.pattern);
+
+        if (patternError) {
+          addError(index, "config", patternError);
         }
+
         break;
       }
     }

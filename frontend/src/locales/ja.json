@@ -117,11 +117,34 @@
   "validation": {
     "emptyName": "フィールド名を入力してください。",
     "duplicateName": "フィールド名は、大文字と小文字の違いに関係なく重複できません。",
+    "nameTooLong": "フィールド名は64文字以内で入力してください。",
     "invalidNumber": "フィールド「{{name}}」：Min と Max には有効な整数を指定してください。Min は Max 以下である必要があります。",
     "invalidString": "フィールド「{{name}}」：文字列の長さは1～100の範囲で指定してください。",
     "invalidChoice": "フィールド「{{name}}」：空でない選択肢を1つ以上入力し、空欄を削除してください。",
     "invalidDate": "フィールド「{{name}}」：開始日と終了日の両方が必要です。開始日は終了日より後にできません。",
-    "invalidPattern": "パターンが無効です。テンプレートを確認してください。"
+    "invalidPattern": "パターンが無効です。テンプレートを確認してください。",
+    "choiceLimit": "フィールド「{{name}}」：選択肢は最大20個、各100文字以内にしてください。",
+    "choiceRequired": "少なくとも1つの選択肢を入力してください。",
+    "choiceEmpty": "空の選択肢があります。内容を入力するか、削除してください。",
+    "choiceTooMany": "選択肢は最大20個までです。数を減らしてください。",
+    "choiceTooLong": "100文字を超える選択肢があります。短くしてください。",
+    "numberMinInteger": "最小値は安全な整数である必要があります。",
+    "numberMaxInteger": "最大値は安全な整数である必要があります。",
+    "numberInvalidRange": "最小値は最大値以下にしてください。",
+
+    "stringLengthInteger": "文字列の長さは整数で指定してください。",
+    "stringLengthRange": "文字列の長さは1〜100の範囲で指定してください。",
+
+    "dateRequired": "開始日と終了日の両方を入力してください。",
+    "dateInvalid": "有効な日付を入力してください。",
+    "dateInvalidRange": "開始日は終了日以前にしてください。",
+
+    "patternRequired": "パターンを入力してください。",
+    "patternTokenLength": "数字または英字の文字数は1〜100の範囲で指定してください。",
+    "patternChoiceCount": "choiceトークンには2つ以上の選択肢が必要です。",
+    "patternChoiceEmpty": "choiceトークンの選択肢を空にすることはできません。",
+    "patternSyntax": "パターンの構文が無効です。下の説明を参照してください。",
+    "patternTooLong": "パターンは200文字以内で入力してください。"
   },
   "appDescription": "テスト用のダミーデータを生成します。",
   "configureDataset": "データセットの設定"

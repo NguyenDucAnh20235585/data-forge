@@ -204,7 +204,9 @@ export default function CustomFieldRow({
                 className={`${baseInputClass} ${hasConfigError ? errorBorder : normalBorder}`}
                 value={(field.options ?? []).join(",")}
                 onChange={(event) => {
-                  const options = event.target.value.split(",");
+                  const value = event.target.value;
+                  const options = value === "" ? [] : value.split(",");
+
                   onConfigChange({ options });
                 }}
               />
@@ -257,6 +259,7 @@ export default function CustomFieldRow({
             <input
               type="text"
               placeholder="PLR-{letters:4}-{digits:6}"
+              aria-label={t("fieldEditor.types.pattern")}
               aria-invalid={hasConfigError}
               aria-describedby={hasConfigError ? configErrorId : undefined}
               className={`${baseInputClass} ${

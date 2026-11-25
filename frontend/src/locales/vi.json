@@ -113,14 +113,38 @@
       "boolean": "Đúng / Sai"
     }
   },
+
   "validation": {
     "emptyName": "Tên trường dữ liệu không được để trống.",
+    "nameTooLong": "Tên trường dữ liệu không được vượt quá 64 ký tự.",
     "duplicateName": "Tên các trường dữ liệu không được trùng nhau, kể cả khi khác chữ hoa hoặc chữ thường.",
     "invalidNumber": "Trường \"{{name}}\": Min và Max phải là số nguyên hợp lệ. Min không được lớn hơn Max.",
     "invalidString": "Trường \"{{name}}\": Độ dài chuỗi phải từ 1 đến 100.",
     "invalidChoice": "Trường \"{{name}}\": Cần ít nhất một lựa chọn không rỗng và không được có lựa chọn bỏ trống.",
     "invalidDate": "Trường \"{{name}}\": Cần nhập cả hai ngày. Ngày bắt đầu không được sau ngày kết thúc.",
-    "invalidPattern": "Pattern không hợp lệ. Xem Mẫu nhanh."
+    "invalidPattern": "Pattern không hợp lệ. Xem Mẫu nhanh.",
+    "choiceLimit": "Trường \"{{name}}\": Tối đa 20 lựa chọn, mỗi lựa chọn không vượt quá 100 ký tự.",
+    "choiceRequired": "Vui lòng nhập ít nhất một lựa chọn.",
+    "choiceEmpty": "Danh sách chứa lựa chọn trống. Hãy xóa hoặc điền nội dung.",
+    "choiceTooMany": "Số lựa chọn vượt quá giới hạn 20.",
+    "choiceTooLong": "Một lựa chọn vượt quá giới hạn 100 ký tự.",
+    "numberMinInteger": "Min phải là số nguyên an toàn.",
+    "numberMaxInteger": "Max phải là số nguyên an toàn.",
+    "numberInvalidRange": "Min không được lớn hơn Max.",
+
+    "stringLengthInteger": "Độ dài chuỗi phải là số nguyên.",
+    "stringLengthRange": "Độ dài chuỗi phải từ 1 đến 100.",
+
+    "dateRequired": "Vui lòng nhập cả ngày bắt đầu và ngày kết thúc.",
+    "dateInvalid": "Ngày tháng không hợp lệ.",
+    "dateInvalidRange": "Ngày bắt đầu không được sau ngày kết thúc.",
+
+    "patternRequired": "Pattern không được để trống.",
+    "patternTokenLength": "Số lượng chữ số hoặc chữ cái phải từ 1 đến 100.",
+    "patternChoiceCount": "Token choice cần ít nhất hai lựa chọn.",
+    "patternChoiceEmpty": "Các lựa chọn trong token choice không được để trống.",
+    "patternSyntax": "Cú pháp Pattern không hợp lệ. Hãy tham khảo hướng dẫn bên dưới.",
+    "patternTooLong": "Pattern không được vượt quá 200 ký tự."
   },
   "appDescription": "Tạo dữ liệu giả để kiểm thử.",
   "configureDataset": "Cấu hình bộ dữ liệu"

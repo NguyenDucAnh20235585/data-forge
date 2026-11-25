@@ -67,7 +67,7 @@
     },
     "tieGD": "{{survivor}} and {{relegated}} finished level on points. {{survivor}} survived on goal difference.",
     "tieGF": "{{survivor}} finished above {{relegated}} on goals scored.",
-    "tieFurther": "Both clubs finished level on points, goal difference and goals scored. Head-to-head results are required.",
+    "tieFurther": "Both clubs finished level on points, goal difference, and goals scored. Data Forge uses alphabetical order as a fallback.",
     "titleGap": "{{champion}} won the title with {{points}} points, finishing {{gap}} points ahead of {{runnerUp}}.",
     "titleGD": "{{champion}} and {{runnerUp}} finished level on {{points}} points. {{champion}} won the title on goal difference.",
     "titleGF": "{{champion}} won the title over {{runnerUp}} on goals scored after finishing level on points and goal difference.",
@@ -116,11 +116,34 @@
   "validation": {
     "emptyName": "Field name cannot be empty.",
     "duplicateName": "Field names must be unique, regardless of uppercase or lowercase.",
+    "nameTooLong": "Field name must not exceed 64 characters.",
     "invalidNumber": "Field \"{{name}}\": Min and Max must be valid integers. Min cannot be greater than Max.",
     "invalidString": "Field \"{{name}}\": String length must be between 1 and 100.",
     "invalidChoice": "Field \"{{name}}\": Enter at least one non-empty option and remove any blank options.",
     "invalidDate": "Field \"{{name}}\": Both dates are required. Start Date cannot be after End Date.",
-    "invalidPattern": "Invalid pattern. See Quick templates."
+    "invalidPattern": "Invalid pattern. See Quick templates.",
+    "choiceLimit": "Field \"{{name}}\": Maximum 20 options, each up to 100 characters.",
+    "choiceRequired": "Please enter at least one option.",
+    "choiceEmpty": "One or more options are empty. Please fill them in or remove them.",
+    "choiceTooMany": "Too many options. A maximum of 20 options is allowed.",
+    "choiceTooLong": "An option exceeds the 100-character limit. Please shorten it.",
+    "numberMinInteger": "Min must be a safe integer.",
+    "numberMaxInteger": "Max must be a safe integer.",
+    "numberInvalidRange": "Min must not exceed Max.",
+
+    "stringLengthInteger": "String length must be an integer.",
+    "stringLengthRange": "String length must be between 1 and 100.",
+
+    "dateRequired": "Enter both start and end dates.",
+    "dateInvalid": "Enter valid dates.",
+    "dateInvalidRange": "Start date must not be after end date.",
+
+    "patternRequired": "Pattern is required.",
+    "patternTokenLength": "The number of digits or letters must be between 1 and 100.",
+    "patternChoiceCount": "Choice tokens require at least two options.",
+    "patternChoiceEmpty": "Choice token options must not be empty.",
+    "patternSyntax": "Invalid pattern syntax. Refer to the guide below.",
+    "patternTooLong": "Pattern must not exceed 200 characters."
   },
   "appDescription": "Generate fake data for testing.",
   "configureDataset": "Configure dataset"
