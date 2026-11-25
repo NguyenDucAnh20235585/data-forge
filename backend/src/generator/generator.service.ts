@@ -229,7 +229,8 @@ export class GeneratorService {
         record[field.name] = faker.date
           .between({
             from: field.startDate,
-            to: field.endDate,
+
+            to: new Date(Date.parse(field.endDate) + 86_399_999),
           })
           .toISOString()
           .slice(0, 10);
