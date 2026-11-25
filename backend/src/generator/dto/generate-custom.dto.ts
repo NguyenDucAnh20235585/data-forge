@@ -14,7 +14,29 @@ import {
   IsDateString,
   ArrayMaxSize,
   MaxLength,
+  IsEnum,
 } from 'class-validator';
+
+export enum CustomFieldType {
+  PERSON_NAME = 'personName',
+  PRODUCT_NAME = 'productName',
+  COMPANY_NAME = 'companyName',
+  NUMBER = 'number',
+  EMAIL = 'email',
+  STRING = 'string',
+  CHOICE = 'choice',
+  PHONE_NUMBER = 'phoneNumber',
+  DATE = 'date',
+  PATTERN = 'pattern',
+  FIRST_NAME = 'firstName',
+  LAST_NAME = 'lastName',
+  CITY = 'city',
+  COUNTRY = 'country',
+  URL = 'url',
+  IPV4 = 'ipv4',
+  UUID = 'uuid',
+  BOOLEAN = 'boolean',
+}
 
 export class CustomFieldDto {
   @IsString()
@@ -61,45 +83,8 @@ export class CustomFieldDto {
   })
   pattern?: string;
 
-  @IsIn([
-    'personName',
-    'productName',
-    'companyName',
-    'number',
-    'email',
-    'string',
-    'choice',
-    'phoneNumber',
-    'date',
-    'pattern',
-    'firstName',
-    'lastName',
-    'city',
-    'country',
-    'url',
-    'ipv4',
-    'uuid',
-    'boolean',
-  ])
-  type!:
-    | 'personName'
-    | 'productName'
-    | 'companyName'
-    | 'number'
-    | 'email'
-    | 'string'
-    | 'choice'
-    | 'phoneNumber'
-    | 'date'
-    | 'pattern'
-    | 'firstName'
-    | 'lastName'
-    | 'city'
-    | 'country'
-    | 'url'
-    | 'ipv4'
-    | 'uuid'
-    | 'boolean';
+  @IsEnum(CustomFieldType)
+  type!: CustomFieldType;
 }
 
 export class GenerateCustomDto {
