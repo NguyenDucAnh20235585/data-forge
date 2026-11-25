@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import type { DataLocale } from '../faker-locale';
 import {
   IsArray,
@@ -39,6 +39,9 @@ export enum CustomFieldType {
 }
 
 export class CustomFieldDto {
+  @Transform(({ value }: { value: unknown }) =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsString()
   @MaxLength(64)
   @Matches(/\S/, {
