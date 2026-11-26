@@ -87,9 +87,11 @@ function App() {
   };
 
   const currentConfig = JSON.stringify(
-    mode === "quick"
-      ? { mode, count: effectiveCount, preset, locale }
-      : { mode, count, fields, locale },
+    isEplTable
+      ? { mode, preset }
+      : mode === "quick"
+        ? { mode, count: effectiveCount, preset, locale }
+        : { mode, count, fields, locale },
   );
 
   const handleAddField = () => {
