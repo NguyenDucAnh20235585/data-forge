@@ -298,13 +298,6 @@ function App() {
       const timer = window.setTimeout(
         () => {
           setProgressPhase("idle");
-
-          requestAnimationFrame(() => {
-            previewRef.current?.scrollIntoView({
-              behavior: reduceMotion ? "auto" : "smooth",
-              block: "start",
-            });
-          });
         },
         reduceMotion ? 0 : 300,
       );
