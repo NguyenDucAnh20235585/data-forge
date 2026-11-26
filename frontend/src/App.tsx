@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 
 import {
+  MAX_QUICK_RECORDS,
+  MAX_CUSTOM_RECORDS,
+  MAX_CUSTOM_FIELDS,
+  MAX_CUSTOM_CELLS,
+} from "./constants/generatorLimits";
+
+import {
   generateData,
   generateCustomDataStream,
   generateEplSeason,
@@ -31,7 +38,7 @@ function App() {
       ? i18n.resolvedLanguage
       : "en";
   const [preset, setPreset] = useState<Preset>("users");
-  const [count, setCount] = useState(3);
+  const [count, setCount] = useState<number | "">(3);
   const [records, setRecords] = useState<GeneratedRecord[]>([]);
   const [eplRecap, setEplRecap] = useState<EplSeasonResponse["recap"] | null>(
     null,
@@ -49,7 +56,7 @@ function App() {
   );
   const [error, setError] = useState("");
   const [mode, setMode] = useState<"quick" | "custom">("quick");
-  const maxRecords = mode === "custom" ? 10_000 : 1_000;
+  const maxRecords = mode === "custom" ? MAX_CUSTOM_RECORDS : MAX_QUICK_RECORDS;
 
   const [fields, setFields] = useState<CustomField[]>([
     { name: "playerName", type: "personName" },
@@ -58,10 +65,21 @@ function App() {
   const isEplTable = mode === "quick" && preset === "eplTable";
   const effectiveCount = isEplTable ? 20 : count;
 
-  const [hasTriedGenerate, setHasTriedGenerate] = useState(false);
+  const isCountInvalid =
+    typeof effectiveCount !== "number" ||
+    !Number.isInteger(effectiveCount) ||
+    effectiveCount < 1 ||
+    effectiveCount > maxRecords;
 
-  const fieldErrors =
-    mode === "custom" && hasTriedGenerate ? validateAllFields(fields) : [];
+  const hasReachedFieldLimit = fields.length >= MAX_CUSTOM_FIELDS;
+
+  const totalCells =
+    typeof effectiveCount === "number" ? effectiveCount * fields.length : 0;
+
+  const isCellLimitExceeded =
+    mode === "custom" && !isCountInvalid && totalCells > MAX_CUSTOM_CELLS;
+
+  const fieldErrors = mode === "custom" ? validateAllFields(fields) : [];
 
   const updateFields: typeof setFields = (update) => {
     setFields(update);
@@ -75,6 +93,7 @@ function App() {
   );
 
   const handleAddField = () => {
+    if (hasReachedFieldLimit) return;
     pendingNewFieldIndexRef.current = fields.length;
     updateFields((previous) => {
       let next = 2;
@@ -133,9 +152,14 @@ function App() {
   };
 
   const handleGenerate = async () => {
+    if (
+      loading ||
+      typeof effectiveCount !== "number" ||
+      isCountInvalid ||
+      isCellLimitExceeded
+    )
+      return;
     if (mode === "custom") {
-      setHasTriedGenerate(true);
-
       const errors = validateAllFields(fields);
 
       if (errors.length > 0) {
@@ -170,7 +194,6 @@ function App() {
       }
     }
 
-    setHasTriedGenerate(false);
     setLoading(true);
     setError("");
     setStreamProgress(null);
@@ -193,7 +216,7 @@ function App() {
         );
 
         data = await generateCustomDataStream(
-          { count, fields: normalizedFields },
+          { count: effectiveCount, fields: normalizedFields },
           locale,
           (completed, total, batch) => {
             lastPartial.push(...batch);
@@ -317,7 +340,6 @@ function App() {
               onClick={() => {
                 setMode("quick");
                 setError("");
-                setHasTriedGenerate(false);
               }}
               className={`mode-tab min-w-0 flex-1 whitespace-nowrap rounded-md px-2 py-2 text-xs sm:flex-none sm:px-4 sm:text-sm font-medium ${
                 mode === "quick"
@@ -334,7 +356,6 @@ function App() {
               onClick={() => {
                 setMode("custom");
                 setError("");
-                setHasTriedGenerate(false);
               }}
               className={`mode-tab min-w-0 flex-1 whitespace-nowrap rounded-md px-2 py-2 text-xs sm:flex-none sm:px-4 sm:text-sm font-medium ${
                 mode === "custom"
@@ -406,7 +427,10 @@ function App() {
                 max={maxRecords}
                 value={effectiveCount}
                 disabled={isEplTable}
-                onChange={(event) => setCount(Number(event.target.value))}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setCount(value === "" ? "" : Number(value));
+                }}
                 className="w-32 rounded-md border border-control-outline bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20"
               />
             </div>
@@ -427,7 +451,8 @@ function App() {
               <button
                 type="button"
                 onClick={handleAddField}
-                className="rounded-md border border-control-outline bg-surface inline-flex h-11 items-center justify-center px-4 text-sm font-medium text-ink transition-colors duration-150 hover:bg-surface-soft w-full whitespace-nowrap sm:w-auto"
+                disabled={hasReachedFieldLimit}
+                className="rounded-md border border-control-outline bg-surface inline-flex h-11 items-center justify-center px-4 text-sm font-medium text-ink transition-colors duration-150 hover:bg-surface-soft w-full whitespace-nowrap sm:w-auto disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {t("configuration.addField")}
               </button>
@@ -437,12 +462,7 @@ function App() {
               type="button"
               onClick={handleGenerate}
               aria-busy={loading}
-              disabled={
-                loading ||
-                !Number.isInteger(effectiveCount) ||
-                effectiveCount < 1 ||
-                effectiveCount > maxRecords
-              }
+              disabled={loading || isCountInvalid || isCellLimitExceeded}
               className="
   inline-flex h-12 w-full items-center justify-center rounded-md px-6
 sm:ml-auto sm:w-44
