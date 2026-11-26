@@ -123,11 +123,15 @@
     "invalidChoice": "Trường \"{{name}}\": Cần ít nhất một lựa chọn không rỗng và không được có lựa chọn bỏ trống.",
     "invalidDate": "Trường \"{{name}}\": Cần nhập cả hai ngày. Ngày bắt đầu không được sau ngày kết thúc.",
     "invalidPattern": "Pattern không hợp lệ. Xem Mẫu nhanh.",
+
     "choiceLimit": "Trường \"{{name}}\": Tối đa 20 lựa chọn, mỗi lựa chọn không vượt quá 100 ký tự.",
     "choiceRequired": "Vui lòng nhập ít nhất một lựa chọn.",
     "choiceEmpty": "Danh sách chứa lựa chọn trống. Hãy xóa hoặc điền nội dung.",
     "choiceTooMany": "Số lựa chọn vượt quá giới hạn 20.",
     "choiceTooLong": "Một lựa chọn vượt quá giới hạn 100 ký tự.",
+
+    "countInvalid": "Nhập số nguyên từ 1 đến {{max}}.",
+
     "numberMinInteger": "Min phải là số nguyên an toàn.",
     "numberMaxInteger": "Max phải là số nguyên an toàn.",
     "numberInvalidRange": "Min không được lớn hơn Max.",

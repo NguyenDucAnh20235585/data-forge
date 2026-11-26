@@ -249,7 +249,6 @@ function App() {
           total: effectiveCount,
         });
       }
-      await new Promise<void>((resolve) => setTimeout(resolve, 1800));
 
       setRecords(data);
       setEplRecap(nextRecap);
@@ -271,11 +270,24 @@ function App() {
 
   useEffect(() => {
     if (progressPhase === "complete") {
+      const frame = requestAnimationFrame(() => {
+        previewRef.current?.scrollIntoView({
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+            .matches
+            ? "auto"
+            : "smooth",
+          block: "start",
+        });
+      });
+
       const timer = window.setTimeout(() => {
         setProgressPhase("fading");
       }, 1200);
 
-      return () => window.clearTimeout(timer);
+      return () => {
+        cancelAnimationFrame(frame);
+        window.clearTimeout(timer);
+      };
     }
 
     if (progressPhase === "fading") {
@@ -424,6 +436,8 @@ function App() {
 
               <input
                 id="count"
+                aria-invalid={isCountInvalid}
+                aria-describedby={isCountInvalid ? "count-error" : undefined}
                 type="number"
                 min="1"
                 max={maxRecords}

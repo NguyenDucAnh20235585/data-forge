@@ -14,7 +14,7 @@ export enum GeneratePreset {
 export class GenerateDataDto {
   @IsInt()
   @Min(1)
-  @Max(1000)
+  @Max(10_000)
   count!: number;
 
   @IsOptional()

@@ -122,11 +122,15 @@
     "invalidChoice": "Field \"{{name}}\": Enter at least one non-empty option and remove any blank options.",
     "invalidDate": "Field \"{{name}}\": Both dates are required. Start Date cannot be after End Date.",
     "invalidPattern": "Invalid pattern. See Quick templates.",
+
     "choiceLimit": "Field \"{{name}}\": Maximum 20 options, each up to 100 characters.",
     "choiceRequired": "Please enter at least one option.",
     "choiceEmpty": "One or more options are empty. Please fill them in or remove them.",
     "choiceTooMany": "Too many options. A maximum of 20 options is allowed.",
     "choiceTooLong": "An option exceeds the 100-character limit. Please shorten it.",
+
+    "countInvalid": "Enter a whole number between 1 and {{max}}.",
+
     "numberMinInteger": "Min must be a safe integer.",
     "numberMaxInteger": "Max must be a safe integer.",
     "numberInvalidRange": "Min must not exceed Max.",
