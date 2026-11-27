@@ -30,6 +30,7 @@ type ProgressPhase = "idle" | "generating" | "complete" | "fading";
 function App() {
   const { t, i18n } = useTranslation();
   const previewRef = useRef<HTMLElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
   const customFieldsRef = useRef<HTMLDivElement>(null);
   const pendingNewFieldIndexRef = useRef<number | null>(null);
   const locale =
@@ -196,6 +197,8 @@ function App() {
     }
 
     setLoading(true);
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
     setError("");
     setStreamProgress(null);
     setIncompleteRecords([]);
@@ -224,9 +227,10 @@ function App() {
             lastPartial.push(...batch);
             setStreamProgress({ completed, total });
           },
+          controller.signal,
         );
       } else if (isEplTable) {
-        const season = await generateEplSeason(locale);
+        const season = await generateEplSeason(locale, controller.signal);
 
         data = season.standings;
         nextRecap = season.recap;
@@ -239,10 +243,10 @@ function App() {
             lastPartial.push(...batch);
             setStreamProgress({ completed, total });
           },
+          controller.signal,
         );
       }
 
-      // Chỉ thay dataset hoàn chỉnh khi API clear.
       if (mode === "quick") {
         if (!Array.isArray(data) || data.length !== effectiveCount) {
           throw new Error("Incomplete generation response.");
@@ -260,14 +264,19 @@ function App() {
       setGeneratedConfig(currentConfig);
       setProgressPhase("complete");
     } catch (error) {
-      console.error(error);
-      setError("errors.generateFailed");
-      setProgressPhase("idle");
+      if (!controller.signal.aborted) {
+        console.error(error);
+        setError("errors.generateFailed");
+      }
 
-      if (mode === "custom" && lastPartial.length > 0) {
+      setProgressPhase("idle");
+      setStreamProgress(null);
+
+      if (lastPartial.length > 0) {
         setIncompleteRecords(lastPartial);
       }
     } finally {
+      abortControllerRef.current = null;
       setLoading(false);
     }
   };
@@ -468,6 +477,16 @@ function App() {
                 className="rounded-md border border-control-outline bg-surface inline-flex h-11 items-center justify-center px-4 text-sm font-medium text-ink transition-colors duration-150 hover:bg-surface-soft w-full whitespace-nowrap sm:w-auto disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {t("configuration.addField")}
+              </button>
+            )}
+
+            {loading && (
+              <button
+                type="button"
+                onClick={() => abortControllerRef.current?.abort()}
+                className="rounded-md border border-control-outline px-4 py-3 text-sm font-medium text-ink"
+              >
+                {t("configuration.cancel")}
               </button>
             )}
 

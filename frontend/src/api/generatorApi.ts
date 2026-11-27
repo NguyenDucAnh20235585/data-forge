@@ -145,9 +145,11 @@ export async function generateDataStream(
 
 export async function generateEplSeason(
   locale: "en" | "vi" | "ja",
+  signal?: AbortSignal,
 ): Promise<EplSeasonResponse> {
   const response = await fetch(
     `${API_BASE_URL}/generate/epl/season?locale=${locale}`,
+    { signal },
   );
 
   if (!response.ok) {
