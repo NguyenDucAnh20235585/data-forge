@@ -8,6 +8,7 @@ import {
 } from "./constants/generatorLimits";
 
 import {
+  ApiError,
   generateDataStream,
   generateEplSeason,
   type EplSeasonResponse,
@@ -54,6 +55,7 @@ function App() {
   const [incompleteRecords, setIncompleteRecords] = useState<GeneratedRecord[]>(
     [],
   );
+  const [apiError, setApiError] = useState<ApiError | null>(null);
   const [error, setError] = useState("");
   const [mode, setMode] = useState<"quick" | "custom">("quick");
   const maxRecords = mode === "custom" ? MAX_CUSTOM_RECORDS : MAX_QUICK_RECORDS;
@@ -200,6 +202,7 @@ function App() {
     const controller = new AbortController();
     abortControllerRef.current = controller;
     setError("");
+    setApiError(null);
     setStreamProgress(null);
     setIncompleteRecords([]);
     setProgressPhase("generating");
@@ -266,7 +269,28 @@ function App() {
     } catch (error) {
       if (!controller.signal.aborted) {
         console.error(error);
-        setError("errors.generateFailed");
+
+        if (error instanceof ApiError) {
+          setApiError(error);
+
+          switch (error.status) {
+            case 400:
+              setError("errors.badRequest");
+              break;
+            case 413:
+              setError("errors.payloadTooLarge");
+              break;
+            case 429:
+              setError("errors.rateLimit");
+              break;
+            default:
+              setError("errors.serverError");
+          }
+        } else if (error instanceof TypeError) {
+          setError("errors.networkError");
+        } else {
+          setError("errors.generateFailed");
+        }
       }
 
       setProgressPhase("idle");
@@ -546,6 +570,16 @@ sm:ml-auto sm:w-44
         {error && (
           <p role="alert" className="mt-4 text-sm text-red-600">
             {t(error)}
+
+            {apiError && apiError.status < 500 && (
+              <span className="block">{apiError.message}</span>
+            )}
+
+            {apiError?.status === 429 && apiError.retryAfter && (
+              <span className="block">
+                {t("errors.retryAfter")}: {apiError.retryAfter}
+              </span>
+            )}
           </p>
         )}
 

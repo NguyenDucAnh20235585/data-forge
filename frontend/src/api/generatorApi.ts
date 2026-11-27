@@ -34,6 +34,37 @@ const API_BASE_URL = (
   (import.meta.env.DEV ? "http://localhost:3000" : "")
 ).replace(/\/+$/, "");
 
+export class ApiError extends Error {
+  readonly status: number;
+  readonly retryAfter: string | null;
+
+  constructor(
+    status: number,
+    message: string,
+    retryAfter: string | null = null,
+  ) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+    this.retryAfter = retryAfter;
+  }
+}
+
+async function createApiError(response: Response) {
+  const body = await response.json().catch(() => null);
+  const message = Array.isArray(body?.message)
+    ? body.message.join("; ")
+    : typeof body?.message === "string"
+      ? body.message
+      : response.statusText;
+
+  return new ApiError(
+    response.status,
+    message,
+    response.headers.get("Retry-After"),
+  );
+}
+
 export async function generateData(
   mode: "quick" | "custom",
   payload: GeneratePayload,
@@ -57,8 +88,7 @@ export async function generateData(
   });
 
   if (!response.ok) {
-    const details = await response.text();
-    throw new Error(details);
+    throw await createApiError(response);
   }
 
   return response.json();
@@ -87,7 +117,7 @@ export async function generateDataStream(
   });
 
   if (!response.ok) {
-    throw new Error(await response.text());
+    throw await createApiError(response);
   }
 
   if (!response.body) {
@@ -153,7 +183,7 @@ export async function generateEplSeason(
   );
 
   if (!response.ok) {
-    throw new Error("Failed to generate EPL season.");
+    throw await createApiError(response);
   }
 
   return (await response.json()) as EplSeasonResponse;
