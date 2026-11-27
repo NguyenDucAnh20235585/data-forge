@@ -1,5 +1,8 @@
 import type { Response } from 'express';
 import { MAX_STREAM_BYTES } from './generatorLimits';
+import { Logger, PayloadTooLargeException } from '@nestjs/common';
+
+const logger = new Logger('NdjsonWriter');
 
 export async function writeNdjson(
   res: Response,
@@ -30,6 +33,27 @@ export async function writeNdjson(
     Buffer.byteLength(limitErrorLine, 'utf8'),
     Buffer.byteLength(runtimeErrorLine, 'utf8'),
   );
+
+  if (!next.done && next.value.length > 0) {
+    const sampleLine =
+      JSON.stringify({
+        type: 'batch',
+        records: next.value,
+        completed: next.value.length,
+        total,
+      }) + '\n';
+
+    const sampleBytes = Buffer.byteLength(sampleLine, 'utf8');
+
+    const estimatedBytes =
+      Math.ceil((sampleBytes / next.value.length) * total) + reservedBytes;
+
+    if (estimatedBytes > maxBytes) {
+      throw new PayloadTooLargeException(
+        'Estimated response size exceeds the limit.',
+      );
+    }
+  }
 
   res.setHeader('Content-Type', 'application/x-ndjson; charset=utf-8');
   res.setHeader('Cache-Control', 'no-cache, no-transform');
@@ -90,7 +114,12 @@ export async function writeNdjson(
     if (!res.destroyed) {
       res.end(doneLine);
     }
-  } catch {
+  } catch (error) {
+    logger.error(
+      `Stream interrupted: ${completed}/${total} records`,
+      error instanceof Error ? error.stack : String(error),
+    );
+
     if (!res.destroyed) {
       res.end(runtimeErrorLine);
     }
