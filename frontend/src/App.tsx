@@ -8,8 +8,7 @@ import {
 } from "./constants/generatorLimits";
 
 import {
-  generateData,
-  generateCustomDataStream,
+  generateDataStream,
   generateEplSeason,
   type EplSeasonResponse,
 } from "./api/generatorApi";
@@ -217,7 +216,8 @@ function App() {
             : field,
         );
 
-        data = await generateCustomDataStream(
+        data = await generateDataStream(
+          "custom",
           { count: effectiveCount, fields: normalizedFields },
           locale,
           (completed, total, batch) => {
@@ -231,10 +231,14 @@ function App() {
         data = season.standings;
         nextRecap = season.recap;
       } else {
-        data = await generateData(
+        data = await generateDataStream(
           "quick",
           { count: effectiveCount, preset },
           locale,
+          (completed, total, batch) => {
+            lastPartial.push(...batch);
+            setStreamProgress({ completed, total });
+          },
         );
       }
 

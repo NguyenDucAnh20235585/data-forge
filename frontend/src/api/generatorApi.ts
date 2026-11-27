@@ -64,8 +64,9 @@ export async function generateData(
   return response.json();
 }
 
-export async function generateCustomDataStream(
-  payload: { count: number; fields: CustomField[] },
+export async function generateDataStream(
+  mode: "quick" | "custom",
+  payload: GeneratePayload,
   locale: DataLocale,
   onProgress: (
     completed: number,
@@ -78,7 +79,7 @@ export async function generateCustomDataStream(
     throw new Error("VITE_API_URL is required in production.");
   }
 
-  const response = await fetch(`${API_BASE_URL}/generate/custom/stream`, {
+  const response = await fetch(`${API_BASE_URL}/generate/${mode}/stream`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ ...payload, locale }),

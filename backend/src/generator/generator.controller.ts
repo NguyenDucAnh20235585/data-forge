@@ -45,6 +45,21 @@ export class GeneratorController {
     );
   }
 
+  @Post('quick/stream')
+  @HttpCode(200)
+  async generateQuickStream(
+    @Body() body: GenerateDataDto,
+    @Res() res: Response,
+  ) {
+    const batches = this.generatorService.generateQuickBatches(
+      body.count,
+      body.preset,
+      body.locale ?? 'en',
+    );
+
+    await writeNdjson(res, batches, body.count);
+  }
+
   @Post('custom/stream')
   @HttpCode(200)
   async generateCustomStream(
