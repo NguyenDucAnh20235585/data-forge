@@ -34,6 +34,10 @@ export async function writeNdjson(
   res.setHeader('Content-Type', 'application/x-ndjson; charset=utf-8');
   res.setHeader('Cache-Control', 'no-cache, no-transform');
 
+  res.setTimeout(30_000, () => {
+    res.destroy();
+  });
+
   let completed = 0;
   let sentBytes = 0;
 

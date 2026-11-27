@@ -46,6 +46,9 @@ export async function readNdjson(
     if (buffer.trim()) {
       onEvent(JSON.parse(buffer) as GenerationStreamEvent);
     }
+  } catch (error) {
+    await reader.cancel().catch(() => undefined);
+    throw error;
   } finally {
     reader.releaseLock();
   }
