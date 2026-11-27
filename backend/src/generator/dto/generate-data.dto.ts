@@ -1,5 +1,6 @@
 import { IsEnum, IsIn, IsInt, IsOptional, Max, Min } from 'class-validator';
 import type { DataLocale } from '../faker-locale';
+import { MAX_QUICK_RECORDS } from '../generatorLimits';
 
 export enum GeneratePreset {
   USERS = 'users',
@@ -14,7 +15,7 @@ export enum GeneratePreset {
 export class GenerateDataDto {
   @IsInt()
   @Min(1)
-  @Max(10_000)
+  @Max(MAX_QUICK_RECORDS)
   count!: number;
 
   @IsOptional()

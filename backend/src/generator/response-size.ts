@@ -1,6 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
 
-const MAX_RESPONSE_BYTES = 2 * 1024 * 1024;
+import { MAX_RESPONSE_BYTES } from './generatorLimits';
 
 export function ensureResponseSize(records: readonly unknown[]): void {
   const json = JSON.stringify(records);

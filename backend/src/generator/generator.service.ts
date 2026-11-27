@@ -7,6 +7,15 @@ import { ensureResponseSize } from './response-size';
 import { generateEplSeason } from './epl-generator';
 
 import {
+  MAX_QUICK_RECORDS,
+  MAX_CUSTOM_RECORDS,
+  MAX_CUSTOM_FIELDS,
+  MAX_CUSTOM_CELLS,
+  MAX_CUSTOM_JSON_RECORDS,
+  MAX_CUSTOM_JSON_CELLS,
+} from './generatorLimits';
+
+import {
   validateFieldNames,
   validateNumberRanges,
   validateChoiceOptions,
@@ -56,6 +65,9 @@ export class GeneratorService {
     preset: GeneratePreset = GeneratePreset.USERS,
     locale: DataLocale = 'en',
   ) {
+    if (!Number.isInteger(count) || count < 1 || count > MAX_QUICK_RECORDS) {
+      throw new BadRequestException('Invalid record count.');
+    }
     if (preset === GeneratePreset.EPL_TABLE && count !== 20) {
       throw new BadRequestException('EPL table requires exactly 20 records.');
     }
@@ -73,6 +85,9 @@ export class GeneratorService {
     locale: DataLocale = 'en',
     batchSize = 50,
   ) {
+    if (!Number.isInteger(count) || count < 1 || count > MAX_QUICK_RECORDS) {
+      throw new BadRequestException('Invalid record count.');
+    }
     if (preset === GeneratePreset.EPL_TABLE) {
       if (count !== 20) {
         throw new BadRequestException('EPL table requires exactly 20 records.');
@@ -94,8 +109,8 @@ export class GeneratorService {
     locale: DataLocale = 'en',
   ) {
     const faker = this.prepareCustomGeneration(count, fields, locale, {
-      maxRecords: 1_000,
-      maxCells: 20_000,
+      maxRecords: MAX_CUSTOM_JSON_RECORDS,
+      maxCells: MAX_CUSTOM_JSON_CELLS,
     });
 
     const records: Record<string, string | number | boolean>[] = [];
@@ -122,7 +137,7 @@ export class GeneratorService {
       !Number.isInteger(count) ||
       count < 1 ||
       count > limits.maxRecords ||
-      fields.length > 50 ||
+      fields.length > MAX_CUSTOM_FIELDS ||
       count * fields.length > limits.maxCells
     ) {
       throw new BadRequestException('Generation request is too large.');
@@ -145,8 +160,8 @@ export class GeneratorService {
     locale: DataLocale = 'en',
   ): Generator<Record<string, string | number | boolean>[]> {
     const faker = this.prepareCustomGeneration(count, fields, locale, {
-      maxRecords: 10_000,
-      maxCells: 200_000,
+      maxRecords: MAX_CUSTOM_RECORDS,
+      maxCells: MAX_CUSTOM_CELLS,
     });
 
     yield* this.createCustomBatches(count, fields, faker);

@@ -17,6 +17,8 @@ import {
   IsEnum,
 } from 'class-validator';
 
+import { MAX_CUSTOM_RECORDS, MAX_CUSTOM_FIELDS } from '../generatorLimits';
+
 export enum CustomFieldType {
   PERSON_NAME = 'personName',
   PRODUCT_NAME = 'productName',
@@ -93,12 +95,12 @@ export class CustomFieldDto {
 export class GenerateCustomDto {
   @IsInt()
   @Min(1)
-  @Max(10_000)
+  @Max(MAX_CUSTOM_RECORDS)
   count!: number;
 
   @IsArray()
   @ArrayMinSize(1)
-  @ArrayMaxSize(50)
+  @ArrayMaxSize(MAX_CUSTOM_FIELDS)
   @ValidateNested({ each: true })
   @Type(() => CustomFieldDto)
   fields!: CustomFieldDto[];

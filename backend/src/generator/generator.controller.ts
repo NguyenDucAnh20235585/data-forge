@@ -12,6 +12,7 @@ import type { Response } from 'express';
 import { GeneratorService } from './generator.service';
 import { GenerateDataDto } from './dto/generate-data.dto';
 import { GenerateCustomDto } from './dto/generate-custom.dto';
+import { MAX_STREAM_BYTES } from './generatorLimits';
 
 @Controller('generate')
 export class GeneratorController {
@@ -57,7 +58,7 @@ export class GeneratorController {
     );
     let next = batches.next();
 
-    const maxBytes = 24 * 1024 * 1024;
+    const maxBytes = MAX_STREAM_BYTES;
     const total = body.count;
 
     const doneLine =
